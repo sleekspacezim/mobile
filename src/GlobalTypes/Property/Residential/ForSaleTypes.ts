@@ -1,0 +1,148 @@
+import { IManagerAccount } from "../../Manager/ManagerTypes";
+import { IPropertyInsights } from "../Insights/InsightsTypes";
+import {
+  IPropertyLocation,
+  IPropertyLocationCreation,
+} from "../Location/LocationTypes";
+import {
+  IPropertyImageOrVideo,
+  IPropertyImageOrVideoCreationOrUpdate,
+} from "../Media/ImageOrVideoTypes";
+
+export type IResidentialPropertyForSaleCreation = {
+  managerId: number;
+  numberOfRooms: number;
+  price: number;
+  numberOfGarages: number;
+  sizeNumber: number;
+  bedrooms: number;
+  bathrooms: number;
+  yearBuilt: number;
+  storeys: number;
+  hasSwimmingPool: boolean;
+  hasElectricity: boolean;
+  hasWater: boolean;
+  isNegotiable: boolean;
+  isPaved: boolean;
+  hasBoreHole: boolean;
+  isPlustered: boolean;
+  isPainted: boolean;
+  isTiled: boolean;
+  hasCeiling: boolean;
+  currency: ICurrency;
+  typeOfExteriorSecurity: string;
+  status: IStatus;
+  marketingStatement: string;
+  type: string;
+  sizeDimensions: string;
+  otherInteriorFeatures: string[];
+  otherExteriorFeatures: string[];
+  propertyLocation: IPropertyLocationCreation;
+  media: IPropertyImageOrVideoCreationOrUpdate[];
+};
+
+export type IResidentialPropertyForSale = {
+  id: number;
+  uniqueId: number;
+  managerId: number;
+  numberOfRooms: number;
+  price: number;
+  numberOfGarages: number;
+  sizeNumber: number;
+  bedrooms: number;
+  bathrooms: number;
+  yearBuilt: number;
+  storeys: number;
+  hasSwimmingPool: boolean;
+  hasElectricity: boolean;
+  isFavorite: boolean;
+  hasWater: boolean;
+  isNegotiable: boolean;
+  isPaved: boolean;
+  hasBoreHole: boolean;
+  isPlustered: boolean;
+  isPainted: boolean;
+  isTiled: boolean;
+  hasCeiling: boolean;
+  currency: ICurrency;
+  typeOfExteriorSecurity: string;
+  status: IStatus;
+  marketingStatement: string;
+  type: string;
+  sizeDimensions: string;
+  otherInteriorFeatures: string[];
+  otherExteriorFeatures: string[];
+  postedTime: string;
+  insights: IPropertyInsights;
+  propertyLocation: IPropertyLocation;
+  media: IPropertyImageOrVideo[];
+};
+
+export type IResidentialPropertyForSaleWithManager = {
+  id: number;
+  uniqueId: number;
+  managerId: number;
+  numberOfRooms: number;
+  price: number;
+  numberOfGarages: number;
+  sizeNumber: number;
+  bedrooms: number;
+  bathrooms: number;
+  yearBuilt: number;
+  storeys: number;
+  hasSwimmingPool: boolean;
+  isFavorite: boolean;
+  hasElectricity: boolean;
+  hasWater: boolean;
+  isNegotiable: boolean;
+  isPaved: boolean;
+  hasBoreHole: boolean;
+  isPlustered: boolean;
+  isPainted: boolean;
+  isTiled: boolean;
+  hasCeiling: boolean;
+  currency: ICurrency;
+  typeOfExteriorSecurity: string;
+  status: IStatus;
+  marketingStatement: string;
+  type: string;
+  sizeDimensions: string;
+  otherInteriorFeatures: string[];
+  otherExteriorFeatures: string[];
+  postedTime: string;
+  insights: IPropertyInsights;
+  propertyLocation: IPropertyLocation;
+  media: IPropertyImageOrVideo[];
+  manager: IManagerAccount;
+};
+export type IResidentialPropertyForSaleUpdate = {
+  id: number;
+  uniqueId: number;
+  managerId: number;
+  numberOfRooms: number;
+  price: number;
+  numberOfGarages: number;
+  sizeNumber: number;
+  bedrooms: number;
+  bathrooms: number;
+  yearBuilt: number;
+  storeys: number;
+  hasSwimmingPool: boolean;
+  hasElectricity: boolean;
+  hasWater: boolean;
+  isNegotiable: boolean;
+  isPaved: boolean;
+  hasBoreHole: boolean;
+  isPlustered: boolean;
+  isPainted: boolean;
+  isTiled: boolean;
+  hasCeiling: boolean;
+  currency: ICurrency;
+  typeOfExteriorSecurity: string;
+  status: IStatus;
+  marketingStatement: string;
+  type: string;
+  sizeDimensions: string;
+  otherInteriorFeatures: string[];
+  otherExteriorFeatures: string[];
+};

@@ -1,0 +1,1 @@
+export { default } from "../../../../src/Screens/Account/Screens/Legalities/Legals/Legals";
