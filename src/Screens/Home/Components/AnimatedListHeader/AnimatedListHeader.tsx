@@ -16,6 +16,7 @@ import SearchBar from "./SearchBar/SearchBar";
 import Filters from "./Filters/Filters";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 import TotalProperties from "./TotalProperties/TotalProperties";
+import SearchLocationModal from "@/src/Components/Modals/Location/SearchLocation/SearchLocationModal";
 
 type Props = {
   activePropertyType: IPropertyType;
@@ -111,6 +112,13 @@ const AnimatedListHeader: React.FC<Props> = ({
             activePropertyType={activePropertyType}
           />
         </Animated.View>
+      )}
+      {openSearchModal && (
+        <SearchLocationModal
+          isModalVisible={openSearchModal}
+          handleCancel={() => setOpenSearchModal(false)}
+          propertyType={activePropertyType}
+        />
       )}
     </>
   );

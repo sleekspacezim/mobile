@@ -109,7 +109,6 @@ export default SortAndViewType;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    gap: 10,
     position: "absolute",
     zIndex: 10,
     bottom: 30,
@@ -122,7 +121,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 5,
     alignItems: "center",
-    paddingHorizontal: 10,
+    justifyContent: "center",
+    width: "50%",
     paddingVertical: 2,
   },
   textStyles: {
