@@ -21,10 +21,10 @@ import {
   gray,
 } from "@/src/Theme/Colors";
 import { family, small } from "@/src/Theme/Font";
-import MyCurrentLocation from "../../CurrentLocation/MyCurrentLocation";
-import Row from "../../Row/Row";
-import ThemedText from "../../ThemedText/ThemedText";
-import RegularText from "../../RegularText/RegularText";
+import MyCurrentLocation from "../../../CurrentLocation/MyCurrentLocation";
+import Row from "../../../Row/Row";
+import ThemedText from "../../../ThemedText/ThemedText";
+import RegularText from "../../../RegularText/RegularText";
 import { activeOpacityOfTouchableOpacity } from "@/src/Utils/Constants";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 
@@ -34,7 +34,7 @@ type Props = {
   propertyType?: IPropertyType;
 };
 
-const SearchLocationModal: React.FC<Props> = ({
+const GetLocationModal: React.FC<Props> = ({
   isModalVisible,
   propertyType,
   handleCancel,
@@ -107,7 +107,7 @@ const SearchLocationModal: React.FC<Props> = ({
   );
 };
 
-export default SearchLocationModal;
+export default GetLocationModal;
 
 const styles = StyleSheet.create({
   container: {

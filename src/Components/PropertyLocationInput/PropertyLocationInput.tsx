@@ -1,14 +1,15 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import ThemedText from "../ThemedText/ThemedText";
-import { FontAwesome5 } from "@expo/vector-icons";
 import Row from "../Row/Row";
 import { gray, red } from "@/src/Theme/Colors";
 import { family, small } from "@/src/Theme/Font";
 import { shortenString } from "@/src/Utils/Funcs";
-import SearchLocationModal from "../Modals/Location/SearchLocationModal";
+import GetLocationModal from "../Modals/Location/GetLocation/GetLocationModal";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 
 type Props = {
   borderColor: string;
@@ -54,7 +55,7 @@ const PropertyLocationInput: React.FC<Props> = ({
       >
         <Text style={styles.text}>{getPropertyInputValue()}</Text>
       </Pressable>
-      <SearchLocationModal
+      <GetLocationModal
         isModalVisible={openLocationModal}
         propertyType={propertType}
         handleCancel={() => setOpenLocationModal(false)}

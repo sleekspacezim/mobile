@@ -35,8 +35,8 @@ type Props = {
   isFocused?: boolean;
   backgroundColor?: string;
   borderColor?: string;
-  isRequired?:boolean;
-  multiLine?:boolean
+  isRequired?: boolean;
+  multiLine?: boolean;
 };
 
 const InputField: React.FC<Props> = ({
@@ -53,7 +53,7 @@ const InputField: React.FC<Props> = ({
   handleOnEnter,
   borderColor,
   isRequired,
-  multiLine
+  multiLine,
 }) => {
   const [ispassWordHidden, setIsPassWordHidden] = useState<boolean>(true);
   const iconSize = 20;
@@ -72,14 +72,16 @@ const InputField: React.FC<Props> = ({
   };
   return (
     <View style={styles(width, height, theme).container}>
-      {label && <Row style={styles(width,height,theme).labelContainer}>
-        <ThemedText type="regular">{label}</ThemedText>
-        {isRequired && (
-          <View style={{ marginTop: 5 }}>
-            <FontAwesome5 name="star-of-life" size={7} color={red} />
-          </View>
-        )}
-        </Row>}
+      {label && (
+        <Row style={styles(width, height, theme).labelContainer}>
+          <ThemedText type="regular">{label}</ThemedText>
+          {isRequired && (
+            <View style={{ marginTop: 5 }}>
+              <FontAwesome5 name="star-of-life" size={7} color={red} />
+            </View>
+          )}
+        </Row>
+      )}
       <View style={styles(width, height, theme).inputWrapper}>
         {type === "emailAddress" && (
           <Fontisto
@@ -152,6 +154,16 @@ const InputField: React.FC<Props> = ({
           style={[
             styles(width, height, theme, borderColor).input,
             {
+              paddingRight:
+                type === "location" ||
+                type === "emailAddress" ||
+                type === "search" ||
+                type === "password" ||
+                type === "givenName" ||
+                type === "familyName" ||
+                label === "Code"
+                  ? 35
+                  : 10,
               backgroundColor: backgroundColor
                 ? backgroundColor
                 : theme === "light"
@@ -169,7 +181,7 @@ const InputField: React.FC<Props> = ({
           cursorColor={theme === "light" ? light.text : dark.text}
           autoCorrect={false}
           enterKeyHint={"enter"}
-          keyboardAppearance={theme==="light"?"light":"dark"}
+          keyboardAppearance={theme === "light" ? "light" : "dark"}
           secureTextEntry={secureText()}
           autoFocus={isFocused ? isFocused : false}
           onSubmitEditing={handleOnEnter}
@@ -197,7 +209,7 @@ const styles = (
     labelContainer: {
       width: "100%",
       gap: 5,
-      marginBottom:-3
+      marginBottom: -3,
     },
     inputWrapper: {
       width: width,
