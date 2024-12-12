@@ -1,4 +1,11 @@
-import { ISortCommercialForSalePropertiesOptions, ISortCommercialRentalPropertiesOptions, ISortLandOptions, ISortPropertiesOptions, ISortResidentialForSalePropertiesOptions, ISortResidentialRentalPropertiesOptions, ISortStandOptions } from "@/src/Context/SortPropertiesContext";
+import {
+  ISortCommercialForSalePropertiesOptions,
+  ISortCommercialRentalPropertiesOptions,
+  ISortLandOptions,
+  ISortResidentialForSalePropertiesOptions,
+  ISortResidentialRentalPropertiesOptions,
+  ISortStandOptions,
+} from "@/src/Context/SortPropertiesContext";
 
 export const residentialForSaleSortOptions: {
   name: string;
@@ -7,6 +14,10 @@ export const residentialForSaleSortOptions: {
   {
     name: "Newest",
     value: "newest",
+  },
+  {
+    name: "Oldest",
+    value: "oldest",
   },
   {
     name: "Price (Low to High)",
@@ -32,11 +43,19 @@ export const residentialForSaleSortOptions: {
     name: "Size (High to Low)",
     value: "size_high_to_low",
   },
+  {
+    name: "Year built (oldest to new)",
+    value: "year_built_oldest_to_new",
+  },
+  {
+    name: "Year built (newest to old)",
+    value: "year_built_newest_to_old",
+  },
 ];
 
 export const residentialRentalSortOptions: {
   name: string;
-  value: ISortResidentialRentalPropertiesOptions
+  value: ISortResidentialRentalPropertiesOptions;
 }[] = [
   {
     name: "Newest",
@@ -73,6 +92,14 @@ export const residentialRentalSortOptions: {
   {
     name: "Size (High to Low)",
     value: "size_high_to_low",
+  },
+  {
+    name: "Year built (oldest to new)",
+    value: "year_built_oldest_to_new",
+  },
+  {
+    name: "Year built (newest to old)",
+    value: "year_built_newest_to_old",
   },
 ];
 
@@ -116,6 +143,14 @@ export const commercialRentalSortOptions: {
     name: "Size (High to Low)",
     value: "size_high_to_low",
   },
+  {
+    name: "Year built (oldest to new)",
+    value: "year_built_oldest_to_new",
+  },
+  {
+    name: "Year built (newest to old)",
+    value: "year_built_newest_to_old",
+  },
 ];
 
 export const commercialForSaleSortOptions: {
@@ -149,6 +184,14 @@ export const commercialForSaleSortOptions: {
   {
     name: "Size (High to Low)",
     value: "size_high_to_low",
+  },
+  {
+    name: "Year built (oldest to new)",
+    value: "year_built_oldest_to_new",
+  },
+  {
+    name: "Year built (newest to old)",
+    value: "year_built_newest_to_old",
   },
 ];
 

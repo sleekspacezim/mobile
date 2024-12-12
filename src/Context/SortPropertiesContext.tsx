@@ -17,6 +17,9 @@ export type ISortPropertiesOptions =
   | "total_rooms_high_to_low"
   | "size_low_to_high"
   | "size_high_to_low"
+  | "year_built_oldest_to_new"
+  | "year_built_newest_to_old"
+  | "oldest"
   | "newest";
 
 export type ISortResidentialRentalPropertiesOptions =
@@ -28,6 +31,9 @@ export type ISortResidentialRentalPropertiesOptions =
   | "total_rooms_high_to_low"
   | "size_low_to_high"
   | "size_high_to_low"
+  | "year_built_oldest_to_new"
+  | "year_built_newest_to_old"
+  | "oldest"
   | "newest";
 
 export type ISortCommercialRentalPropertiesOptions =
@@ -39,6 +45,9 @@ export type ISortCommercialRentalPropertiesOptions =
   | "total_rooms_high_to_low"
   | "size_low_to_high"
   | "size_high_to_low"
+  | "year_built_oldest_to_new"
+  | "year_built_newest_to_old"
+  | "oldest"
   | "newest";
 
 export type ISortResidentialForSalePropertiesOptions =
@@ -48,6 +57,9 @@ export type ISortResidentialForSalePropertiesOptions =
   | "total_rooms_high_to_low"
   | "size_low_to_high"
   | "size_high_to_low"
+  | "year_built_oldest_to_new"
+  | "year_built_newest_to_old"
+  | "oldest"
   | "newest";
 
 export type ISortCommercialForSalePropertiesOptions =
@@ -57,6 +69,9 @@ export type ISortCommercialForSalePropertiesOptions =
   | "total_rooms_high_to_low"
   | "size_low_to_high"
   | "size_high_to_low"
+  | "year_built_oldest_to_new"
+  | "year_built_newest_to_old"
+  | "oldest"
   | "newest";
 
 export type ISortStandOptions =
@@ -64,6 +79,7 @@ export type ISortStandOptions =
   | "price_high_to_low"
   | "size_low_to_high"
   | "size_high_to_low"
+  | "oldest"
   | "newest";
 
 export type ISortLandOptions =
@@ -71,6 +87,7 @@ export type ISortLandOptions =
   | "price_high_to_low"
   | "size_low_to_high"
   | "size_high_to_low"
+  | "oldest"
   | "newest";
 
 const SortPropertiesContext = createContext<{

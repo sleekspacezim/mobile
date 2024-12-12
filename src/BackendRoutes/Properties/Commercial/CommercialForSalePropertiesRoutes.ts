@@ -6,4 +6,5 @@ export const commercialPropertiesForSaleRoutes = {
   postCommercialPropertyForSale: `${backEndUrl}${baseRouteName}`,
   getAllCommercialForSaleProperties: `${backEndUrl}${baseRouteName}`,
   getUpdateAndDeleteCommercialPropertyForSale: `${backEndUrl}${baseRouteName}`,
+  searchCommercialPropertiesForSaleByLocation: `${backEndUrl}${baseRouteName}/search`
 };

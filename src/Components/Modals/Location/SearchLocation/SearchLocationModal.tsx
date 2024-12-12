@@ -7,20 +7,14 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { router } from "expo-router";
 
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import SearchBar from "./SearchBar/SearchBar";
-import {
-  dark,
-  gray,
-  lightGray,
-  pureWhite,
-  red,
-} from "@/src/Theme/Colors";
+import { dark, gray, lightGray, pureWhite, red } from "@/src/Theme/Colors";
 import Row from "@/src/Components/Row/Row";
 import { useSearchLocationHistoryContext } from "@/src/Context/SearchLocationHistoryContext";
 import RegularText from "@/src/Components/RegularText/RegularText";
@@ -34,6 +28,7 @@ import {
   SCREEN_BREAK_POINT,
 } from "@/src/Utils/Constants";
 import EmptySearchHistory from "./EmptySearchHistory/EmptySearchHistory";
+import PropertyTypeList from "@/src/Components/PropertyTypeList/PropertyTypeList";
 
 type Props = {
   handleCancel: IVoidFunc;
@@ -46,11 +41,28 @@ const SearchLocationModal: React.FC<Props> = ({
   isModalVisible,
   propertyType,
 }) => {
+  const [activePropertyType, setActivePropertyType] =
+    useState<IPropertyType>(propertyType);
   const { width } = useWindowDimensions();
   const { searchLocationHistory, setSearchLocationHistory } =
     useSearchLocationHistoryContext();
   const theme = useAppSelector((state) => state.theme.value);
   const underLayColor = theme === "light" ? lightGray : dark.darkGray;
+
+  const navigateToSearchResults = (history: {
+    id: number;
+    location: string | undefined;
+  }) => {
+    handleCancel();
+    router.push({
+      pathname: "/search",
+      params: {
+        propertyType: activePropertyType,
+        location: history.location,
+      },
+    });
+  };
+
   return (
     <Modal
       visible={isModalVisible}
@@ -66,12 +78,27 @@ const SearchLocationModal: React.FC<Props> = ({
           },
         ]}
       >
-        <SearchBar handleCancel={handleCancel} propertyType={propertyType} />
+        <SearchBar
+          handleCancel={handleCancel}
+          propertyType={activePropertyType}
+        />
+        <PropertyTypeList
+          activePropertyType={activePropertyType}
+          setActivePropertyType={setActivePropertyType}
+        />
         <ScrollView showsVerticalScrollIndicator={false}>
           {searchLocationHistory.length > 0 ? (
             <View>
               <Row style={styles.recentSearchesContainer}>
-                <ThemedText type="subHeader">Recent Searches</ThemedText>
+                <ThemedText
+                  type="subHeader"
+                  styles={{
+                    textDecorationStyle: "solid",
+                    textDecorationLine: "underline",
+                  }}
+                >
+                  Recent Searches
+                </ThemedText>
                 <CustomButton
                   title="clear all"
                   onPressFunc={() => setSearchLocationHistory([])}
@@ -85,17 +112,11 @@ const SearchLocationModal: React.FC<Props> = ({
                 <TouchableHighlight
                   key={history.id}
                   underlayColor={underLayColor}
-                  style={styles.touchable}
-                  onPress={() => {
-                    handleCancel();
-                      router.push({
-                        pathname: "/search",
-                        params: {
-                          propertyType,
-                          location: history.location,
-                        },
-                      });
-                  }}
+                  style={[
+                    styles.touchable,
+                    { borderBottomWidth: 1, borderBottomColor: underLayColor },
+                  ]}
+                  onPress={() => navigateToSearchResults(history)}
                 >
                   <View
                     style={[styles.innerTouchable, { flexDirection: "row" }]}
@@ -116,7 +137,7 @@ const SearchLocationModal: React.FC<Props> = ({
                       <AntDesign
                         name="closecircle"
                         size={24}
-                        color={theme === "light" ? "black" : gray}
+                        color={theme === "light" ? "gray" : gray}
                       />
                     </TouchableOpacity>
                   </View>
@@ -140,11 +161,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     paddingVertical: 10,
     paddingHorizontal: 10,
+    gap: 15,
   },
   recentSearchesContainer: {
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 10,
     marginBottom: 10,
     width: "100%",
     paddingHorizontal: 5,

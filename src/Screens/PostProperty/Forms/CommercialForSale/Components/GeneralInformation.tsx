@@ -235,11 +235,7 @@ const GeneralInformation: React.FC<Props> = ({
               {
                 label: "Acres",
                 value: "Acres",
-              },
-              {
-                label: "Hectares",
-                value: "Ha",
-              },
+              }
             ]}
           />
         </Row>

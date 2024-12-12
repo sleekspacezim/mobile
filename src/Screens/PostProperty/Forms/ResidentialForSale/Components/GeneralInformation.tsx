@@ -15,6 +15,7 @@ import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
 import CheckBoxField from "@/src/Components/CheckBox/CheckBoxField";
+import { ICurrency } from "@/src/GlobalTypes/Property/Common";
 
 type Props = {
   formError: IGeneralInfoFormError;
@@ -206,11 +207,7 @@ const GeneralInformation: React.FC<Props> = ({
               {
                 label: "Acres",
                 value: "Acres",
-              },
-              {
-                label: "Hectares",
-                value: "Ha",
-              },
+              }
             ]}
           />
         </Row>

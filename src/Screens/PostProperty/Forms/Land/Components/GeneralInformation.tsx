@@ -12,6 +12,7 @@ import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
 import { IGeneralInfoFormError, ILandGeneralInfo } from "../Types/FormTypes";
+import { ICurrency } from "@/src/GlobalTypes/Property/Common";
 
 type Props = {
   formError: IGeneralInfoFormError;
@@ -208,11 +209,7 @@ const GeneralInformation: React.FC<Props> = ({
               {
                 label: "Acres",
                 value: "Acres",
-              },
-              {
-                label: "Hectares",
-                value: "Ha",
-              },
+              }
             ]}
           />
         </Row>
