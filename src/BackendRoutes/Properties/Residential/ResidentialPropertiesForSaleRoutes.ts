@@ -6,4 +6,5 @@ export const residentialPropertiesForSaleRoutes = {
   postResidentialPropertyForSale: `${backEndUrl}${baseRouteName}`,
   getAllResidentialForSaleProperties: `${backEndUrl}${baseRouteName}`,
   getUpdateAndDeleteResidentialPropertyForSale: `${backEndUrl}${baseRouteName}`,
+  searchResidentialPropertiesForSaleByLocation: `${backEndUrl}${baseRouteName}/search`
 };

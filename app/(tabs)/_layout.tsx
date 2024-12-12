@@ -17,6 +17,7 @@ import PropertyCardBottomSheet from "@/src/Components/BottomSheets/PropertyCard/
 import UserProfileBottomSheet from "@/src/Components/BottomSheets/UserProfile/UserProfileBottomSheet";
 import PropertyFiltersBottomSheet from "@/src/Components/BottomSheets/PropertyFilters/PropertyFiltersBottomSheet";
 import { SearchLocationHistoryContextProvider } from "@/src/Context/SearchLocationHistoryContext";
+import { SearchByLocationPropertyResultsContextProvider } from "@/src/Context/SearchByLocationPropertyResultsContext";
 
 const TabsLayout = () => {
   const theme = useAppSelector((state) => state.theme.value);
@@ -31,102 +32,23 @@ const TabsLayout = () => {
     <Screen>
       <SortPropertiesContextProvider>
         <SearchLocationHistoryContextProvider>
-          <Tabs
-            screenOptions={{
-              headerTitleStyle: {
-                fontFamily: family,
-                color: theme === "light" ? light.text : dark.text,
-                fontSize: large,
-                textAlign: "left",
-              },
-              headerTitleAlign: "left",
-              headerShadowVisible: false,
-              headerStyle: {
-                backgroundColor:
-                  theme === "light" ? pureWhite : dark.background,
-                height: 100,
-              },
-              headerRight: () => <TabsRightHeader />,
-              tabBarStyle: [
-                styles.tabStyles,
-                {
+          <SearchByLocationPropertyResultsContextProvider>
+            <Tabs
+              screenOptions={{
+                headerTitleStyle: {
+                  fontFamily: family,
+                  color: theme === "light" ? light.text : dark.text,
+                  fontSize: large,
+                  textAlign: "left",
+                },
+                headerTitleAlign: "left",
+                headerShadowVisible: false,
+                headerStyle: {
                   backgroundColor:
                     theme === "light" ? pureWhite : dark.background,
-                  borderTopColor: theme === "light" ? pureWhite : dark.darkGray,
+                  height: 100,
                 },
-              ],
-              tabBarInactiveTintColor: gray,
-              tabBarActiveTintColor: primary,
-              tabBarLabelPosition: "below-icon",
-            }}
-          >
-            <Tabs.Screen
-              name="home"
-              options={{
-                title: tabsMenu.home,
-                tabBarIcon: ({ color, focused }) => (
-                  <TabsIcons
-                    focused={focused}
-                    color={color}
-                    name={tabsMenu.home}
-                  />
-                ),
-                tabBarLabel: ({ focused }) => (
-                  <TabsLabels focused={focused} textItem={tabsMenu.home} />
-                ),
-              }}
-            />
-            <Tabs.Screen
-              name="chats"
-              options={{
-                title: tabsMenu.chats,
-                tabBarIcon: ({ color, focused }) => (
-                  <TabsIcons
-                    focused={focused}
-                    color={color}
-                    name={tabsMenu.chats}
-                  />
-                ),
-                tabBarLabel: ({ focused }) => (
-                  <TabsLabels focused={focused} textItem={tabsMenu.chats} />
-                ),
-              }}
-            />
-            <Tabs.Screen
-              name="postproperty"
-              options={{
-                title: "Post A Property",
-                tabBarIcon: ({ color, focused }) => (
-                  <TabsIcons
-                    focused={focused}
-                    color={color}
-                    name={tabsMenu.post}
-                  />
-                ),
-                tabBarLabel: "",
-              }}
-            />
-            <Tabs.Screen
-              name="favorites"
-              options={{
-                title: "My Favorites",
-                tabBarIcon: ({ color, focused }) => (
-                  <TabsIcons
-                    focused={focused}
-                    color={color}
-                    name={tabsMenu.favorites}
-                  />
-                ),
-                tabBarLabel: ({ focused }) => (
-                  <TabsLabels focused={focused} textItem={tabsMenu.favorites} />
-                ),
-              }}
-            />
-            <Tabs.Screen
-              name="(account)"
-              options={{
-                headerShown: segments[3] === undefined ? true : false,
-                title: "My Account",
+                headerRight: () => <TabsRightHeader />,
                 tabBarStyle: [
                   styles.tabStyles,
                   {
@@ -134,55 +56,140 @@ const TabsLayout = () => {
                       theme === "light" ? pureWhite : dark.background,
                     borderTopColor:
                       theme === "light" ? pureWhite : dark.darkGray,
-                    display: segments[3] === undefined ? "flex" : "none",
                   },
                 ],
-                tabBarIcon: ({ color, focused }) => (
-                  <TabsIcons
-                    focused={focused}
-                    color={color}
-                    name={tabsMenu.account}
-                  />
-                ),
-                tabBarLabel: ({ focused }) => (
-                  <TabsLabels focused={focused} textItem={tabsMenu.account} />
-                ),
+                tabBarInactiveTintColor: gray,
+                tabBarActiveTintColor: primary,
+                tabBarLabelPosition: "below-icon",
               }}
-            />
-            <Tabs.Screen
-              name="search"
-              options={{
-                title: "none",
-                href: null,
-                headerShown: false,
-                tabBarStyle: {
-                  display: "none",
-                },
-              }}
-            />
-            <Tabs.Screen
-              name="map"
-              options={{
-                title: "none",
-                href: null,
-                headerShown: false,
-                tabBarStyle: {
-                  display: "none",
-                },
-              }}
-            />
-            <Tabs.Screen
-              name="(property)"
-              options={{
-                title: "none",
-                href: null,
-                headerShown: false,
-                tabBarStyle: {
-                  display: "none",
-                },
-              }}
-            />
-          </Tabs>
+            >
+              <Tabs.Screen
+                name="home"
+                options={{
+                  title: tabsMenu.home,
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabsIcons
+                      focused={focused}
+                      color={color}
+                      name={tabsMenu.home}
+                    />
+                  ),
+                  tabBarLabel: ({ focused }) => (
+                    <TabsLabels focused={focused} textItem={tabsMenu.home} />
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="chats"
+                options={{
+                  title: tabsMenu.chats,
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabsIcons
+                      focused={focused}
+                      color={color}
+                      name={tabsMenu.chats}
+                    />
+                  ),
+                  tabBarLabel: ({ focused }) => (
+                    <TabsLabels focused={focused} textItem={tabsMenu.chats} />
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="postproperty"
+                options={{
+                  title: "Post A Property",
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabsIcons
+                      focused={focused}
+                      color={color}
+                      name={tabsMenu.post}
+                    />
+                  ),
+                  tabBarLabel: "",
+                }}
+              />
+              <Tabs.Screen
+                name="favorites"
+                options={{
+                  title: "My Favorites",
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabsIcons
+                      focused={focused}
+                      color={color}
+                      name={tabsMenu.favorites}
+                    />
+                  ),
+                  tabBarLabel: ({ focused }) => (
+                    <TabsLabels
+                      focused={focused}
+                      textItem={tabsMenu.favorites}
+                    />
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="(account)"
+                options={{
+                  headerShown: segments[3] === undefined ? true : false,
+                  title: "My Account",
+                  tabBarStyle: [
+                    styles.tabStyles,
+                    {
+                      backgroundColor:
+                        theme === "light" ? pureWhite : dark.background,
+                      borderTopColor:
+                        theme === "light" ? pureWhite : dark.darkGray,
+                      display: segments[3] === undefined ? "flex" : "none",
+                    },
+                  ],
+                  tabBarIcon: ({ color, focused }) => (
+                    <TabsIcons
+                      focused={focused}
+                      color={color}
+                      name={tabsMenu.account}
+                    />
+                  ),
+                  tabBarLabel: ({ focused }) => (
+                    <TabsLabels focused={focused} textItem={tabsMenu.account} />
+                  ),
+                }}
+              />
+              <Tabs.Screen
+                name="search"
+                options={{
+                  header: undefined,
+                  href: null,
+                  headerShown: false,
+                  tabBarStyle: {
+                    display: "none",
+                  },
+                }}
+              />
+              <Tabs.Screen
+                name="map"
+                options={{
+                  title: "none",
+                  href: null,
+                  headerShown: false,
+                  tabBarStyle: {
+                    display: "none",
+                  },
+                }}
+              />
+              <Tabs.Screen
+                name="(property)"
+                options={{
+                  title: "none",
+                  href: null,
+                  headerShown: false,
+                  tabBarStyle: {
+                    display: "none",
+                  },
+                }}
+              />
+            </Tabs>
+          </SearchByLocationPropertyResultsContextProvider>
         </SearchLocationHistoryContextProvider>
       </SortPropertiesContextProvider>
       {isPropertyCardBottomSheetOpen && <PropertyCardBottomSheet />}

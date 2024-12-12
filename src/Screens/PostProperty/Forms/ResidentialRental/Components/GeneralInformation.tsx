@@ -14,6 +14,7 @@ import {
 import PropertyLocationInput from "@/src/Components/PropertyLocationInput/PropertyLocationInput";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import { ICurrency } from "@/src/GlobalTypes/Property/Common";
 
 type Props = {
   formError: IGeneralInfoFormError;
@@ -242,11 +243,7 @@ const GeneralInformation: React.FC<Props> = ({
               {
                 label: "Acres",
                 value: "Acres",
-              },
-              {
-                label: "Hectares",
-                value: "Ha",
-              },
+              }
             ]}
           />
         </Row>

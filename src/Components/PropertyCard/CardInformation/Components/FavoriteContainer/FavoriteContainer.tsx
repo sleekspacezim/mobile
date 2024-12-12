@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import React, { useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useMutation } from "@tanstack/react-query";
@@ -23,6 +23,7 @@ import {
 } from "@/src/HttpServices/Mutations/Property/Favorites/FavoritesHttpFuncs";
 import useUpdatePropertyFavorite from "../../../Hooks/useUpdatePropertyFavorite";
 import MessageModal from "@/src/Components/Modals/MessageModal";
+import { PropertyTypesEnum } from "@/src/Utils/Constants";
 
 type Props = {
   propertyId: number;
@@ -58,41 +59,43 @@ const FavoriteContainer: React.FC<Props> = ({
   } = useUpdatePropertyFavorite(loader.propertyId);
 
   const addFavoritePropertyMutationFn = () => {
-    if (propertyType === "Commercial ForSale")
+    if (propertyType === PropertyTypesEnum.CommercialForSale)
       return addFavoriteCommercialForSalePropertyHttpFunc;
-    else if (propertyType === "Commercial Rentals")
+    else if (propertyType === PropertyTypesEnum.CommercialRentals)
       return addFavoriteCommercialRentalPropertyHttpFunc;
-    else if (propertyType === "Residential Rentals")
+    else if (propertyType === PropertyTypesEnum.ResidentialRentals)
       return addFavoriteResidentialRentalPropertyHttpFunc;
-    else if (propertyType === "Residential ForSale")
+    else if (propertyType === PropertyTypesEnum.ResidentialForSale)
       return addFavoriteResidentialForSalePropertyHttpFunc;
-    else if (propertyType === "Land") return addLandFavoritePropertyHttpFunc;
+    else if (propertyType === PropertyTypesEnum.Land)
+      return addLandFavoritePropertyHttpFunc;
     else return addStandFavoritePropertyHttpFunc;
   };
 
   const removeFavoritePropertyMutationFn = () => {
-    if (propertyType === "Commercial ForSale")
+    if (propertyType === PropertyTypesEnum.CommercialForSale)
       return removeFavoriteCommercialForSalePropertyHttpFunc;
-    else if (propertyType === "Commercial Rentals")
+    else if (propertyType === PropertyTypesEnum.CommercialRentals)
       return removeFavoriteCommercialRentalPropertyHttpFunc;
-    else if (propertyType === "Residential Rentals")
+    else if (propertyType === PropertyTypesEnum.ResidentialRentals)
       return removeFavoriteResidentialRentalPropertyHttpFunc;
-    else if (propertyType === "Residential ForSale")
+    else if (propertyType === PropertyTypesEnum.ResidentialForSale)
       return removeFavoriteResidentialForSalePropertyHttpFunc;
-    else if (propertyType === "Land") return removeLandFavoritePropertyHttpFunc;
+    else if (propertyType === PropertyTypesEnum.Land)
+      return removeLandFavoritePropertyHttpFunc;
     else return removeStandFavoritePropertyHttpFunc;
   };
 
   const updatePropertyFavorite = () => {
-    if (propertyType === "Commercial ForSale")
+    if (propertyType === PropertyTypesEnum.CommercialForSale)
       updateOnSaleCommercialProperties();
-    else if (propertyType === "Commercial Rentals")
+    else if (propertyType === PropertyTypesEnum.CommercialRentals)
       updateRentalCommercialProperties();
-    else if (propertyType === "Residential Rentals")
+    else if (propertyType === PropertyTypesEnum.ResidentialRentals)
       updateRentalResidentialProperties();
-    else if (propertyType === "Residential ForSale")
+    else if (propertyType === PropertyTypesEnum.ResidentialForSale)
       updateOnSaleResidentialProperties();
-    else if (propertyType === "Land") updateLandProperties();
+    else if (propertyType === PropertyTypesEnum.Land) updateLandProperties();
     else return updateStandProperties();
   };
 
@@ -192,5 +195,3 @@ const FavoriteContainer: React.FC<Props> = ({
 };
 
 export default FavoriteContainer;
-
-const styles = StyleSheet.create({});

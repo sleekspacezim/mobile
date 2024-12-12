@@ -217,7 +217,7 @@ const Account: INoPropsReactComponent = () => {
         >
           <CustomButton
             title={accessToken ? "Logout" : "Login"}
-            onPressFunc={accessToken?handleSignOut:handleSignOut}
+            onPressFunc={accessToken ? handleSignOut : handleSignOut}
           />
           {!accessToken && (
             <TouchableOpacity

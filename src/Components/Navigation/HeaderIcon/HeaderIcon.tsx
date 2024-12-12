@@ -6,7 +6,7 @@ import { dark, light } from "@/src/Theme/Colors";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 
 type Props = {
-  onPressFunc: () => void;
+  onPressFunc?: () => void;
   iconName: keyof typeof Ionicons.glyphMap;
   iconSize?: number;
 };

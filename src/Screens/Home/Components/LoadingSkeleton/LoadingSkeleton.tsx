@@ -10,27 +10,30 @@ import { INoPropsReactComponent } from "@/src/GlobalTypes/Types";
 import SkeletonLoader from "@/src/Components/SkeletonLoader/SkeletonLoader";
 import { animatedHeaderHeight } from "../../Utils/Constants";
 
-const LoadingSkeleton: INoPropsReactComponent = () => {
-  const cardsList = [1, 2, 3,4];
+type Props = {
+  addAnimatedPaddingTop?: boolean;
+};
+
+const LoadingSkeleton: React.FC<Props> = ({ addAnimatedPaddingTop }) => {
+  const cardsList = [1, 2, 3, 4];
   const { width } = useWindowDimensions();
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
+      scrollEnabled={false}
       contentContainerStyle={{
         flexGrow: 1,
         width: width,
-        
       }}
     >
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          { paddingTop: addAnimatedPaddingTop ? animatedHeaderHeight : 0 },
+        ]}
+      >
         {cardsList.map((card) => (
-          <View
-            style={[
-              styles.card,
-              { width: 340 },
-            ]}
-            key={card}
-          >
+          <View style={[styles.card, { width: 340 }]} key={card}>
             <SkeletonLoader
               style={{ width: "100%", height: 200, borderRadius: 7 }}
             />
@@ -62,11 +65,10 @@ const styles = StyleSheet.create({
     gap: 20,
     marginBottom: 10,
     width: "100%",
-    paddingTop:animatedHeaderHeight,
     justifyContent: "center",
     alignItems: "center",
-    flexWrap:"wrap",
-    flexDirection:"row"
+    flexWrap: "wrap",
+    flexDirection: "row",
   },
   card: {
     gap: 10,

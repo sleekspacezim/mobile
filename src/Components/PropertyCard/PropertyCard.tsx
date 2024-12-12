@@ -3,11 +3,11 @@ import React from "react";
 
 import { PropertyTypesEnum, SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
 import { IResidentialRentalPropertyWithManager } from "@/src/GlobalTypes/Property/Residential/RentalTypes";
-import { IResidentialPropertyForSale } from "@/src/GlobalTypes/Property/Residential/ForSaleTypes";
-import { ICommercialPropertyForSale } from "@/src/GlobalTypes/Property/Commercial/ForSaleTypes";
-import { ICommercialRentalProperty } from "@/src/GlobalTypes/Property/Commercial/RentalTypes";
-import { IStandProperty } from "@/src/GlobalTypes/Property/Stand/StandTypes";
-import { ILandProperty } from "@/src/GlobalTypes/Property/Land/LandTypes";
+import { IResidentialPropertyForSaleWithManager } from "@/src/GlobalTypes/Property/Residential/ForSaleTypes";
+import { ICommercialPropertyForSaleWithManager } from "@/src/GlobalTypes/Property/Commercial/ForSaleTypes";
+import { ICommercialRentalPropertyWithManager } from "@/src/GlobalTypes/Property/Commercial/RentalTypes";
+import { IStandPropertyWithManager } from "@/src/GlobalTypes/Property/Stand/StandTypes";
+import { ILandPropertyWithManager } from "@/src/GlobalTypes/Property/Land/LandTypes";
 import ImageCarousel from "./ImageCarousel/ImageCarousel";
 import StandInformation from "./CardInformation/Components/Stand";
 import LandInformation from "./CardInformation/Components/Land";
@@ -24,23 +24,23 @@ type Props =
     }
   | {
       type: PropertyTypesEnum.ResidentialForSale;
-      property: IResidentialPropertyForSale;
+      property: IResidentialPropertyForSaleWithManager;
     }
   | {
       type: PropertyTypesEnum.CommercialForSale;
-      property: ICommercialPropertyForSale;
+      property: ICommercialPropertyForSaleWithManager;
     }
   | {
       type: PropertyTypesEnum.CommercialRentals;
-      property: ICommercialRentalProperty;
+      property: ICommercialRentalPropertyWithManager;
     }
   | {
       type: PropertyTypesEnum.Stands;
-      property: IStandProperty;
+      property: IStandPropertyWithManager;
     }
   | {
       type: PropertyTypesEnum.Land;
-      property: ILandProperty;
+      property: ILandPropertyWithManager;
     };
 
 const PropertyCard: React.FC<Props> = ({ type, property }) => {
@@ -48,8 +48,9 @@ const PropertyCard: React.FC<Props> = ({ type, property }) => {
   return (
     <View
       style={{
-        width: width > SCREEN_BREAK_POINT ? propertyCardTabletWidth : width - 10,
-        borderRadius:10
+        width:
+          width > SCREEN_BREAK_POINT ? propertyCardTabletWidth : width - 10,
+        borderRadius: 10,
       }}
     >
       <ImageCarousel media={property.media} propertyType={type} />

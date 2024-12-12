@@ -1,4 +1,5 @@
 import { usePropertiesContext } from "@/src/Context/PropertiesContext";
+import { useSearchByLocationPropertyResultsContext } from "@/src/Context/SearchByLocationPropertyResultsContext";
 
 const useUpdatePropertyFavorite = (propertyId: number) => {
   const {
@@ -10,6 +11,21 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
     setStandProperties,
   } = usePropertiesContext();
 
+  const {
+    landPropertiesSearchResults,
+    standPropertiesSearchResults,
+    onSaleCommercialPropertiesSearchResults,
+    onSaleResidentialPropertiesSearchResults,
+    rentalCommercialPropertiesSearchResults,
+    rentalResidentialPropertiesSearchResults,
+    setLandPropertiesSearchResults,
+    setOnSaleCommercialPropertiesSearchResults,
+    setOnSaleResidentialPropertiesSearchResults,
+    setRentalCommercialPropertiesSearchResults,
+    setRentalResidentialPropertiesSearchResults,
+    setStandPropertiesSearchResults,
+  } = useSearchByLocationPropertyResultsContext();
+
   const updateRentalCommercialProperties = () => {
     setRentalCommercialProperties((properties) =>
       properties.map((property) =>
@@ -18,6 +34,15 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
           : property
       )
     );
+    if (rentalCommercialPropertiesSearchResults.length > 0) {
+      setRentalCommercialPropertiesSearchResults((properties) =>
+        properties.map((property) =>
+          property.id === propertyId
+            ? { ...property, isFavorite: !property.isFavorite }
+            : property
+        )
+      );
+    }
   };
 
   const updateOnSaleCommercialProperties = () => {
@@ -28,6 +53,15 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
           : property
       )
     );
+    if (onSaleCommercialPropertiesSearchResults.length > 0) {
+      setOnSaleCommercialPropertiesSearchResults((properties) =>
+        properties.map((property) =>
+          property.id === propertyId
+            ? { ...property, isFavorite: !property.isFavorite }
+            : property
+        )
+      );
+    }
   };
 
   const updateRentalResidentialProperties = () => {
@@ -38,6 +72,15 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
           : property
       )
     );
+    if (rentalResidentialPropertiesSearchResults.length > 0) {
+      setRentalResidentialPropertiesSearchResults((properties) =>
+        properties.map((property) =>
+          property.id === propertyId
+            ? { ...property, isFavorite: !property.isFavorite }
+            : property
+        )
+      );
+    }
   };
 
   const updateOnSaleResidentialProperties = () => {
@@ -48,6 +91,15 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
           : property
       )
     );
+    if (onSaleResidentialPropertiesSearchResults.length > 0) {
+      setOnSaleResidentialPropertiesSearchResults((properties) =>
+        properties.map((property) =>
+          property.id === propertyId
+            ? { ...property, isFavorite: !property.isFavorite }
+            : property
+        )
+      );
+    }
   };
 
   const updateStandProperties = () => {
@@ -58,6 +110,15 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
           : property
       )
     );
+    if (standPropertiesSearchResults.length > 0) {
+      setStandPropertiesSearchResults((properties) =>
+        properties.map((property) =>
+          property.id === propertyId
+            ? { ...property, isFavorite: !property.isFavorite }
+            : property
+        )
+      );
+    }
   };
 
   const updateLandProperties = () => {
@@ -68,6 +129,15 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
           : property
       )
     );
+    if (landPropertiesSearchResults.length > 0) {
+      setLandPropertiesSearchResults((properties) =>
+        properties.map((property) =>
+          property.id === propertyId
+            ? { ...property, isFavorite: !property.isFavorite }
+            : property
+        )
+      );
+    }
   };
 
   return {

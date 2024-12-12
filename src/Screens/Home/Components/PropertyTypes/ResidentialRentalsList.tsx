@@ -23,7 +23,7 @@ import { useSharedContext } from "@/src/Context/SharedContext";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { usePropertiesContext } from "@/src/Context/PropertiesContext";
 import ButtonSpinner from "@/src/Components/Spinners/ButtonSpinner";
-import { primary } from "@/src/Theme/Colors";
+import { primary, pureWhite } from "@/src/Theme/Colors";
 import FlatListOnEndReachedError from "@/src/Components/FlatListOnEndReachedError/FlatListOnEndReachedError";
 import OutlinedButton from "@/src/Components/Buttons/Outlined/OutlinedButton";
 import { animatedHeaderHeight } from "../../Utils/Constants";
@@ -51,6 +51,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
   const [pageNumber, setPageNumber] = useState<number>(1);
   const { width } = useWindowDimensions();
   const { accessToken } = useAppSelector((state) => state.user.value);
+  const theme = useAppSelector((state) => state.theme.value);
 
   const pageLimit = width > SCREEN_BREAK_POINT ? 30 : 12;
 
@@ -140,7 +141,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
   }, [accessToken]);
 
   useEffect(() => {
-    if(httpError) setTotalproperties(0)
+    if (httpError) setTotalproperties(0);
   }, [httpError]);
 
   const flatListFooter = () => {
@@ -155,11 +156,12 @@ const ResidentialRentalsList: React.FC<Props> = ({
       );
     else return null;
   };
+
   const text =
     "We currently do not have Residential Rental Properties, please try again soon. Please checkout other property types in the meantime.";
   return (
     <View style={styles.container}>
-      {isLoading && <LoadingSkeleton />}
+      {isLoading && <LoadingSkeleton addAnimatedPaddingTop />}
       {httpError && (
         <View
           style={{
@@ -177,10 +179,12 @@ const ResidentialRentalsList: React.FC<Props> = ({
         </View>
       )}
       {!httpError && !isLoading && rentalResidentialProperties.length < 1 && (
-        <View style={{
-          flex: 1,
-          paddingTop: width > SCREEN_BREAK_POINT ? 0 : animatedHeaderHeight,
-        }}>
+        <View
+          style={{
+            flex: 1,
+            paddingTop: width > SCREEN_BREAK_POINT ? 0 : animatedHeaderHeight,
+          }}
+        >
           <EmptyPropertyList text={text} />
         </View>
       )}
@@ -214,8 +218,15 @@ const ResidentialRentalsList: React.FC<Props> = ({
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             horizontal={false}
-            refreshing={isRefreshing}
-            onRefresh={handleRefresh}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={handleRefresh}
+                progressBackgroundColor={theme === "dark" ? pureWhite : primary}
+                tintColor={primary}
+                colors={[theme === "dark" ? primary : pureWhite]}
+              />
+            }
             ListFooterComponent={flatListFooter()}
             onEndReached={loadMorehttpError ? undefined : loadMoreProperties}
             onEndReachedThreshold={0.8}

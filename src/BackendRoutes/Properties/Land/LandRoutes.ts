@@ -5,4 +5,5 @@ const baseRouteName = "/property/land";
 
 export const landRoutes = {
   getAllGetOnePostDeleteAndUpdateLand: `${backEndUrl}${baseRouteName}`,
+  searchLandPropertiesByLocation: `${backEndUrl}${baseRouteName}/search`
 };

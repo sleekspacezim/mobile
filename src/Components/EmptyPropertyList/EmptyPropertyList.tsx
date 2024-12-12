@@ -2,7 +2,6 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import LottieView from "lottie-react-native";
 import React from "react";
 
-import { INoPropsReactComponent } from "@/src/GlobalTypes/Types";
 import house from "@/src/Components/Lotties/house.json";
 import ThemedText from "../ThemedText/ThemedText";
 import RegularText from "../RegularText/RegularText";
