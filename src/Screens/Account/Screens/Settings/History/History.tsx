@@ -6,7 +6,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 
@@ -28,25 +28,45 @@ import RegularText from "@/src/Components/RegularText/RegularText";
 import { family, large } from "@/src/Theme/Font";
 import { shortenString } from "@/src/Utils/Funcs";
 import { INoPropsReactComponent } from "@/src/GlobalTypes/Types";
+import PropertyTypesModal from "@/src/Components/Modals/PropertyTypes/PropertyTypesModal";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 
 const History: INoPropsReactComponent = () => {
+  const [selectedPropertyType, setSelectedPropertyType] =
+    useState<IPropertyType>(PropertyTypesEnum.ResidentialRentals);
+  const [openPropertyTypeModal, setOpenPropertyModal] =
+    useState<boolean>(false);
+  const [location, setLocation] = useState<string>("");
   const { searchLocationHistory, setSearchLocationHistory } =
     useSearchLocationHistoryContext();
   const theme = useAppSelector((state) => state.theme.value);
   const underLayColor = theme === "light" ? lightGray : dark.darkGray;
   const { width } = useWindowDimensions();
-  
-  const navigateToSearchResults = (history: {
-    id: number;
-    location: string | undefined;
-  }) => {
-    router.push({
-      pathname: "/search",
-      params: {
-        PropertyType: PropertyTypesEnum.ResidentialRentals,
-        location: history.location,
-      },
-    });
+
+  const propertyTypes: IPropertyType[] = [
+    PropertyTypesEnum.ResidentialRentals,
+    PropertyTypesEnum.CommercialForSale,
+    PropertyTypesEnum.CommercialRentals,
+    PropertyTypesEnum.Land,
+    PropertyTypesEnum.ResidentialForSale,
+    PropertyTypesEnum.Stands,
+  ];
+
+  const handleOpenModal = (location: string) => {
+    setLocation(location);
+    setOpenPropertyModal(true);
+  };
+  const navigateToSearchResults = () => {
+    setOpenPropertyModal(false);
+    setTimeout(() => {
+      router.push({
+        pathname: "/search",
+        params: {
+          propertyType: selectedPropertyType,
+          location,
+        },
+      });
+    }, 500);
   };
 
   return (
@@ -86,7 +106,7 @@ const History: INoPropsReactComponent = () => {
                         borderBottomColor: underLayColor,
                       },
                     ]}
-                    onPress={() => navigateToSearchResults(history)}
+                    onPress={() => handleOpenModal(history.location as string)}
                   >
                     <View
                       style={[styles.innerTouchable, { flexDirection: "row" }]}
@@ -119,6 +139,16 @@ const History: INoPropsReactComponent = () => {
             )}
           </ScrollView>
         </View>
+        {openPropertyTypeModal && (
+          <PropertyTypesModal
+            propertyTypes={propertyTypes}
+            selectedPropertyType={selectedPropertyType}
+            setSelectedPropertyType={setSelectedPropertyType}
+            isModalVisible={openPropertyTypeModal}
+            handleCancel={() => setOpenPropertyModal(false)}
+            handleOkay={navigateToSearchResults}
+          />
+        )}
       </StackScreen>
     </Screen>
   );

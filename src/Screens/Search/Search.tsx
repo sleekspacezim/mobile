@@ -23,10 +23,7 @@ import {
   searchStandsByLocationHttpFunc,
 } from "@/src/HttpServices/Queries/Properties/SearchPropertiesHttpFuncs";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import {
-  SCREEN_BREAK_POINT,
-  PropertyTypesEnum,
-} from "@/src/Utils/Constants";
+import { SCREEN_BREAK_POINT, PropertyTypesEnum } from "@/src/Utils/Constants";
 import { useSharedContext } from "@/src/Context/SharedContext";
 import EmptyPropertyList from "@/src/Components/EmptyPropertyList/EmptyPropertyList";
 import FlatListOnEndReachedError from "@/src/Components/FlatListOnEndReachedError/FlatListOnEndReachedError";

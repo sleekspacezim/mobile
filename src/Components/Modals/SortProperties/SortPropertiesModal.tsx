@@ -21,7 +21,6 @@ import {
 } from "@/src/Context/SortPropertiesContext";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
-import { family, small } from "@/src/Theme/Font";
 import { pureWhite, dark, primary } from "@/src/Theme/Colors";
 import {
   SCREEN_BREAK_POINT,
