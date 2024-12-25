@@ -10,32 +10,25 @@ export type IPropertyFilterType =
   | "Price"
   | "Size"
   | "Rent"
+  | "Total rooms"
   | "Bedrooms"
   | "Bathrooms"
+  | "Currency"
   | "Rooms to rent"
   | "Type"
+  | ""
   | "All Filters";
-
-type IPropertyFiltersBottomSheet = {
-  type: IPropertyFilterType;
-  isOpen: boolean;
-};
 
 const BottomSheetsContext = createContext<{
   isPropertyCardBottomSheetOpen: boolean;
-  propertyFiltersBottomSheet: IPropertyFiltersBottomSheet;
+  propertyFiltersBottomSheet: IPropertyFilterType;
   isUserProfileBottomSheetOpen: boolean;
   setIsUserProfileBottomSheetOpen: Dispatch<SetStateAction<boolean>>;
-  setPropertyFiltersBottomSheet: Dispatch<
-    SetStateAction<IPropertyFiltersBottomSheet>
-  >;
+  setPropertyFiltersBottomSheet: Dispatch<SetStateAction<IPropertyFilterType>>;
   setIsPropertyCardBottomSheetOpen: Dispatch<SetStateAction<boolean>>;
 }>({
   isPropertyCardBottomSheetOpen: false,
-  propertyFiltersBottomSheet: {
-    type: "All Filters",
-    isOpen: false,
-  },
+  propertyFiltersBottomSheet: "",
   isUserProfileBottomSheetOpen: false,
   setIsPropertyCardBottomSheetOpen: () => {},
   setPropertyFiltersBottomSheet: () => {},
@@ -49,13 +42,8 @@ export const BottomSheetsContextProvider = ({
 }) => {
   const [isUserProfileBottomSheetOpen, setIsUserProfileBottomSheetOpen] =
     useState<boolean>(false);
-  const [
-    propertyFiltersBottomSheet,
-    setPropertyFiltersBottomSheet,
-  ] = useState<IPropertyFiltersBottomSheet>({
-    type: "All Filters",
-    isOpen: false,
-  });
+  const [propertyFiltersBottomSheet, setPropertyFiltersBottomSheet] =
+    useState<IPropertyFilterType>("");
   const [isPropertyCardBottomSheetOpen, setIsPropertyCardBottomSheetOpen] =
     useState<boolean>(false);
   return (

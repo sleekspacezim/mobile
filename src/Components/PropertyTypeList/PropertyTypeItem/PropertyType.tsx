@@ -2,30 +2,31 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import React from "react";
 
 import { dark, lightGray, pureWhite, white } from "@/src/Theme/Colors";
-import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import { useAppDispatch, useAppSelector } from "@/src/Redux/Hooks/Config";
 import { activeOpacityOfTouchableOpacity } from "@/src/Utils/Constants";
 import { family, small } from "@/src/Theme/Font";
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import { setActivePropertyType } from "@/src/Redux/Slices/ActivePropertyTypeSlice/ActiveProperty";
 
 type Props = {
-  activePropertyType: IPropertyType;
   propertyType: IPropertyType;
-  setActivePropertyType: React.Dispatch<React.SetStateAction<IPropertyType>>;
   onPressFlatListScrollFunc: IVoidFunc;
 };
 
 const PropertyTypeItem: React.FC<Props> = ({
-  activePropertyType,
   propertyType,
-  setActivePropertyType,
   onPressFlatListScrollFunc,
 }) => {
+  const activePropertyType = useAppSelector(
+    (state) => state.activePropertyType.value
+  );
   const theme = useAppSelector((state) => state.theme.value);
+  const dispatch = useAppDispatch();
   return (
     <TouchableOpacity
       onPress={() => {
-        setActivePropertyType(propertyType);
+        dispatch(setActivePropertyType(propertyType));
         onPressFlatListScrollFunc();
       }}
       activeOpacity={activeOpacityOfTouchableOpacity}

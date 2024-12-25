@@ -119,6 +119,10 @@ const GeneralInformation: React.FC<Props> = ({
               value: "Farm",
             },
             {
+              label:"Plot",
+              value:"Plot"
+            },
+            {
               label: "Mine",
               value: "Mine",
             },

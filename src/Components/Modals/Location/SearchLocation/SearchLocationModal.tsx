@@ -82,10 +82,7 @@ const SearchLocationModal: React.FC<Props> = ({
           handleCancel={handleCancel}
           propertyType={activePropertyType}
         />
-        <PropertyTypeList
-          activePropertyType={activePropertyType}
-          setActivePropertyType={setActivePropertyType}
-        />
+        <PropertyTypeList />
         <ScrollView showsVerticalScrollIndicator={false}>
           {searchLocationHistory.length > 0 ? (
             <View>

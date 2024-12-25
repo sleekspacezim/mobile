@@ -6,8 +6,10 @@ export type IPropertyFilter =
   | "Bedrooms"
   | "Bathrooms"
   | "Rooms to rent"
+  | "Total rooms"
   | "Type"
   | "All Filters"
+  | string
   | "Reset Filters";
 
 export type IPropertiesViewType = "map" | "list";

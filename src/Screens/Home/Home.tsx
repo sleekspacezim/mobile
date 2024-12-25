@@ -9,11 +9,11 @@ import { PropertyTypesEnum } from "@/src/Utils/Constants";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 import { IPropertiesViewType } from "./Types/Types";
 import SortAndViewType from "./Components/SortAndViewType/SortAndViewType";
+import { useAppDispatch, useAppSelector } from "@/src/Redux/Hooks/Config";
+import { setActivePropertyType } from "@/src/Redux/Slices/ActivePropertyTypeSlice/ActiveProperty";
 
 const Home: INoPropsReactComponent = () => {
-  const [activePropertyType, setActivePropertyType] = useState<IPropertyType>(
-    PropertyTypesEnum.ResidentialRentals
-  );
+  const activePropertyType = useAppSelector((state)=>state.activePropertyType.value)
   const [propertiesViewType, setPropertiesViewType] =
     useState<IPropertiesViewType>("list");
   const [totalProperties, setTotalproperties] = useState<number>(0);
@@ -24,7 +24,6 @@ const Home: INoPropsReactComponent = () => {
         activePropertyType={activePropertyType}
         totalProperties={totalProperties}
         scrollAnimation={scrollAnimation}
-        setActivePropertyType={setActivePropertyType}
       />
       <ResidentialRentalsList
         setTotalproperties={setTotalproperties}

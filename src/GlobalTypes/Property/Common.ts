@@ -9,4 +9,4 @@ export type IPropertyType =
 export type ICurrency = "US$"|"R"|"ZIG"
 export type IStatus = "on the market"|"off the market";
 
-export type IDimensions = "m²"|"Acres"|"Ha"
+export type IDimensions = "m²"|"Acres"

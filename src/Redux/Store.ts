@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import { userSlice } from "./Slices/UserSlice/User";
-import { payWallSlice} from "./Slices/payWallSlice/PayWallState";
+import { payWallSlice } from "./Slices/payWallSlice/PayWallState";
 import { themeSlice } from "./Slices/Theme/Theme";
 import { managerAccountSlice } from "./Slices/ManagerAccountSlice/ManagerSlice";
 import { mapLocationSlice } from "./Slices/MapLocationSlice/MapLocationSlice";
+import { activePropertyTypeSlice } from "./Slices/ActivePropertyTypeSlice/ActiveProperty";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     theme: themeSlice.reducer,
     managerAccount: managerAccountSlice.reducer,
     mapLocation: mapLocationSlice.reducer,
+    activePropertyType: activePropertyTypeSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

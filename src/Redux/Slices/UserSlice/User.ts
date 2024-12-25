@@ -26,6 +26,7 @@ const user: IUser = {
   favoriteResidentialRentalProperties: [],
   favoriteStands: [],
 };
+
 export const userSlice = createSlice({
   name: "user",
   initialState: {

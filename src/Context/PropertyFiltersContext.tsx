@@ -33,7 +33,6 @@ export type IPriceFilter = {
     | "";
   min: number;
   max: number;
-  currency: ICurrency;
 };
 
 export type IBedroomsFilter = {
@@ -42,9 +41,25 @@ export type IBedroomsFilter = {
     | PropertyTypesEnum.ResidentialForSale
     | PropertyTypesEnum.ResidentialRentals
     | "";
-  figure: number;
+  figure: string;
 };
 
+export type ITotalRoomsFilter = {
+  isActive: boolean;
+  propertyType:
+    | PropertyTypesEnum.ResidentialForSale
+    | PropertyTypesEnum.ResidentialRentals
+    | PropertyTypesEnum.CommercialForSale
+    | PropertyTypesEnum.CommercialRentals
+    | "";
+  figure: string;
+};
+
+export type ICurrencyFilter = {
+  isActive: boolean;
+  propertyType: IPropertyType | "";
+  currency: ICurrency | "";
+};
 
 export type IBathroomsFilter = {
   isActive: boolean;
@@ -52,19 +67,19 @@ export type IBathroomsFilter = {
     | PropertyTypesEnum.ResidentialForSale
     | PropertyTypesEnum.ResidentialRentals
     | "";
-  figure: number;
+  figure: string;
 };
 
 export type IRoomsToRentFilter = {
   isActive: boolean;
   propertyType:
-    | PropertyTypesEnum.ResidentialForSale
+    | PropertyTypesEnum.CommercialRentals
     | PropertyTypesEnum.ResidentialRentals
     | "";
-  figure: number;
+  figure: string;
 };
 
-export type IPropertyTypeFilter = {
+export type IPropertyStructureTypeFilter = {
   isActive: boolean;
   propertyType: IPropertyType | "";
   type: string;
@@ -73,28 +88,41 @@ export type IPropertyTypeFilter = {
 export type IPropertySizeFilter = {
   isActive: boolean;
   propertyType: IPropertyType | "";
-  figure: number;
+  figure: string;
   dimension: IDimensions;
 };
 
 const PropertyFiltersContext = createContext<{
   priceFilter: IPriceFilter;
+  totalRoomsFilter: ITotalRoomsFilter;
+  currencyFilter: ICurrencyFilter;
   rentFilter: IRentFilter;
   propertySizeFilter: IPropertySizeFilter;
   bedroomsFilter: IBedroomsFilter;
   bathroomsFilter: IBathroomsFilter;
-  propertyTypeFilter: IPropertyTypeFilter;
+  propertyStructureTypeFilter: IPropertyStructureTypeFilter;
   roomsToRentFilter: IRoomsToRentFilter;
+  setTotalRoomsFilter: Dispatch<SetStateAction<ITotalRoomsFilter>>;
+  setCurrencyFilter: Dispatch<SetStateAction<ICurrencyFilter>>;
   setPropertySizeFilter: Dispatch<SetStateAction<IPropertySizeFilter>>;
   setBedroomsFilter: Dispatch<SetStateAction<IBedroomsFilter>>;
   setBathroomsFilter: Dispatch<SetStateAction<IBathroomsFilter>>;
-  setPropertyTypeFilter: Dispatch<SetStateAction<IPropertyTypeFilter>>;
+  setPropertyStructureTypeFilter: Dispatch<SetStateAction<IPropertyStructureTypeFilter>>;
   setRoomsToRentFilter: Dispatch<SetStateAction<IRoomsToRentFilter>>;
   setRentFilter: Dispatch<SetStateAction<IRentFilter>>;
   setPriceFilter: Dispatch<SetStateAction<IPriceFilter>>;
 }>({
+  currencyFilter: {
+    isActive: false,
+    propertyType: "",
+    currency: "",
+  },
+  totalRoomsFilter: {
+    isActive: false,
+    figure: "",
+    propertyType: "",
+  },
   priceFilter: {
-    currency: "US$",
     max: 0,
     min: 0,
     isActive: false,
@@ -110,9 +138,9 @@ const PropertyFiltersContext = createContext<{
     isActive: false,
     propertyType: "",
     dimension: "m²",
-    figure: 0,
+    figure: "",
   },
-  propertyTypeFilter: {
+  propertyStructureTypeFilter: {
     isActive: false,
     propertyType: "",
     type: "",
@@ -120,22 +148,24 @@ const PropertyFiltersContext = createContext<{
   bathroomsFilter: {
     isActive: false,
     propertyType: "",
-    figure: 0,
+    figure: "",
   },
   bedroomsFilter: {
     isActive: false,
     propertyType: "",
-    figure: 0,
+    figure: "",
   },
   roomsToRentFilter: {
     isActive: false,
     propertyType: "",
-    figure: 0,
+    figure: "",
   },
+  setTotalRoomsFilter: () => {},
+  setCurrencyFilter: () => {},
   setBathroomsFilter: () => {},
   setBedroomsFilter: () => {},
   setPropertySizeFilter: () => {},
-  setPropertyTypeFilter: () => {},
+  setPropertyStructureTypeFilter: () => {},
   setRoomsToRentFilter: () => {},
   setRentFilter: () => {},
   setPriceFilter: () => {},
@@ -146,8 +176,17 @@ export const PropertyFiltersContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const [currencyFilter, setCurrencyFilter] = useState<ICurrencyFilter>({
+    isActive: false,
+    propertyType: "",
+    currency: "",
+  });
+  const [totalRoomsFilter, setTotalRoomsFilter] = useState<ITotalRoomsFilter>({
+    isActive: false,
+    propertyType: "",
+    figure: "",
+  });
   const [priceFilter, setPriceFilter] = useState<IPriceFilter>({
-    currency: "US$",
     max: 0,
     min: 0,
     isActive: false,
@@ -159,11 +198,11 @@ export const PropertyFiltersContextProvider = ({
       isActive: false,
       propertyType: "",
       dimension: "m²",
-      figure: 0,
+      figure: "",
     });
 
-  const [propertyTypeFilter, setPropertyTypeFilter] =
-    useState<IPropertyTypeFilter>({
+  const [propertyStructureTypeFilter, setPropertyStructureTypeFilter] =
+    useState<IPropertyStructureTypeFilter>({
       isActive: false,
       propertyType: "",
       type: "",
@@ -172,19 +211,19 @@ export const PropertyFiltersContextProvider = ({
     useState<IRoomsToRentFilter>({
       isActive: false,
       propertyType: "",
-      figure: 0,
+      figure: "",
     });
 
   const [bedroomsFilter, setBedroomsFilter] = useState<IBedroomsFilter>({
     isActive: false,
     propertyType: "",
-    figure: 0,
+    figure: "",
   });
 
   const [bathroomsFilter, setBathroomsFilter] = useState<IBathroomsFilter>({
     isActive: false,
     propertyType: "",
-    figure: 0,
+    figure: "",
   });
 
   const [rentFilter, setRentFilter] = useState<IRentFilter>({
@@ -197,19 +236,23 @@ export const PropertyFiltersContextProvider = ({
   return (
     <PropertyFiltersContext.Provider
       value={{
+        totalRoomsFilter,
         priceFilter,
+        currencyFilter,
         rentFilter,
         propertySizeFilter,
-        propertyTypeFilter,
+        propertyStructureTypeFilter,
         bathroomsFilter,
         bedroomsFilter,
         roomsToRentFilter,
+        setCurrencyFilter,
+        setTotalRoomsFilter,
         setRentFilter,
         setPriceFilter,
         setBathroomsFilter,
         setBedroomsFilter,
         setPropertySizeFilter,
-        setPropertyTypeFilter,
+        setPropertyStructureTypeFilter,
         setRoomsToRentFilter,
       }}
     >

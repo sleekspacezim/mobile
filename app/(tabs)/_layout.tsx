@@ -194,7 +194,7 @@ const TabsLayout = () => {
       </SortPropertiesContextProvider>
       {isPropertyCardBottomSheetOpen && <PropertyCardBottomSheet />}
       {isUserProfileBottomSheetOpen && <UserProfileBottomSheet />}
-      {propertyFiltersBottomSheet.isOpen && <PropertyFiltersBottomSheet />}
+      {propertyFiltersBottomSheet && <PropertyFiltersBottomSheet />}
     </Screen>
   );
 };

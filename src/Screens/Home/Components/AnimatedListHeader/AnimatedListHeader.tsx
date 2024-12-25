@@ -22,14 +22,12 @@ type Props = {
   activePropertyType: IPropertyType;
   totalProperties: number;
   scrollAnimation: Animated.Value;
-  setActivePropertyType: React.Dispatch<React.SetStateAction<IPropertyType>>;
 };
 
 const AnimatedListHeader: React.FC<Props> = ({
   activePropertyType,
   totalProperties,
   scrollAnimation,
-  setActivePropertyType,
 }) => {
   const [openSearchModal, setOpenSearchModal] = useState<boolean>(false);
   const theme = useAppSelector((state) => state.theme.value);
@@ -79,14 +77,10 @@ const AnimatedListHeader: React.FC<Props> = ({
       {width > SCREEN_BREAK_POINT ? (
         <View style={styles.tabletContainer}>
           <SearchBar onPressFunc={() => setOpenSearchModal(true)} />
-          <PropertyTypeList
-            activePropertyType={activePropertyType}
-            setActivePropertyType={setActivePropertyType}
-          />
-          <Filters propertyType={activePropertyType} />
+          <PropertyTypeList />
+          <Filters />
           <TotalProperties
             totalProperties={totalProperties}
-            activePropertyType={activePropertyType}
           />
         </View>
       ) : (
@@ -102,14 +96,10 @@ const AnimatedListHeader: React.FC<Props> = ({
           onLayout={onLayout}
         >
           <SearchBar onPressFunc={() => setOpenSearchModal(true)} />
-          <PropertyTypeList
-            activePropertyType={activePropertyType}
-            setActivePropertyType={setActivePropertyType}
-          />
-          <Filters propertyType={activePropertyType} />
+          <PropertyTypeList />
+          <Filters />
           <TotalProperties
             totalProperties={totalProperties}
-            activePropertyType={activePropertyType}
           />
         </Animated.View>
       )}
