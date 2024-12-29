@@ -33,6 +33,7 @@ import MessageModal from "@/src/Components/Modals/MessageModal";
 import useUpdatePropertyFavorite from "@/src/Components/PropertyCard/Hooks/useUpdatePropertyFavorite";
 import Row from "@/src/Components/Row/Row";
 import { useSharedContext } from "@/src/Context/SharedContext";
+import { PropertyTypesEnum } from "@/src/Utils/Constants";
 
 type Props = {
   closeBottomSheetWithoutScrollingToTheBottom: () => void;
@@ -72,43 +73,43 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
   };
 
   const addFavoritePropertyMutationFn = () => {
-    if (selectedProperty.type === "Commercial ForSale")
+    if (selectedProperty.type === PropertyTypesEnum.CommercialForSale)
       return addFavoriteCommercialForSalePropertyHttpFunc;
-    else if (selectedProperty.type === "Commercial Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.CommercialRentals)
       return addFavoriteCommercialRentalPropertyHttpFunc;
-    else if (selectedProperty.type === "Residential Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialRentals)
       return addFavoriteResidentialRentalPropertyHttpFunc;
-    else if (selectedProperty.type === "Residential ForSale")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialForSale)
       return addFavoriteResidentialForSalePropertyHttpFunc;
-    else if (selectedProperty.type === "Land")
+    else if (selectedProperty.type === PropertyTypesEnum.Land)
       return addLandFavoritePropertyHttpFunc;
     else return addStandFavoritePropertyHttpFunc;
   };
 
   const removeFavoritePropertyMutationFn = () => {
-    if (selectedProperty.type === "Commercial ForSale")
+    if (selectedProperty.type === PropertyTypesEnum.CommercialForSale)
       return removeFavoriteCommercialForSalePropertyHttpFunc;
-    else if (selectedProperty.type === "Commercial Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.CommercialRentals)
       return removeFavoriteCommercialRentalPropertyHttpFunc;
-    else if (selectedProperty.type === "Residential Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialRentals)
       return removeFavoriteResidentialRentalPropertyHttpFunc;
-    else if (selectedProperty.type === "Residential ForSale")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialForSale)
       return removeFavoriteResidentialForSalePropertyHttpFunc;
-    else if (selectedProperty.type === "Land")
+    else if (selectedProperty.type === PropertyTypesEnum.Land)
       return removeLandFavoritePropertyHttpFunc;
     else return removeStandFavoritePropertyHttpFunc;
   };
 
   const updatePropertyFavorite = () => {
-    if (selectedProperty.type === "Commercial ForSale")
+    if (selectedProperty.type === PropertyTypesEnum.CommercialForSale)
       updateOnSaleCommercialProperties();
-    else if (selectedProperty.type === "Commercial Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.CommercialRentals)
       updateRentalCommercialProperties();
-    else if (selectedProperty.type === "Residential Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialRentals)
       updateRentalResidentialProperties();
-    else if (selectedProperty.type === "Residential ForSale")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialForSale)
       updateOnSaleResidentialProperties();
-    else if (selectedProperty.type === "Land") updateLandProperties();
+    else if (selectedProperty.type === PropertyTypesEnum.Land) updateLandProperties();
     else return updateStandProperties();
   };
 

@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
-import { IPropertySize, IVoidFunc } from "@/src/GlobalTypes/Types";
+import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import {
   dark,
   gray,
@@ -20,21 +20,27 @@ import {
 } from "@/src/Theme/Colors";
 import { family, small } from "@/src/Theme/Font";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
-import { SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
+import {
+  IPropertySizeFilter,
+  usePropertyFiltersContext,
+} from "@/src/Context/PropertyFiltersContext";
+import {
+  activeOpacityOfTouchableOpacity,
+  PropertyTypesEnum,
+  SCREEN_BREAK_POINT,
+} from "@/src/Utils/Constants";
 import CustomButton from "../../Buttons/Custom/CustomButton";
 import InputField from "../../InputField/InputField";
 import Row from "../../Row/Row";
 import ThemedText from "../../ThemedText/ThemedText";
 import { propertySizeDimensions } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Contants";
-import {
-  sharedAreaSizeFilterStyles,
-} from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Styles";
+import { sharedAreaSizeFilterStyles } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Styles";
 import ResetFilterButton from "../../Buttons/ResetFilter/ResetFilterButton";
+import usePropertyAreaSizeFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/usePropertyAreaSizeFilterFuncs";
 
 type Props = {
   isFilterModalOpen: boolean;
-  propertyType: IPropertyType | "";
+  propertyType: IPropertyType;
   closeModal: IVoidFunc;
 };
 
@@ -47,42 +53,51 @@ const AreaSizeFilterModal: React.FC<Props> = ({
   const { width } = useWindowDimensions();
   const { propertySizeFilter, setPropertySizeFilter } =
     usePropertyFiltersContext();
-  const [propertySize, setPropertySize] = useState<IPropertySize>({
-    figure: propertySizeFilter.figure,
-    dimension: propertySizeFilter.dimension,
-  });
+  const [propertySize, setPropertySize] =
+    useState<IPropertySizeFilter>(propertySizeFilter);
+  const {
+    applyPropertySizeFilter,
+    resetPropertySizeFilter,
+    handleSelectDimensions,
+    handleSelectSize,
+    size,
+    color,
+  } = usePropertyAreaSizeFilterFuncs(
+    propertySize,
+    propertyType,
+    setPropertySize
+  );
 
   const handleFilterReset = () => {
-    setPropertySize({
-      figure: "",
-      dimension: "m²",
-    });
-    setPropertySizeFilter({
-      isActive: false,
-      figure: "",
-      dimension: "m²",
-      propertyType: "",
-    });
+    resetPropertySizeFilter();
     closeModal();
   };
 
   const handleApplyFilter = () => {
-    if (propertySize.figure) {
-      setPropertySizeFilter({
-        isActive: true,
-        figure: propertySize.figure,
-        dimension: propertySize.dimension,
-        propertyType,
-      });
-    } else {
-      setPropertySizeFilter({
-        isActive: false,
-        figure: "",
-        dimension: "m²",
-        propertyType: "",
-      });
-    }
+    applyPropertySizeFilter();
     closeModal();
+  };
+
+  const isPropertySizeSelected = () => {
+    if (propertyType === PropertyTypesEnum.CommercialForSale) {
+      if (propertySize.commercialForsale.figure) return true;
+      else return false;
+    } else if (propertyType === PropertyTypesEnum.CommercialRentals) {
+      if (propertySize.commercialRentals.figure) return true;
+      else return false;
+    } else if (propertyType === PropertyTypesEnum.ResidentialForSale) {
+      if (propertySize.residentialForsale.figure) return true;
+      else return false;
+    } else if (propertyType === PropertyTypesEnum.ResidentialRentals) {
+      if (propertySize.residentialRentals.figure) return true;
+      else return false;
+    } else if (propertyType === PropertyTypesEnum.Stands) {
+      if (propertySize.stand.figure) return true;
+      else return false;
+    } else {
+      if (propertySize.land.figure) return true;
+      else return false;
+    }
   };
 
   return (
@@ -124,19 +139,17 @@ const AreaSizeFilterModal: React.FC<Props> = ({
               <ThemedText type="subHeader">Area Size</ThemedText>
             </Row>
             <View style={{ height: 30 }}>
-              {propertySizeFilter.figure && (
-                <ResetFilterButton handleResetFunc={handleFilterReset}/>
+              {isPropertySizeSelected() && (
+                <ResetFilterButton handleResetFunc={handleFilterReset} />
               )}
             </View>
           </Row>
           <View style={{ marginTop: -10 }}>
             <InputField
               label="Size"
-              textValue={propertySize.figure}
+              textValue={size()}
               placeHolder="0"
-              handleOnChangeText={(figure: string) =>
-                setPropertySize({ ...propertySize, figure })
-              }
+              handleOnChangeText={handleSelectSize}
               contentType="none"
               type="number"
               width={200}
@@ -147,17 +160,18 @@ const AreaSizeFilterModal: React.FC<Props> = ({
           <View style={sharedAreaSizeFilterStyles.dimensionContainer}>
             {propertySizeDimensions.map((dimension) => (
               <TouchableOpacity
+                activeOpacity={activeOpacityOfTouchableOpacity}
                 key={dimension}
-                onPress={() => setPropertySize({ ...propertySize, dimension })}
+                onPress={() => handleSelectDimensions(dimension)}
                 style={[
                   sharedAreaSizeFilterStyles.dimension,
                   {
-                    backgroundColor:
-                      propertySize.dimension === dimension
-                        ? lighterPrimary
-                        : "transparent",
-                    borderColor:
-                      propertySize.dimension === dimension ? primary : gray,
+                    backgroundColor: color(
+                      dimension,
+                      lighterPrimary,
+                      "transparent"
+                    ),
+                    borderColor: color(dimension, primary, gray),
                   },
                 ]}
               >
@@ -165,8 +179,7 @@ const AreaSizeFilterModal: React.FC<Props> = ({
                   style={[
                     sharedAreaSizeFilterStyles.dimensionText,
                     {
-                      color:
-                        propertySize.dimension === dimension ? primary : gray,
+                      color: color(dimension, primary, gray),
                     },
                   ]}
                 >

@@ -1,14 +1,9 @@
-import {
-  Modal,
-  StyleSheet,
-  useWindowDimensions,
-  View
-} from "react-native";
+import { Modal, StyleSheet, useWindowDimensions, View } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-import { pureWhite, dark, primary, gray, red } from "@/src/Theme/Colors";
-import { PropertyTypesEnum, SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
+import { pureWhite, dark, primary } from "@/src/Theme/Colors";
+import { SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
 import ThemedText from "../../ThemedText/ThemedText";
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
@@ -17,16 +12,18 @@ import InputField from "../../InputField/InputField";
 import Row from "../../Row/Row";
 import RangingSlider from "../../RangingSlider/RangingSlider";
 import RegularText from "../../RegularText/RegularText";
-import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
+import {
+  IRentFilter,
+  usePropertyFiltersContext,
+} from "@/src/Context/PropertyFiltersContext";
 import ResetFilterButton from "../../Buttons/ResetFilter/ResetFilterButton";
 import { sharedRentFilterStyles } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Styles";
+import useRentFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/useRentFilterFuncs";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 
 type Props = {
   isFilterModalOpen: boolean;
-  propertyType:
-    | PropertyTypesEnum.CommercialRentals
-    | PropertyTypesEnum.ResidentialRentals
-    | "";
+  propertyType: IPropertyType;
   closeModal: IVoidFunc;
 };
 
@@ -36,40 +33,24 @@ const RentFilterModal: React.FC<Props> = ({
   closeModal,
 }) => {
   const { setRentFilter, rentFilter } = usePropertyFiltersContext();
-  const [rentMin, setRentMin] = useState<number>(rentFilter.min);
-  const [rentMax, setRentMax] = useState<number>(rentFilter.max);
+  const [rent, setRent] = useState<IRentFilter>(rentFilter);
   const theme = useAppSelector((state) => state.theme.value);
   const { width } = useWindowDimensions();
+  const {
+    borderColor,
+    rentMax,
+    rentMin,
+    setRentMax,
+    setRentMin,
+    resetRentFilter,
+    applyRentFilter,
+  } = useRentFilterFuncs(rent, propertyType, setRent);
   const maxValue = 3000;
 
-  const borderColor = () => {
-    if (rentMin !== 0 && rentMin >= rentMax) {
-      return red;
-    } else return gray;
-  };
-
-  const handleFilterReset = () => {
-    setRentMax(0);
-    setRentMin(0);
-    setRentFilter({
-      isActive: false,
-      max: 0,
-      min: 0,
-      propertyType: "",
-    });
-  };
-
   const applyFilter = () => {
-    if (rentMin <= rentMax) {
-      if (rentMax > 0 || rentMin > 0) {
-        setRentFilter({
-          isActive: true,
-          max: rentMax,
-          min: rentMin,
-          propertyType,
-        });
-        closeModal();
-      }
+    if (rentMin() <= rentMax()) {
+      applyRentFilter();
+      closeModal();
     }
   };
 
@@ -107,8 +88,8 @@ const RentFilterModal: React.FC<Props> = ({
               <Ionicons name="pricetag-outline" size={25} color={primary} />
               <ThemedText type="subHeader">Rent Filter</ThemedText>
             </Row>
-            {(rentMax > 0 || rentMin > 0) && (
-              <ResetFilterButton handleResetFunc={handleFilterReset}/>
+            {(rentMax() > 0 || rentMin() > 0) && (
+              <ResetFilterButton handleResetFunc={resetRentFilter} />
             )}
           </Row>
           <View style={sharedRentFilterStyles.sliderContainer}>
@@ -117,14 +98,14 @@ const RentFilterModal: React.FC<Props> = ({
               maxValue={maxValue}
               minValue={0}
               onChange={setRentMin}
-              value={rentMin}
+              value={rentMin()}
               step={10}
             />
           </View>
           <Row style={sharedRentFilterStyles.inputRow}>
             <View>
               <InputField
-                textValue={rentMin.toString()}
+                textValue={rentMin().toString()}
                 placeHolder="0"
                 handleOnChangeText={(rent: string) => setRentMin(+rent)}
                 contentType="none"
@@ -137,7 +118,7 @@ const RentFilterModal: React.FC<Props> = ({
             <ThemedText type="regular">To</ThemedText>
             <View>
               <InputField
-                textValue={rentMax.toString()}
+                textValue={rentMax().toString()}
                 placeHolder="Any"
                 handleOnChangeText={(rent: string) => setRentMax(+rent)}
                 contentType="none"
@@ -154,14 +135,14 @@ const RentFilterModal: React.FC<Props> = ({
               maxValue={maxValue}
               minValue={0}
               onChange={setRentMax}
-              value={rentMax}
+              value={rentMax()}
               step={10}
             />
           </View>
           <CustomButton
             title="Apply"
             onPressFunc={applyFilter}
-            isDisabled={rentMax < rentMin ? true : false}
+            isDisabled={rentMax() < rentMin() ? true : false}
           />
         </View>
       </View>
@@ -191,5 +172,5 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignItems: "center",
     justifyContent: "space-between",
-  }
+  },
 });

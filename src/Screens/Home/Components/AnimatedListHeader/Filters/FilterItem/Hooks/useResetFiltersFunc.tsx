@@ -19,52 +19,92 @@ const useResetFiltersFunc = () => {
 
   const handleResetFilters = () => {
     setPropertySizeFilter({
-      isActive: false,
-      figure: "",
-      dimension: "m²",
-      propertyType: "",
+      commercialForsale: {
+        figure: "",
+        dimension: "m²",
+      },
+      commercialRentals: {
+        figure: "",
+        dimension: "m²",
+      },
+      residentialForsale: {
+        figure: "",
+        dimension: "m²",
+      },
+      residentialRentals: {
+        figure: "",
+        dimension: "m²",
+      },
+      stand: {
+        figure: "",
+        dimension: "m²",
+      },
+      land: {
+        figure: "",
+        dimension: "m²",
+      },
     });
     setPriceFilter({
-      isActive: false,
-      max: 0,
-      min: 0,
-      propertyType: "",
+      commercialForSale: {
+        max: 0,
+        min: 0,
+      },
+      residentialForSale: {
+        max: 0,
+        min: 0,
+      },
+      stand: {
+        max: 0,
+        min: 0,
+      },
+      land: {
+        max: 0,
+        min: 0,
+      },
     });
     setRentFilter({
-      isActive: false,
-      max: 0,
-      min: 0,
-      propertyType: "",
+      commercialRentals: {
+        max: 0,
+        min: 0,
+      },
+      residentialRentals: {
+        max: 0,
+        min: 0,
+      },
     });
     setCurrencyFilter({
-      isActive: false,
-      currency: "",
-      propertyType: "",
+      commercialForsale: "",
+      commercialRentals: "",
+      residentialForsale: "",
+      residentialRentals: "",
+      stand: "",
+      land: "",
     });
     setPropertyStructureTypeFilter({
-      isActive: false,
-      type: "",
-      propertyType: "",
+      commercialForsale: "",
+      commercialRentals: "",
+      residentialForsale: "",
+      residentialRentals: "",
+      stand: "",
+      land: "",
     });
     setRoomsToRentFilter({
-      isActive: false,
-      figure: "",
-      propertyType: "",
+      commercialRentalsFigure: "",
+      residentialRentalsFigure: "",
     });
     setBathroomsFilter({
-      isActive: false,
-      figure: "",
-      propertyType: "",
+      residentialForsaleFigure: "",
+      residentialRentalsFigure: "",
     });
     setBedroomsFilter({
-      isActive: false,
-      figure: "",
-      propertyType: "",
+      residentialForsaleFigure: "",
+      residentialRentalsFigure: "",
     });
     setTotalRoomsFilter({
-      isActive: false,
-      figure: "",
-      propertyType: "",
+      commercialForsaleFigure: "",
+      commercialRentalsFigure: "",
+      residentialForsaleFigure: "",
+      residentialRentalsFigure: "",
     });
     dispatch(setActivePropertyType(PropertyTypesEnum.ResidentialRentals));
   };

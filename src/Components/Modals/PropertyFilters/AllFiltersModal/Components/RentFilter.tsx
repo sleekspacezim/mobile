@@ -1,36 +1,38 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 import InputField from "@/src/Components/InputField/InputField";
 import RangingSlider from "@/src/Components/RangingSlider/RangingSlider";
 import RegularText from "@/src/Components/RegularText/RegularText";
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
-import { red, gray, primary } from "@/src/Theme/Colors";
+import { primary } from "@/src/Theme/Colors";
 import Divider from "./Divider";
 import { sharedRentFilterStyles } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Styles";
-import { Ionicons } from "@expo/vector-icons";
+import { IRentFilter } from "@/src/Context/PropertyFiltersContext";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import useRentFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/useRentFilterFuncs";
 
 type Props = {
-  rentMin: number;
-  rentMax: number;
-  setRentMax: React.Dispatch<React.SetStateAction<number>>;
-  setRentMin: React.Dispatch<React.SetStateAction<number>>;
+  rentFilterLocalDetails: IRentFilter;
+  propertyType: IPropertyType;
+  setRentFilterLocalDetails: React.Dispatch<React.SetStateAction<IRentFilter>>;
 };
 
 const RentFilter: React.FC<Props> = ({
-  rentMin,
-  rentMax,
-  setRentMax,
-  setRentMin,
+  rentFilterLocalDetails,
+  setRentFilterLocalDetails,
+  propertyType,
 }) => {
   const maxValue = 3000;
 
-  const borderColor = () => {
-    if (rentMin !== 0 && rentMin >= rentMax) {
-      return red;
-    } else return gray;
-  };
+  const { borderColor, rentMax, rentMin, setRentMax, setRentMin } =
+    useRentFilterFuncs(
+      rentFilterLocalDetails,
+      propertyType,
+      setRentFilterLocalDetails
+    );
 
   return (
     <View style={styles.container}>
@@ -44,14 +46,14 @@ const RentFilter: React.FC<Props> = ({
           maxValue={maxValue}
           minValue={0}
           onChange={setRentMin}
-          value={rentMin}
+          value={rentMin()}
           step={10}
         />
       </View>
       <Row style={sharedRentFilterStyles.inputRow}>
         <View>
           <InputField
-            textValue={rentMin.toString()}
+            textValue={rentMin().toString()}
             placeHolder="0"
             handleOnChangeText={(rent: string) => setRentMin(+rent)}
             contentType="none"
@@ -64,7 +66,7 @@ const RentFilter: React.FC<Props> = ({
         <ThemedText type="regular">To</ThemedText>
         <View>
           <InputField
-            textValue={rentMax.toString()}
+            textValue={rentMax().toString()}
             placeHolder="Any"
             handleOnChangeText={(rent: string) => setRentMax(+rent)}
             contentType="none"
@@ -81,7 +83,7 @@ const RentFilter: React.FC<Props> = ({
           maxValue={maxValue}
           minValue={0}
           onChange={setRentMax}
-          value={rentMax}
+          value={rentMax()}
           step={10}
         />
       </View>

@@ -1,9 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { MaterialIcons, Ionicons, FontAwesome } from "@expo/vector-icons";
 
@@ -12,9 +7,18 @@ import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { gray, lighterPrimary, primary } from "@/src/Theme/Colors";
 import { IPropertyFilter } from "@/src/Screens/Home/Types/Types";
 import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";
-import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
+import {
+  IBathroomsFilter,
+  IBedroomsFilter,
+  IRoomsToRentFilter,
+  ITotalRoomsFilter,
+  usePropertyFiltersContext,
+} from "@/src/Context/PropertyFiltersContext";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import { PropertyTypesEnum } from "@/src/Utils/Constants";
+import {
+  activeOpacityOfTouchableOpacity,
+  PropertyTypesEnum,
+} from "@/src/Utils/Constants";
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import {
   bathRoomsFilterList,
@@ -24,6 +28,7 @@ import {
 } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Contants";
 import ResetFilterButton from "@/src/Components/Buttons/ResetFilter/ResetFilterButton";
 import { sharedRoomsFilterStyles } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Styles";
+import useSharedRoomsFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/useSharedRoomsFilterFuncs";
 
 type Props = {
   filterType: IPropertyFilter;
@@ -45,91 +50,133 @@ const SharedRoomsFilter: React.FC<Props> = ({
     setTotalRoomsFilter,
   } = usePropertyFiltersContext();
   const [selectedTotalNumberOfRooms, setSelectedTotalNumberOfRooms] =
-    useState<string>(totalRoomsFilter.figure);
+    useState<ITotalRoomsFilter>(totalRoomsFilter);
   const [selectedNumberOfRoomsToRent, setSelectedNumberOfRoomsToRent] =
-    useState<string>(roomsToRentFilter.figure);
+    useState<IRoomsToRentFilter>(roomsToRentFilter);
   const [selectedNumberOfBathrooms, setSelectedNumberOfBathrooms] =
-    useState<string>(bathroomsFilter.figure);
+    useState<IBathroomsFilter>(bathroomsFilter);
   const [selectedNumberOfBedrooms, setSelectedNumberOfBedrooms] =
-    useState<string>(bedroomsFilter.figure);
+    useState<IBedroomsFilter>(bedroomsFilter);
   const activePropertyType = useAppSelector(
     (state) => state.activePropertyType.value
   );
+  const {
+    resetSharedRoomsFilter,
+    applySharedRoomsFilter,
+    handleSelectBathrooms,
+    handleSelectBedrooms,
+    handleSelectRoomsToRent,
+    handleSelectTotalRooms,
+    totalRoomsColor,
+    bathRoomsColor,
+    bedRoomsColor,
+    roomsToRentColor,
+  } = useSharedRoomsFilterFuncs(
+    activePropertyType,
+    selectedTotalNumberOfRooms,
+    selectedNumberOfRoomsToRent,
+    selectedNumberOfBathrooms,
+    selectedNumberOfBedrooms,
+    setSelectedNumberOfBathrooms,
+    setSelectedNumberOfBedrooms,
+    setSelectedNumberOfRoomsToRent,
+    setSelectedTotalNumberOfRooms
+  );
 
   const handleFilterReset = () => {
-    if (filterType === "Rooms to rent") {
-      setSelectedNumberOfRoomsToRent("");
-      setRoomsToRentFilter({
-        isActive: false,
-        figure: "",
-        propertyType: "",
-      });
-    } else if (filterType === "Bathrooms") {
-      setSelectedNumberOfBathrooms("");
-      setBathroomsFilter({
-        isActive: false,
-        figure: "",
-        propertyType: "",
-      });
-    } else if (filterType === "Bedrooms") {
-      setSelectedNumberOfBedrooms("");
-      setBedroomsFilter({
-        isActive: false,
-        figure: "",
-        propertyType: "",
-      });
-    } else {
-      setSelectedTotalNumberOfRooms("");
-      setTotalRoomsFilter({
-        isActive: false,
-        figure: "",
-        propertyType: "",
-      });
-    }
+    resetSharedRoomsFilter();
     closeBottomSheet();
   };
 
   const handleApplyFilter = () => {
-    if (filterType === "Rooms to rent") {
-      setRoomsToRentFilter({
-        isActive: true,
-        figure: selectedNumberOfRoomsToRent,
-        propertyType: activePropertyType as
-          | ""
-          | PropertyTypesEnum.ResidentialRentals
-          | PropertyTypesEnum.CommercialRentals,
-      });
-    } else if (filterType === "Bathrooms") {
-      setBathroomsFilter({
-        isActive: true,
-        figure: selectedNumberOfBathrooms,
-        propertyType: activePropertyType as
-          | ""
-          | PropertyTypesEnum.ResidentialForSale
-          | PropertyTypesEnum.ResidentialRentals,
-      });
-    } else if (filterType === "Bedrooms") {
-      setBedroomsFilter({
-        isActive: true,
-        figure: selectedNumberOfBedrooms,
-        propertyType: activePropertyType as
-          | ""
-          | PropertyTypesEnum.ResidentialForSale
-          | PropertyTypesEnum.ResidentialRentals,
-      });
-    } else {
-      setTotalRoomsFilter({
-        isActive: true,
-        figure: selectedTotalNumberOfRooms,
-        propertyType: activePropertyType as
-          | ""
-          | PropertyTypesEnum.ResidentialRentals
-          | PropertyTypesEnum.ResidentialForSale
-          | PropertyTypesEnum.CommercialRentals
-          | PropertyTypesEnum.CommercialForSale,
-      });
-    }
+    applySharedRoomsFilter();
     closeBottomSheet();
+  };
+
+  const renderBedroomResetButton = () => {
+    if (activePropertyType === PropertyTypesEnum.ResidentialForSale) {
+      if (
+        bedroomsFilter.residentialForsaleFigure &&
+        selectedNumberOfBedrooms.residentialForsaleFigure
+      )
+        return true;
+      else return false;
+    } else {
+      if (
+        bedroomsFilter.residentialRentalsFigure &&
+        selectedNumberOfBedrooms.residentialRentalsFigure
+      )
+        return true;
+      else return false;
+    }
+  };
+
+  const renderBathroomResetButton = () => {
+    if (activePropertyType === PropertyTypesEnum.ResidentialForSale) {
+      if (
+        bathroomsFilter.residentialForsaleFigure &&
+        selectedNumberOfBathrooms.residentialForsaleFigure
+      )
+        return true;
+      else return false;
+    } else {
+      if (
+        bathroomsFilter.residentialRentalsFigure &&
+        selectedNumberOfBathrooms.residentialRentalsFigure
+      )
+        return true;
+      else return false;
+    }
+  };
+
+  const renderRoomsToRentResetButton = () => {
+    if (activePropertyType === PropertyTypesEnum.CommercialRentals) {
+      if (
+        roomsToRentFilter.commercialRentalsFigure &&
+        selectedNumberOfRoomsToRent.commercialRentalsFigure
+      )
+        return true;
+      else return false;
+    } else {
+      if (
+        roomsToRentFilter.residentialRentalsFigure &&
+        selectedNumberOfRoomsToRent.residentialRentalsFigure
+      )
+        return true;
+      else return false;
+    }
+  };
+
+  const renderTotalRoomsResetButton = () => {
+    if (activePropertyType === PropertyTypesEnum.ResidentialForSale) {
+      if (
+        totalRoomsFilter.residentialForsaleFigure &&
+        selectedTotalNumberOfRooms.residentialForsaleFigure
+      )
+        return true;
+      else return false;
+    } else if (activePropertyType === PropertyTypesEnum.ResidentialRentals) {
+      if (
+        totalRoomsFilter.residentialRentalsFigure &&
+        selectedTotalNumberOfRooms.residentialRentalsFigure
+      )
+        return true;
+      else return false;
+    } else if (activePropertyType === PropertyTypesEnum.CommercialForSale) {
+      if (
+        totalRoomsFilter.commercialForsaleFigure &&
+        selectedTotalNumberOfRooms.commercialForsaleFigure
+      )
+        return true;
+      else return false;
+    } else {
+      if (
+        totalRoomsFilter.commercialRentalsFigure &&
+        selectedTotalNumberOfRooms.commercialRentalsFigure
+      )
+        return true;
+      else return false;
+    }
   };
 
   return (
@@ -147,22 +194,20 @@ const SharedRoomsFilter: React.FC<Props> = ({
         </Row>
         <View style={{ height: 30 }}>
           {filterType === "Total rooms" &&
-            totalRoomsFilter.figure &&
+            renderTotalRoomsResetButton() &&
             selectedTotalNumberOfRooms && (
               <ResetFilterButton handleResetFunc={handleFilterReset} />
             )}
           {filterType === "Rooms to rent" &&
-            roomsToRentFilter.figure &&
+            renderRoomsToRentResetButton() &&
             selectedNumberOfRoomsToRent && (
               <ResetFilterButton handleResetFunc={handleFilterReset} />
             )}
-          {filterType === "Bedrooms" &&
-            bedroomsFilter.figure &&
-            selectedNumberOfBedrooms && (
-              <ResetFilterButton handleResetFunc={handleFilterReset} />
-            )}
+          {filterType === "Bedrooms" && renderBedroomResetButton() && (
+            <ResetFilterButton handleResetFunc={handleFilterReset} />
+          )}
           {filterType === "Bathrooms" &&
-            bathroomsFilter.figure &&
+            renderBathroomResetButton() &&
             selectedNumberOfBathrooms && (
               <ResetFilterButton handleResetFunc={handleFilterReset} />
             )}
@@ -172,30 +217,26 @@ const SharedRoomsFilter: React.FC<Props> = ({
         {filterType === "Rooms to rent" &&
           roomsToRentFilterList.map((numberOfRooms) => (
             <TouchableOpacity
+              activeOpacity={activeOpacityOfTouchableOpacity}
               style={[
                 sharedRoomsFilterStyles.room,
                 {
-                  backgroundColor:
-                    selectedNumberOfRoomsToRent === numberOfRooms
-                      ? lighterPrimary
-                      : "transparent",
-                  borderColor:
-                    selectedNumberOfRoomsToRent === numberOfRooms
-                      ? primary
-                      : gray,
+                  backgroundColor: roomsToRentColor(
+                    numberOfRooms,
+                    lighterPrimary,
+                    "transparent"
+                  ),
+                  borderColor: roomsToRentColor(numberOfRooms, primary, gray),
                 },
               ]}
               key={numberOfRooms}
-              onPress={() => setSelectedNumberOfRoomsToRent(numberOfRooms)}
+              onPress={() => handleSelectRoomsToRent(numberOfRooms)}
             >
               <Text
                 style={[
                   sharedRoomsFilterStyles.roomText,
                   {
-                    color:
-                      selectedNumberOfRoomsToRent === numberOfRooms
-                        ? primary
-                        : gray,
+                    color: roomsToRentColor(numberOfRooms, primary, gray),
                   },
                 ]}
               >
@@ -207,28 +248,26 @@ const SharedRoomsFilter: React.FC<Props> = ({
         {filterType === "Bedrooms" &&
           bedRoomsFilterList.map((numberOfRooms) => (
             <TouchableOpacity
+              activeOpacity={activeOpacityOfTouchableOpacity}
               style={[
                 sharedRoomsFilterStyles.room,
                 {
-                  backgroundColor:
-                    selectedNumberOfBedrooms === numberOfRooms
-                      ? lighterPrimary
-                      : "transparent",
-                  borderColor:
-                    selectedNumberOfBedrooms === numberOfRooms ? primary : gray,
+                  backgroundColor: bedRoomsColor(
+                    numberOfRooms,
+                    lighterPrimary,
+                    "transparent"
+                  ),
+                  borderColor: bedRoomsColor(numberOfRooms, primary, gray),
                 },
               ]}
               key={numberOfRooms}
-              onPress={() => setSelectedNumberOfBedrooms(numberOfRooms)}
+              onPress={() => handleSelectBedrooms(numberOfRooms)}
             >
               <Text
                 style={[
                   sharedRoomsFilterStyles.roomText,
                   {
-                    color:
-                      selectedNumberOfBedrooms === numberOfRooms
-                        ? primary
-                        : gray,
+                    color: bedRoomsColor(numberOfRooms, primary, gray),
                   },
                 ]}
               >
@@ -240,30 +279,26 @@ const SharedRoomsFilter: React.FC<Props> = ({
         {filterType === "Bathrooms" &&
           bathRoomsFilterList.map((numberOfRooms) => (
             <TouchableOpacity
+              activeOpacity={activeOpacityOfTouchableOpacity}
               style={[
                 sharedRoomsFilterStyles.room,
                 {
-                  backgroundColor:
-                    selectedNumberOfBathrooms === numberOfRooms
-                      ? lighterPrimary
-                      : "transparent",
-                  borderColor:
-                    selectedNumberOfBathrooms === numberOfRooms
-                      ? primary
-                      : gray,
+                  backgroundColor: bathRoomsColor(
+                    numberOfRooms,
+                    lighterPrimary,
+                    "transparent"
+                  ),
+                  borderColor: bathRoomsColor(numberOfRooms, primary, gray),
                 },
               ]}
               key={numberOfRooms}
-              onPress={() => setSelectedNumberOfBathrooms(numberOfRooms)}
+              onPress={() => handleSelectBathrooms(numberOfRooms)}
             >
               <Text
                 style={[
                   sharedRoomsFilterStyles.roomText,
                   {
-                    color:
-                      selectedNumberOfBathrooms === numberOfRooms
-                        ? primary
-                        : gray,
+                    color: bathRoomsColor(numberOfRooms, primary, gray),
                   },
                 ]}
               >
@@ -275,30 +310,26 @@ const SharedRoomsFilter: React.FC<Props> = ({
         {filterType === "Total rooms" &&
           totalRoomsFilterList.map((numberOfRooms) => (
             <TouchableOpacity
+              activeOpacity={activeOpacityOfTouchableOpacity}
               style={[
                 sharedRoomsFilterStyles.room,
                 {
-                  backgroundColor:
-                    selectedTotalNumberOfRooms === numberOfRooms
-                      ? lighterPrimary
-                      : "transparent",
-                  borderColor:
-                    selectedTotalNumberOfRooms === numberOfRooms
-                      ? primary
-                      : gray,
+                  backgroundColor: totalRoomsColor(
+                    numberOfRooms,
+                    lighterPrimary,
+                    "transparent"
+                  ),
+                  borderColor: totalRoomsColor(numberOfRooms, primary, gray),
                 },
               ]}
               key={numberOfRooms}
-              onPress={() => setSelectedTotalNumberOfRooms(numberOfRooms)}
+              onPress={() => handleSelectTotalRooms(numberOfRooms)}
             >
               <Text
                 style={[
                   sharedRoomsFilterStyles.roomText,
                   {
-                    color:
-                      selectedTotalNumberOfRooms === numberOfRooms
-                        ? primary
-                        : gray,
+                    color: totalRoomsColor(numberOfRooms, primary, gray),
                   },
                 ]}
               >

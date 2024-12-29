@@ -1,20 +1,26 @@
-import {
-  Modal,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { Modal, ScrollView, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 
-import { ICurrency, IPropertyType } from "@/src/GlobalTypes/Property/Common";
-import { IPropertySize, IVoidFunc } from "@/src/GlobalTypes/Types";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import { useAppDispatch, useAppSelector } from "@/src/Redux/Hooks/Config";
 import { dark, pureWhite } from "@/src/Theme/Colors";
 import PropertyTypesFilterList from "./Components/PropertyTypesFilterList";
 import TopBar from "./Components/TopBar";
 import BottomBar from "./Components/BottomBar";
 import RentFilter from "./Components/RentFilter";
-import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
+import {
+  IBathroomsFilter,
+  IBedroomsFilter,
+  ICurrencyFilter,
+  IPriceFilter,
+  IPropertySizeFilter,
+  IPropertyStructureTypeFilter,
+  IRentFilter,
+  IRoomsToRentFilter,
+  ITotalRoomsFilter,
+  usePropertyFiltersContext,
+} from "@/src/Context/PropertyFiltersContext";
 import PriceFilter from "./Components/PriceFilter";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
 import Currency from "./Components/Currency";
@@ -22,6 +28,12 @@ import SharedRooms from "./Components/SharedRooms";
 import AreaSize from "./Components/AreaSize";
 import PropertyStructureType from "./Components/PropertyStructureType";
 import { setActivePropertyType } from "@/src/Redux/Slices/ActivePropertyTypeSlice/ActiveProperty";
+import usePropertyStructureFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/usePropertyStructureFilterFuncs";
+import useCurrencyFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/useCurrencyFilterFuncs";
+import useRentFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/useRentFilterFuncs";
+import usePriceFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/usePriceFilterFuncs";
+import usePropertyAreaSizeFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/usePropertyAreaSizeFilterFuncs";
+import useSharedRoomsFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/useSharedRoomsFilterFuncs";
 
 type Props = {
   isFilterModalOpen: boolean;
@@ -42,211 +54,180 @@ const AllFiltersModal: React.FC<Props> = ({
     currencyFilter,
     priceFilter,
     rentFilter,
-    setPriceFilter,
-    setRentFilter,
-    setCurrencyFilter,
-    setPropertySizeFilter,
-    setBathroomsFilter,
-    setBedroomsFilter,
-    setRoomsToRentFilter,
-    setTotalRoomsFilter,
-    setPropertyStructureTypeFilter,
   } = usePropertyFiltersContext();
   const activePropertyType = useAppSelector(
     (state) => state.activePropertyType.value
   );
-  const [rentMin, setRentMin] = useState<number>(rentFilter.min);
-  const [rentMax, setRentMax] = useState<number>(rentFilter.max);
-  const [priceMin, setPriceMin] = useState<number>(priceFilter.min);
-  const [priceMax, setPriceMax] = useState<number>(priceFilter.max);
+
+  const [rentFilterLocalDetails, setRentFilterLocalDetails] =
+    useState<IRentFilter>({
+      residentialRentals: {
+        max: rentFilter.residentialRentals.max,
+        min: rentFilter.residentialRentals.min,
+      },
+      commercialRentals: {
+        max: rentFilter.commercialRentals.max,
+        min: rentFilter.commercialRentals.min,
+      },
+    });
+
+  const [priceFilterLocalDetails, setPriceFilterLocalDetails] =
+    useState<IPriceFilter>({
+      residentialForSale: {
+        max: priceFilter.residentialForSale.max,
+        min: priceFilter.residentialForSale.min,
+      },
+      commercialForSale: {
+        max: priceFilter.commercialForSale.max,
+        min: priceFilter.commercialForSale.min,
+      },
+      stand: {
+        max: priceFilter.stand.max,
+        min: priceFilter.stand.min,
+      },
+      land: {
+        max: priceFilter.land.max,
+        min: priceFilter.land.min,
+      },
+    });
+
   const [selectedTotalNumberOfRooms, setSelectedTotalNumberOfRooms] =
-    useState<string>(totalRoomsFilter.figure);
+    useState<ITotalRoomsFilter>({
+      residentialForsaleFigure: totalRoomsFilter.residentialForsaleFigure,
+      residentialRentalsFigure: totalRoomsFilter.residentialRentalsFigure,
+      commercialForsaleFigure: totalRoomsFilter.commercialForsaleFigure,
+      commercialRentalsFigure: totalRoomsFilter.commercialRentalsFigure,
+    });
+
   const [selectedNumberOfRoomsToRent, setSelectedNumberOfRoomsToRent] =
-    useState<string>(roomsToRentFilter.figure);
+    useState<IRoomsToRentFilter>({
+      commercialRentalsFigure: roomsToRentFilter.commercialRentalsFigure,
+      residentialRentalsFigure: roomsToRentFilter.residentialRentalsFigure,
+    });
+
   const [selectedNumberOfBathrooms, setSelectedNumberOfBathrooms] =
-    useState<string>(bathroomsFilter.figure);
+    useState<IBathroomsFilter>({
+      residentialForsaleFigure: bathroomsFilter.residentialForsaleFigure,
+      residentialRentalsFigure: bathroomsFilter.residentialRentalsFigure,
+    });
+
   const [selectedNumberOfBedrooms, setSelectedNumberOfBedrooms] =
-    useState<string>(bedroomsFilter.figure);
-  const [propertySize, setPropertySize] = useState<IPropertySize>({
-    figure: propertySizeFilter.figure,
-    dimension: propertySizeFilter.dimension,
+    useState<IBedroomsFilter>({
+      residentialForsaleFigure: bedroomsFilter.residentialForsaleFigure,
+      residentialRentalsFigure: bedroomsFilter.residentialRentalsFigure,
+    });
+
+  const [propertySize, setPropertySize] = useState<IPropertySizeFilter>({
+    residentialForsale: {
+      figure: propertySizeFilter.residentialForsale.figure,
+      dimension: propertySizeFilter.residentialForsale.dimension,
+    },
+    residentialRentals: {
+      figure: propertySizeFilter.residentialRentals.figure,
+      dimension: propertySizeFilter.residentialRentals.dimension,
+    },
+    commercialForsale: {
+      figure: propertySizeFilter.commercialForsale.figure,
+      dimension: propertySizeFilter.commercialForsale.dimension,
+    },
+    commercialRentals: {
+      figure: propertySizeFilter.commercialRentals.figure,
+      dimension: propertySizeFilter.commercialRentals.dimension,
+    },
+    stand: {
+      figure: propertySizeFilter.stand.figure,
+      dimension: propertySizeFilter.stand.dimension,
+    },
+    land: {
+      figure: propertySizeFilter.land.figure,
+      dimension: propertySizeFilter.land.dimension,
+    },
   });
-  const [currency, setCurrency] = useState<ICurrency | "">(
-    currencyFilter.currency
-  );
-  const [propertyStructureType, setPropertyStructureType] = useState<string>(
-    propertyStructureTypeFilter.type
-  );
+
+  const [currency, setCurrency] = useState<ICurrencyFilter>({
+    commercialForsale: currencyFilter.commercialForsale,
+    commercialRentals: currencyFilter.commercialRentals,
+    residentialForsale: currencyFilter.residentialForsale,
+    residentialRentals: currencyFilter.residentialRentals,
+    stand: currencyFilter.stand,
+    land: currencyFilter.land,
+  });
+
+  const [propertyStructureType, setPropertyStructureType] =
+    useState<IPropertyStructureTypeFilter>({
+      commercialForsale: propertyStructureTypeFilter.commercialForsale,
+      commercialRentals: propertyStructureTypeFilter.commercialRentals,
+      residentialForsale: propertyStructureTypeFilter.residentialForsale,
+      residentialRentals: propertyStructureTypeFilter.residentialRentals,
+      stand: propertyStructureTypeFilter.stand,
+      land: propertyStructureTypeFilter.land,
+    });
+
   const [propertyType, setPropertyType] =
     useState<IPropertyType>(activePropertyType);
+
   const theme = useAppSelector((state) => state.theme.value);
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+
+  const { resetPropertyStructureTypeFilter, applyPropertyStructureTypeFilter } =
+    usePropertyStructureFilterFuncs(
+      propertyStructureType,
+      propertyType,
+      setPropertyStructureType
+    );
+
+  const { applyCurrencyFilter, resetCurrencyFilter } = useCurrencyFilterFuncs(
+    currency,
+    propertyType,
+    setCurrency
+  );
+
+  const { applyPropertySizeFilter, resetPropertySizeFilter } =
+    usePropertyAreaSizeFilterFuncs(propertySize, propertyType, setPropertySize);
+
+  const { applyRentFilter, resetRentFilter } = useRentFilterFuncs(
+    rentFilterLocalDetails,
+    propertyType,
+    setRentFilterLocalDetails
+  );
+
+  const { applyPriceFilter, resetPriceFilter } = usePriceFilterFuncs(
+    priceFilterLocalDetails,
+    propertyType,
+    setPriceFilterLocalDetails
+  );
+
+  const { resetSharedRoomsFilter, applySharedRoomsFilter } =
+    useSharedRoomsFilterFuncs(
+      propertyType,
+      selectedTotalNumberOfRooms,
+      selectedNumberOfRoomsToRent,
+      selectedNumberOfBathrooms,
+      selectedNumberOfBedrooms,
+      setSelectedNumberOfBathrooms,
+      setSelectedNumberOfBedrooms,
+      setSelectedNumberOfRoomsToRent,
+      setSelectedTotalNumberOfRooms
+    );
 
   const handleApplyFilters = () => {
-    if (propertySize.figure) {
-      setPropertySizeFilter({
-        isActive: true,
-        figure: propertySize.figure,
-        dimension: propertySize.dimension,
-        propertyType,
-      });
-    } else {
-      setPropertySizeFilter({
-        isActive: false,
-        figure: "",
-        dimension: "m²",
-        propertyType: "",
-      });
-    }
-    if (priceMin <= priceMax) {
-      if (priceMax > 0 || priceMin > 0) {
-        setPriceFilter({
-          isActive: true,
-          max: priceMax,
-          min: priceMin,
-          propertyType: propertyType as
-            | PropertyTypesEnum.CommercialForSale
-            | PropertyTypesEnum.ResidentialForSale
-            | PropertyTypesEnum.Stands
-            | PropertyTypesEnum.Land
-            | "",
-        });
-      }
-    }
-    if (rentMin <= rentMax) {
-      if (rentMax > 0 || rentMin > 0) {
-        setRentFilter({
-          isActive: true,
-          max: rentMax,
-          min: rentMin,
-          propertyType: propertyType as
-            | PropertyTypesEnum.CommercialRentals
-            | PropertyTypesEnum.ResidentialRentals
-            | "",
-        });
-      }
-    }
-    if (selectedNumberOfRoomsToRent) {
-      setRoomsToRentFilter({
-        isActive: true,
-        figure: selectedNumberOfRoomsToRent,
-        propertyType: activePropertyType as
-          | ""
-          | PropertyTypesEnum.ResidentialRentals
-          | PropertyTypesEnum.CommercialRentals,
-      });
-    }
-    if (selectedNumberOfBathrooms) {
-      setBathroomsFilter({
-        isActive: true,
-        figure: selectedNumberOfBathrooms,
-        propertyType: activePropertyType as
-          | ""
-          | PropertyTypesEnum.ResidentialForSale
-          | PropertyTypesEnum.ResidentialRentals,
-      });
-    }
-    if (selectedNumberOfBedrooms) {
-      setBedroomsFilter({
-        isActive: true,
-        figure: selectedNumberOfBedrooms,
-        propertyType: activePropertyType as
-          | ""
-          | PropertyTypesEnum.ResidentialForSale
-          | PropertyTypesEnum.ResidentialRentals,
-      });
-    }
-    if (selectedTotalNumberOfRooms) {
-      setTotalRoomsFilter({
-        isActive: true,
-        figure: selectedTotalNumberOfRooms,
-        propertyType: activePropertyType as
-          | ""
-          | PropertyTypesEnum.ResidentialRentals
-          | PropertyTypesEnum.ResidentialForSale
-          | PropertyTypesEnum.CommercialRentals
-          | PropertyTypesEnum.CommercialForSale,
-      });
-    }
-    setCurrencyFilter({
-      isActive: true,
-      currency,
-      propertyType: activePropertyType,
-    });
-    setPropertyStructureTypeFilter({
-      isActive: true,
-      type: propertyStructureType,
-      propertyType: activePropertyType,
-    });
-    dispatch(setActivePropertyType(propertyType))
-    closeModal()
+    applyPropertySizeFilter();
+    applyPriceFilter();
+    applyRentFilter();
+    applySharedRoomsFilter();
+    applyCurrencyFilter();
+    applyPropertyStructureTypeFilter();
+    dispatch(setActivePropertyType(propertyType));
+    closeModal();
   };
 
   const handleResetFilters = () => {
-    setPropertySize({
-      figure: "",
-      dimension: "m²",
-    });
-    setPropertySizeFilter({
-      isActive: false,
-      figure: "",
-      dimension: "m²",
-      propertyType: "",
-    });
-    setPriceMax(0);
-    setPriceMin(0);
-    setPriceFilter({
-      isActive: false,
-      max: 0,
-      min: 0,
-      propertyType: "",
-    });
-    setRentMax(0);
-    setRentMin(0);
-    setRentFilter({
-      isActive: false,
-      max: 0,
-      min: 0,
-      propertyType: "",
-    });
-    setCurrency("");
-    setCurrencyFilter({
-      isActive: false,
-      currency: "",
-      propertyType: "",
-    });
-    setPropertyStructureType("");
-    setPropertyStructureTypeFilter({
-      isActive: false,
-      type: "",
-      propertyType: "",
-    });
-    setSelectedNumberOfRoomsToRent("");
-    setRoomsToRentFilter({
-      isActive: false,
-      figure: "",
-      propertyType: "",
-    });
-    setSelectedNumberOfBathrooms("");
-    setBathroomsFilter({
-      isActive: false,
-      figure: "",
-      propertyType: "",
-    });
-    setSelectedNumberOfBedrooms("");
-    setBedroomsFilter({
-      isActive: false,
-      figure: "",
-      propertyType: "",
-    });
-    setSelectedTotalNumberOfRooms("");
-    setTotalRoomsFilter({
-      isActive: false,
-      figure: "",
-      propertyType: "",
-    });
-    setPropertyType(PropertyTypesEnum.ResidentialRentals)
-    dispatch(setActivePropertyType(PropertyTypesEnum.ResidentialRentals))
+    resetPropertySizeFilter();
+    resetPriceFilter();
+    resetRentFilter();
+    resetCurrencyFilter();
+    resetPropertyStructureTypeFilter();
+    resetSharedRoomsFilter();
   };
 
   return (
@@ -263,32 +244,35 @@ const AllFiltersModal: React.FC<Props> = ({
       >
         <TopBar closeModal={closeModal} />
         <View style={{ flex: 1 }}>
-          <ScrollView showsHorizontalScrollIndicator={false}>
+          <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
             <View style={styles.contentContainer}>
               <PropertyTypesFilterList
                 setPropertyType={setPropertyType}
                 propertyType={propertyType}
               />
-              <Currency setCurrency={setCurrency} currency={currency} />
+              <Currency
+                setCurrency={setCurrency}
+                currency={currency}
+                propertyType={propertyType}
+              />
               {propertyType === PropertyTypesEnum.CommercialRentals ||
               propertyType === PropertyTypesEnum.ResidentialRentals ? (
                 <RentFilter
-                  rentMax={rentMax}
-                  rentMin={rentMin}
-                  setRentMax={setRentMax}
-                  setRentMin={setRentMin}
+                  rentFilterLocalDetails={rentFilterLocalDetails}
+                  setRentFilterLocalDetails={setRentFilterLocalDetails}
+                  propertyType={propertyType}
                 />
               ) : (
                 <PriceFilter
-                  priceMax={priceMax}
-                  priceMin={priceMin}
-                  setPriceMax={setPriceMax}
-                  setPriceMin={setPriceMin}
+                  price={priceFilterLocalDetails}
+                  setPrice={setPriceFilterLocalDetails}
+                  propertyType={propertyType}
                 />
               )}
               {(propertyType === PropertyTypesEnum.CommercialRentals ||
                 propertyType === PropertyTypesEnum.ResidentialRentals) && (
                 <SharedRooms
+                  propertyType={propertyType}
                   filterType="Rooms to rent"
                   selectedNumberOfBathrooms={selectedNumberOfBathrooms}
                   selectedNumberOfBedrooms={selectedNumberOfBedrooms}
@@ -305,6 +289,7 @@ const AllFiltersModal: React.FC<Props> = ({
               {propertyType !== PropertyTypesEnum.Land &&
                 propertyType !== PropertyTypesEnum.Stands && (
                   <SharedRooms
+                    propertyType={propertyType}
                     filterType="Total rooms"
                     selectedNumberOfBathrooms={selectedNumberOfBathrooms}
                     selectedNumberOfBedrooms={selectedNumberOfBedrooms}
@@ -324,6 +309,7 @@ const AllFiltersModal: React.FC<Props> = ({
                 propertyType === PropertyTypesEnum.ResidentialRentals) && (
                 <SharedRooms
                   filterType="Bedrooms"
+                  propertyType={propertyType}
                   selectedNumberOfBathrooms={selectedNumberOfBathrooms}
                   selectedNumberOfBedrooms={selectedNumberOfBedrooms}
                   selectedNumberOfRoomsToRent={selectedNumberOfRoomsToRent}
@@ -340,6 +326,7 @@ const AllFiltersModal: React.FC<Props> = ({
                 propertyType === PropertyTypesEnum.ResidentialRentals) && (
                 <SharedRooms
                   filterType="Bathrooms"
+                  propertyType={propertyType}
                   selectedNumberOfBathrooms={selectedNumberOfBathrooms}
                   selectedNumberOfBedrooms={selectedNumberOfBedrooms}
                   selectedNumberOfRoomsToRent={selectedNumberOfRoomsToRent}
@@ -354,6 +341,7 @@ const AllFiltersModal: React.FC<Props> = ({
               )}
               <AreaSize
                 propertySize={propertySize}
+                propertyType={propertyType}
                 setPropertySize={setPropertySize}
               />
               <PropertyStructureType
@@ -381,7 +369,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     gap: 10,
-    marginTop: 10
+    marginTop: 10,
   },
   contentSubContainer: {
     paddingHorizontal: 10,

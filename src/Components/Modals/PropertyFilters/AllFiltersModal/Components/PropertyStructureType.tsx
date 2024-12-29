@@ -1,20 +1,26 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import {
-  FontAwesome,
-} from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { primary, lighterPrimary, gray } from "@/src/Theme/Colors";
-import { propertyStructureTypeIcon, propertyStructureTypeOptions } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Funcs";
+import {
+  propertyStructureTypeIcon,
+  propertyStructureTypeOptions,
+} from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Funcs";
 import { sharedPropertyStructureTypeStyles } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Styles";
+import { IPropertyStructureTypeFilter } from "@/src/Context/PropertyFiltersContext";
+import { PropertyTypesEnum } from "@/src/Utils/Constants";
+import usePropertyStructureFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/usePropertyStructureFilterFuncs";
 
 type Props = {
   propertyType: IPropertyType;
-  propertyStructureType: string;
-  setPropertyStructureType: React.Dispatch<React.SetStateAction<string>>;
+  propertyStructureType: IPropertyStructureTypeFilter;
+  setPropertyStructureType: React.Dispatch<
+    React.SetStateAction<IPropertyStructureTypeFilter>
+  >;
 };
 
 const PropertyStructureType: React.FC<Props> = ({
@@ -22,6 +28,12 @@ const PropertyStructureType: React.FC<Props> = ({
   propertyStructureType,
   setPropertyStructureType,
 }) => {
+  const { handleSelectStructure, color } = usePropertyStructureFilterFuncs(
+    propertyStructureType,
+    propertyType,
+    setPropertyStructureType
+  );
+
   return (
     <View style={styles.container}>
       <Row style={sharedPropertyStructureTypeStyles.row}>
@@ -29,38 +41,41 @@ const PropertyStructureType: React.FC<Props> = ({
         <ThemedText type="header">Property Structure Type</ThemedText>
       </Row>
       <View style={sharedPropertyStructureTypeStyles.propertyTypeContainer}>
-        {propertyStructureTypeOptions(propertyType).map((propertyStructureTypeOption) => (
-          <TouchableOpacity
-            key={propertyStructureTypeOption}
-            onPress={() => setPropertyStructureType(propertyStructureTypeOption)}
-            style={[
-              sharedPropertyStructureTypeStyles.propertyTypeOption,
-              {
-                backgroundColor:
-                  propertyStructureType === propertyStructureTypeOption
-                    ? lighterPrimary
-                    : "transparent",
-                borderColor:
-                  propertyStructureType === propertyStructureTypeOption ? primary : gray,
-              },
-            ]}
-          >
-            {propertyStructureTypeIcon(propertyStructureTypeOption)}
-            <Text
+        {propertyStructureTypeOptions(propertyType).map(
+          (propertyStructureTypeOption) => (
+            <TouchableOpacity
+              key={propertyStructureTypeOption}
+              onPress={() => handleSelectStructure(propertyStructureTypeOption)}
               style={[
-                sharedPropertyStructureTypeStyles.propertyTypeOptionText,
+                sharedPropertyStructureTypeStyles.propertyTypeOption,
                 {
-                  color:
-                    propertyStructureType === propertyStructureTypeOption
-                      ? primary
-                      : gray,
+                  backgroundColor: color(
+                    propertyStructureTypeOption,
+                    lighterPrimary,
+                    "transparent"
+                  ),
+                  borderColor: color(
+                    propertyStructureTypeOption,
+                    primary,
+                    gray
+                  ),
                 },
               ]}
             >
-              {propertyStructureTypeOption}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              {propertyStructureTypeIcon(propertyStructureTypeOption)}
+              <Text
+                style={[
+                  sharedPropertyStructureTypeStyles.propertyTypeOptionText,
+                  {
+                    color: color(propertyStructureTypeOption, primary, gray),
+                  },
+                ]}
+              >
+                {propertyStructureTypeOption}
+              </Text>
+            </TouchableOpacity>
+          )
+        )}
       </View>
     </View>
   );

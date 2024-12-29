@@ -23,6 +23,7 @@ import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import { pureWhite, dark, primary } from "@/src/Theme/Colors";
 import {
+  PropertyTypesEnum,
   SCREEN_BREAK_POINT,
   activeOpacityOfTouchableOpacity,
 } from "@/src/Utils/Constants";
@@ -67,54 +68,54 @@ const SortPropertiesModal: React.FC<Props> = ({
   } = useSortPropertiesContext();
 
   const sortByOptions = () => {
-    if (propertyType === "Commercial ForSale")
+    if (propertyType === PropertyTypesEnum.CommercialForSale)
       return commercialForSaleSortOptions;
-    else if (propertyType === "Commercial Rentals")
+    else if (propertyType === PropertyTypesEnum.CommercialRentals)
       return commercialRentalSortOptions;
-    else if (propertyType === "Residential ForSale")
+    else if (propertyType === PropertyTypesEnum.ResidentialForSale)
       return residentialForSaleSortOptions;
-    else if (propertyType === "Residential Rentals")
+    else if (propertyType === PropertyTypesEnum.ResidentialRentals)
       return residentialRentalSortOptions;
-    else if (propertyType === "Land") return landSortOptions;
+    else if (propertyType === PropertyTypesEnum.Land) return landSortOptions;
     else return standSortOptions;
   };
 
   const activeSortOption = () => {
-    if (propertyType === "Commercial ForSale")
+    if (propertyType === PropertyTypesEnum.CommercialForSale)
       return sortCommercialForSalePropertiesBy;
-    else if (propertyType === "Commercial Rentals")
+    else if (propertyType === PropertyTypesEnum.CommercialRentals)
       return sortCommercialRentalPropertiesBy;
-    else if (propertyType === "Residential ForSale")
+    else if (propertyType === PropertyTypesEnum.ResidentialForSale)
       return sortResidentialForSalePropertiesBy;
-    else if (propertyType === "Residential Rentals")
+    else if (propertyType === PropertyTypesEnum.ResidentialRentals)
       return sortResidentialRentalPropertiesBy;
-    else if (propertyType === "Land") return sortLandPropertiesBy;
+    else if (propertyType === PropertyTypesEnum.Land) return sortLandPropertiesBy;
     else return sortStandPropertiesBy;
   };
 
   const changeSortOption = (value: string) => {
-    handleCancel();
     setTimeout(() => {
-      if (propertyType === "Commercial ForSale")
-        return setSortCommercialForSalePropertiesBy(
-          value as ISortCommercialForSalePropertiesOptions
-        );
-      else if (propertyType === "Commercial Rentals")
-        return setSortCommercialRentalPropertiesBy(
-          value as ISortCommercialRentalPropertiesOptions
-        );
-      else if (propertyType === "Residential ForSale")
-        return setSortResidentialForSalePropertiesBy(
-          value as ISortResidentialForSalePropertiesOptions
-        );
-      else if (propertyType === "Residential Rentals")
-        return setSortResidentialRentalPropertiesBy(
-          value as ISortResidentialRentalPropertiesOptions
-        );
-      else if (propertyType === "Land")
-        return setSortLandPropertiesBy(value as ISortLandOptions);
-      else return setSortStandPropertiesBy(value as ISortStandOptions);
+      handleCancel();
     }, 500);
+    if (propertyType === PropertyTypesEnum.CommercialForSale)
+      return setSortCommercialForSalePropertiesBy(
+        value as ISortCommercialForSalePropertiesOptions
+      );
+    else if (propertyType === PropertyTypesEnum.CommercialRentals)
+      return setSortCommercialRentalPropertiesBy(
+        value as ISortCommercialRentalPropertiesOptions
+      );
+    else if (propertyType === PropertyTypesEnum.ResidentialForSale)
+      return setSortResidentialForSalePropertiesBy(
+        value as ISortResidentialForSalePropertiesOptions
+      );
+    else if (propertyType === PropertyTypesEnum.ResidentialRentals)
+      return setSortResidentialRentalPropertiesBy(
+        value as ISortResidentialRentalPropertiesOptions
+      );
+    else if (propertyType === PropertyTypesEnum.Land)
+      return setSortLandPropertiesBy(value as ISortLandOptions);
+    else return setSortStandPropertiesBy(value as ISortStandOptions);
   };
 
   return (

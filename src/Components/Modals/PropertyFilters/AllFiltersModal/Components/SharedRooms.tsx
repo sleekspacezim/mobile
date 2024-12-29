@@ -13,20 +13,38 @@ import {
   roomsToRentFilterList,
   totalRoomsFilterList,
 } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Contants";
+import {
+  IBathroomsFilter,
+  IBedroomsFilter,
+  IRoomsToRentFilter,
+  ITotalRoomsFilter,
+} from "@/src/Context/PropertyFiltersContext";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import useSharedRoomsFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/useSharedRoomsFilterFuncs";
 
 type Props = {
+  propertyType: IPropertyType;
   filterType: string;
-  selectedTotalNumberOfRooms: string;
-  selectedNumberOfRoomsToRent: string;
-  selectedNumberOfBathrooms: string;
-  selectedNumberOfBedrooms: string;
-  setSelectedNumberOfBathrooms: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedNumberOfBedrooms: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedNumberOfRoomsToRent: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedTotalNumberOfRooms: React.Dispatch<React.SetStateAction<string>>;
+  selectedTotalNumberOfRooms: ITotalRoomsFilter;
+  selectedNumberOfRoomsToRent: IRoomsToRentFilter;
+  selectedNumberOfBathrooms: IBathroomsFilter;
+  selectedNumberOfBedrooms: IBedroomsFilter;
+  setSelectedNumberOfBathrooms: React.Dispatch<
+    React.SetStateAction<IBathroomsFilter>
+  >;
+  setSelectedNumberOfBedrooms: React.Dispatch<
+    React.SetStateAction<IBedroomsFilter>
+  >;
+  setSelectedNumberOfRoomsToRent: React.Dispatch<
+    React.SetStateAction<IRoomsToRentFilter>
+  >;
+  setSelectedTotalNumberOfRooms: React.Dispatch<
+    React.SetStateAction<ITotalRoomsFilter>
+  >;
 };
 
 const SharedRooms: React.FC<Props> = ({
+  propertyType,
   filterType,
   selectedNumberOfBathrooms,
   selectedNumberOfBedrooms,
@@ -37,6 +55,27 @@ const SharedRooms: React.FC<Props> = ({
   setSelectedNumberOfRoomsToRent,
   setSelectedTotalNumberOfRooms,
 }) => {
+  const {
+    handleSelectBathrooms,
+    handleSelectBedrooms,
+    handleSelectRoomsToRent,
+    handleSelectTotalRooms,
+    totalRoomsColor,
+    bathRoomsColor,
+    bedRoomsColor,
+    roomsToRentColor,
+  } = useSharedRoomsFilterFuncs(
+    propertyType,
+    selectedTotalNumberOfRooms,
+    selectedNumberOfRoomsToRent,
+    selectedNumberOfBathrooms,
+    selectedNumberOfBedrooms,
+    setSelectedNumberOfBathrooms,
+    setSelectedNumberOfBedrooms,
+    setSelectedNumberOfRoomsToRent,
+    setSelectedTotalNumberOfRooms
+  );
+
   return (
     <View style={styles.container}>
       <Row style={sharedRoomsFilterStyles.row}>
@@ -56,27 +95,22 @@ const SharedRooms: React.FC<Props> = ({
               style={[
                 sharedRoomsFilterStyles.room,
                 {
-                  backgroundColor:
-                    selectedNumberOfRoomsToRent === numberOfRooms
-                      ? lighterPrimary
-                      : "transparent",
-                  borderColor:
-                    selectedNumberOfRoomsToRent === numberOfRooms
-                      ? primary
-                      : gray,
+                  backgroundColor: roomsToRentColor(
+                    numberOfRooms,
+                    lighterPrimary,
+                    "transparent"
+                  ),
+                  borderColor: roomsToRentColor(numberOfRooms, primary, gray),
                 },
               ]}
               key={numberOfRooms}
-              onPress={() => setSelectedNumberOfRoomsToRent(numberOfRooms)}
+              onPress={() => handleSelectRoomsToRent(numberOfRooms)}
             >
               <Text
                 style={[
                   sharedRoomsFilterStyles.roomText,
                   {
-                    color:
-                      selectedNumberOfRoomsToRent === numberOfRooms
-                        ? primary
-                        : gray,
+                    color: roomsToRentColor(numberOfRooms, primary, gray),
                   },
                 ]}
               >
@@ -91,25 +125,22 @@ const SharedRooms: React.FC<Props> = ({
               style={[
                 sharedRoomsFilterStyles.room,
                 {
-                  backgroundColor:
-                    selectedNumberOfBedrooms === numberOfRooms
-                      ? lighterPrimary
-                      : "transparent",
-                  borderColor:
-                    selectedNumberOfBedrooms === numberOfRooms ? primary : gray,
+                  backgroundColor: bedRoomsColor(
+                    numberOfRooms,
+                    lighterPrimary,
+                    "transparent"
+                  ),
+                  borderColor: bedRoomsColor(numberOfRooms, primary, gray),
                 },
               ]}
               key={numberOfRooms}
-              onPress={() => setSelectedNumberOfBedrooms(numberOfRooms)}
+              onPress={() => handleSelectBedrooms(numberOfRooms)}
             >
               <Text
                 style={[
                   sharedRoomsFilterStyles.roomText,
                   {
-                    color:
-                      selectedNumberOfBedrooms === numberOfRooms
-                        ? primary
-                        : gray,
+                    color: bedRoomsColor(numberOfRooms, primary, gray),
                   },
                 ]}
               >
@@ -124,27 +155,22 @@ const SharedRooms: React.FC<Props> = ({
               style={[
                 sharedRoomsFilterStyles.room,
                 {
-                  backgroundColor:
-                    selectedNumberOfBathrooms === numberOfRooms
-                      ? lighterPrimary
-                      : "transparent",
-                  borderColor:
-                    selectedNumberOfBathrooms === numberOfRooms
-                      ? primary
-                      : gray,
+                  backgroundColor: bathRoomsColor(
+                    numberOfRooms,
+                    lighterPrimary,
+                    "transparent"
+                  ),
+                  borderColor: bathRoomsColor(numberOfRooms, primary, gray),
                 },
               ]}
               key={numberOfRooms}
-              onPress={() => setSelectedNumberOfBathrooms(numberOfRooms)}
+              onPress={() => handleSelectBathrooms(numberOfRooms)}
             >
               <Text
                 style={[
                   sharedRoomsFilterStyles.roomText,
                   {
-                    color:
-                      selectedNumberOfBathrooms === numberOfRooms
-                        ? primary
-                        : gray,
+                    color: bathRoomsColor(numberOfRooms, primary, gray),
                   },
                 ]}
               >
@@ -159,27 +185,23 @@ const SharedRooms: React.FC<Props> = ({
               style={[
                 sharedRoomsFilterStyles.room,
                 {
-                  backgroundColor:
-                    selectedTotalNumberOfRooms === numberOfRooms
-                      ? lighterPrimary
-                      : "transparent",
-                  borderColor:
-                    selectedTotalNumberOfRooms === numberOfRooms
-                      ? primary
-                      : gray,
+                  backgroundColor: totalRoomsColor(
+                    numberOfRooms,
+                    lighterPrimary,
+                    "transparent"
+                  ),
+
+                  borderColor: totalRoomsColor(numberOfRooms, primary, gray),
                 },
               ]}
               key={numberOfRooms}
-              onPress={() => setSelectedTotalNumberOfRooms(numberOfRooms)}
+              onPress={() => handleSelectTotalRooms(numberOfRooms)}
             >
               <Text
                 style={[
                   sharedRoomsFilterStyles.roomText,
                   {
-                    color:
-                      selectedTotalNumberOfRooms === numberOfRooms
-                        ? primary
-                        : gray,
+                    color: totalRoomsColor(numberOfRooms, primary, gray),
                   },
                 ]}
               >

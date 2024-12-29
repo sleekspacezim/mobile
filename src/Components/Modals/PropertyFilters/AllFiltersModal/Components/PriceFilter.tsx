@@ -1,36 +1,29 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 
 import InputField from "@/src/Components/InputField/InputField";
 import RangingSlider from "@/src/Components/RangingSlider/RangingSlider";
 import RegularText from "@/src/Components/RegularText/RegularText";
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
-import { red, gray, primary } from "@/src/Theme/Colors";
+import { primary } from "@/src/Theme/Colors";
 import Divider from "./Divider";
 import { sharedPriceFilterStyles } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Styles";
-import { Ionicons } from "@expo/vector-icons";
+import { IPriceFilter } from "@/src/Context/PropertyFiltersContext";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import usePriceFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/usePriceFilterFuncs";
 
 type Props = {
-  priceMin: number;
-  priceMax: number;
-  setPriceMax: React.Dispatch<React.SetStateAction<number>>;
-  setPriceMin: React.Dispatch<React.SetStateAction<number>>;
+  price: IPriceFilter;
+  setPrice: React.Dispatch<React.SetStateAction<IPriceFilter>>;
+  propertyType: IPropertyType;
 };
 
-const PriceFilter: React.FC<Props> = ({
-  priceMax,
-  priceMin,
-  setPriceMax,
-  setPriceMin,
-}) => {
+const PriceFilter: React.FC<Props> = ({ price, setPrice, propertyType }) => {
   const maxValue = 1000000;
-
-  const borderColor = () => {
-    if (priceMin !== 0 && priceMin >= priceMax) {
-      return red;
-    } else return gray;
-  };
+  const { borderColor, priceMax, priceMin, setPriceMax, setPriceMin } =
+    usePriceFilterFuncs(price, propertyType, setPrice);
 
   return (
     <View style={styles.container}>
@@ -44,14 +37,14 @@ const PriceFilter: React.FC<Props> = ({
           maxValue={maxValue}
           minValue={0}
           onChange={setPriceMin}
-          value={priceMin}
+          value={priceMin()}
           step={10}
         />
       </View>
       <Row style={sharedPriceFilterStyles.inputRow}>
         <View>
           <InputField
-            textValue={priceMin.toString()}
+            textValue={priceMin().toString()}
             placeHolder="0"
             handleOnChangeText={(rent: string) => setPriceMin(+rent)}
             contentType="none"
@@ -64,7 +57,7 @@ const PriceFilter: React.FC<Props> = ({
         <ThemedText type="regular">To</ThemedText>
         <View>
           <InputField
-            textValue={priceMax.toString()}
+            textValue={priceMax().toString()}
             placeHolder="Any"
             handleOnChangeText={(rent: string) => setPriceMax(+rent)}
             contentType="none"
@@ -81,7 +74,7 @@ const PriceFilter: React.FC<Props> = ({
           maxValue={maxValue}
           minValue={0}
           onChange={setPriceMax}
-          value={priceMax}
+          value={priceMax()}
           step={10}
         />
       </View>

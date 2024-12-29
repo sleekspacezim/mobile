@@ -1,12 +1,12 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, useWindowDimensions, View } from "react-native";
 import React from "react";
 
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";
 import OutlinedButton from "@/src/Components/Buttons/Outlined/OutlinedButton";
-import Row from "@/src/Components/Row/Row";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { dark, lightGray } from "@/src/Theme/Colors";
+import { SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
 
 type Props = {
   resetFiltersFunc: IVoidFunc;
@@ -15,6 +15,7 @@ type Props = {
 
 const BottomBar: React.FC<Props> = ({ resetFiltersFunc, applyFiltersFunc }) => {
   const theme = useAppSelector((state) => state.theme.value);
+  const { width } = useWindowDimensions();
   return (
     <View
       style={[
@@ -22,7 +23,12 @@ const BottomBar: React.FC<Props> = ({ resetFiltersFunc, applyFiltersFunc }) => {
         { borderTopColor: theme === "dark" ? dark.darkGray : lightGray },
       ]}
     >
-      <Row style={styles.btnContainer}>
+      <View
+        style={[
+          styles.btnContainer,
+          { width: width < SCREEN_BREAK_POINT ? "100%" : 400 },
+        ]}
+      >
         <OutlinedButton
           title="Reset"
           onPressFunc={resetFiltersFunc}
@@ -36,7 +42,7 @@ const BottomBar: React.FC<Props> = ({ resetFiltersFunc, applyFiltersFunc }) => {
             height={45}
           />
         </View>
-      </Row>
+      </View>
     </View>
   );
 };
@@ -51,7 +57,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
   },
   btnContainer: {
-    width: "100%",
+    flexDirection: "row",
     gap: 10,
   },
 });

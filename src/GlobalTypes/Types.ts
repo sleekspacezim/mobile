@@ -5,10 +5,6 @@ export type IVoidFunc = () => void;
 export type INoPropsReactComponent = React.FC;
 export type IStringOrNull = string | null;
 export type INumberOrNull = number | null;
-export type IPropertySize = {
-  figure: string;
-  dimension: IDimensions;
-};
 export type ICountryCodes =
   | "AF"
   | "AL"

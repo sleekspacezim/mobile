@@ -5,18 +5,29 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { gray, lighterPrimary, primary } from "@/src/Theme/Colors";
-import { IPropertySize } from "@/src/GlobalTypes/Types";
 import InputField from "@/src/Components/InputField/InputField";
 import Divider from "./Divider";
 import { propertySizeDimensions } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Contants";
 import { sharedAreaSizeFilterStyles } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Styles";
+import { IPropertySizeFilter } from "@/src/Context/PropertyFiltersContext";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import usePropertyAreaSizeFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/usePropertyAreaSizeFilterFuncs";
+import { activeOpacityOfTouchableOpacity } from "@/src/Utils/Constants";
 
 type Props = {
-  propertySize: IPropertySize;
-  setPropertySize: React.Dispatch<React.SetStateAction<IPropertySize>>;
+  propertySize: IPropertySizeFilter;
+  propertyType: IPropertyType;
+  setPropertySize: React.Dispatch<React.SetStateAction<IPropertySizeFilter>>;
 };
 
-const AreaSize: React.FC<Props> = ({ propertySize, setPropertySize }) => {
+const AreaSize: React.FC<Props> = ({
+  propertySize,
+  propertyType,
+  setPropertySize,
+}) => {
+  const { color, size, handleSelectDimensions, handleSelectSize } =
+    usePropertyAreaSizeFilterFuncs(propertySize, propertyType, setPropertySize);
+
   return (
     <View style={styles.container}>
       <Row style={sharedAreaSizeFilterStyles.row}>
@@ -26,11 +37,9 @@ const AreaSize: React.FC<Props> = ({ propertySize, setPropertySize }) => {
       <View>
         <InputField
           label="Size"
-          textValue={propertySize.figure}
+          textValue={size()}
           placeHolder="0"
-          handleOnChangeText={(figure: string) =>
-            setPropertySize({ ...propertySize, figure })
-          }
+          handleOnChangeText={handleSelectSize}
           contentType="none"
           type="number"
           width={200}
@@ -42,16 +51,17 @@ const AreaSize: React.FC<Props> = ({ propertySize, setPropertySize }) => {
         {propertySizeDimensions.map((dimension) => (
           <TouchableOpacity
             key={dimension}
-            onPress={() => setPropertySize({ ...propertySize, dimension })}
+            activeOpacity={activeOpacityOfTouchableOpacity}
+            onPress={() => handleSelectDimensions(dimension)}
             style={[
               sharedAreaSizeFilterStyles.dimension,
               {
-                backgroundColor:
-                  propertySize.dimension === dimension
-                    ? lighterPrimary
-                    : "transparent",
-                borderColor:
-                  propertySize.dimension === dimension ? primary : gray,
+                backgroundColor: color(
+                  dimension,
+                  lighterPrimary,
+                  "transparent"
+                ),
+                borderColor: color(dimension, primary, gray),
               },
             ]}
           >
@@ -59,7 +69,7 @@ const AreaSize: React.FC<Props> = ({ propertySize, setPropertySize }) => {
               style={[
                 sharedAreaSizeFilterStyles.dimensionText,
                 {
-                  color: propertySize.dimension === dimension ? primary : gray,
+                  color: color(dimension, primary, gray),
                 },
               ]}
             >
@@ -68,8 +78,8 @@ const AreaSize: React.FC<Props> = ({ propertySize, setPropertySize }) => {
           </TouchableOpacity>
         ))}
       </View>
-      <View style={{marginTop:5}}>
-      <Divider/>
+      <View style={{ marginTop: 5 }}>
+        <Divider />
       </View>
     </View>
   );

@@ -1,17 +1,15 @@
-import {
-  Modal,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { Modal, StyleSheet, useWindowDimensions, View } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
-import { PropertyTypesEnum, SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
-import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
+import { SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
+import {
+  IPriceFilter,
+  usePropertyFiltersContext,
+} from "@/src/Context/PropertyFiltersContext";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import { red, gray, dark, primary, pureWhite } from "@/src/Theme/Colors";
+import { dark, primary, pureWhite } from "@/src/Theme/Colors";
 import CustomButton from "../../Buttons/Custom/CustomButton";
 import InputField from "../../InputField/InputField";
 import RangingSlider from "../../RangingSlider/RangingSlider";
@@ -20,15 +18,12 @@ import Row from "../../Row/Row";
 import ThemedText from "../../ThemedText/ThemedText";
 import ResetFilterButton from "../../Buttons/ResetFilter/ResetFilterButton";
 import { sharedPriceFilterStyles } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Styles";
+import usePriceFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/usePriceFilterFuncs";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 
 type Props = {
   isFilterModalOpen: boolean;
-  propertyType:
-    | PropertyTypesEnum.CommercialForSale
-    | PropertyTypesEnum.ResidentialForSale
-    | PropertyTypesEnum.Stands
-    | PropertyTypesEnum.Land
-    | "";
+  propertyType: IPropertyType;
   closeModal: IVoidFunc;
 };
 
@@ -37,41 +32,25 @@ const PriceFilterModal: React.FC<Props> = ({
   propertyType,
   closeModal,
 }) => {
-  const { setPriceFilter, priceFilter } = usePropertyFiltersContext();
-  const [priceMin, setPriceMin] = useState<number>(priceFilter.min);
-  const [priceMax, setPriceMax] = useState<number>(priceFilter.max);
+  const { priceFilter } = usePropertyFiltersContext();
+  const [price, setPrice] = useState<IPriceFilter>(priceFilter);
   const theme = useAppSelector((state) => state.theme.value);
   const { width } = useWindowDimensions();
   const maxValue = 1000000;
-
-  const borderColor = () => {
-    if (priceMin !== 0 && priceMin >= priceMax) {
-      return red;
-    } else return gray;
-  };
-
-  const handleFilterReset = () => {
-    setPriceMax(0);
-    setPriceMin(0);
-    setPriceFilter({
-      isActive: false,
-      max: 0,
-      min: 0,
-      propertyType: "",
-    });
-  };
+  const {
+    priceMax,
+    priceMin,
+    setPriceMax,
+    setPriceMin,
+    applyPriceFilter,
+    resetPriceFilter,
+    borderColor,
+  } = usePriceFilterFuncs(price, propertyType, setPrice);
 
   const applyFilter = () => {
-    if (priceMin <= priceMax) {
-      if (priceMax > 0 || priceMin > 0) {
-        setPriceFilter({
-          isActive: true,
-          max: priceMax,
-          min: priceMin,
-          propertyType,
-        });
-        closeModal();
-      }
+    if (priceMin() <= priceMax()) {
+      applyPriceFilter();
+      closeModal();
     }
   };
 
@@ -109,8 +88,8 @@ const PriceFilterModal: React.FC<Props> = ({
               <Ionicons name="pricetag-outline" size={25} color={primary} />
               <ThemedText type="subHeader">Price Filter</ThemedText>
             </Row>
-            {(priceMax > 0 || priceMin > 0) && (
-              <ResetFilterButton handleResetFunc={handleFilterReset}/>
+            {(priceMax() > 0 || priceMin() > 0) && (
+              <ResetFilterButton handleResetFunc={resetPriceFilter} />
             )}
           </Row>
           <View style={sharedPriceFilterStyles.sliderContainer}>
@@ -119,14 +98,14 @@ const PriceFilterModal: React.FC<Props> = ({
               maxValue={maxValue}
               minValue={0}
               onChange={setPriceMin}
-              value={priceMin}
+              value={priceMin()}
               step={10}
             />
           </View>
           <Row style={sharedPriceFilterStyles.inputRow}>
             <View>
               <InputField
-                textValue={priceMin.toString()}
+                textValue={priceMin().toString()}
                 placeHolder="0"
                 handleOnChangeText={(rent: string) => setPriceMin(+rent)}
                 contentType="none"
@@ -139,7 +118,7 @@ const PriceFilterModal: React.FC<Props> = ({
             <ThemedText type="regular">To</ThemedText>
             <View>
               <InputField
-                textValue={priceMax.toString()}
+                textValue={priceMax().toString()}
                 placeHolder="Any"
                 handleOnChangeText={(rent: string) => setPriceMax(+rent)}
                 contentType="none"
@@ -156,14 +135,14 @@ const PriceFilterModal: React.FC<Props> = ({
               maxValue={maxValue}
               minValue={0}
               onChange={setPriceMax}
-              value={priceMax}
+              value={priceMax()}
               step={10}
             />
           </View>
           <CustomButton
             title="Apply"
             onPressFunc={applyFilter}
-            isDisabled={priceMax < priceMin ? true : false}
+            isDisabled={priceMax() < priceMin() ? true : false}
           />
         </View>
       </View>

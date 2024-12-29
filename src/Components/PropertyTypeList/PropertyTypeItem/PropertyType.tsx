@@ -3,7 +3,7 @@ import React from "react";
 
 import { dark, lightGray, pureWhite, white } from "@/src/Theme/Colors";
 import { useAppDispatch, useAppSelector } from "@/src/Redux/Hooks/Config";
-import { activeOpacityOfTouchableOpacity } from "@/src/Utils/Constants";
+import { activeOpacityOfTouchableOpacity, PropertyTypesEnum } from "@/src/Utils/Constants";
 import { family, small } from "@/src/Theme/Font";
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
@@ -33,7 +33,7 @@ const PropertyTypeItem: React.FC<Props> = ({
       style={[
         styles.container,
         {
-          marginRight: propertyType === "Land" ? 5 : 0,
+          marginRight: propertyType === PropertyTypesEnum.Land ? 5 : 0,
           backgroundColor:
             activePropertyType === propertyType
               ? theme === "dark"

@@ -6,90 +6,79 @@ import {
   useState,
 } from "react";
 
-import { PropertyTypesEnum } from "../Utils/Constants";
 import {
   ICurrency,
   IDimensions,
-  IPropertyType,
 } from "../GlobalTypes/Property/Common";
 
+type IMinMax = {
+  min:number,
+  max:number
+}
 export type IRentFilter = {
-  isActive: boolean;
-  propertyType:
-    | PropertyTypesEnum.CommercialRentals
-    | PropertyTypesEnum.ResidentialRentals
-    | "";
-  min: number;
-  max: number;
+  residentialRentals:IMinMax,
+  commercialRentals:IMinMax
 };
 
 export type IPriceFilter = {
-  isActive: boolean;
-  propertyType:
-    | PropertyTypesEnum.CommercialForSale
-    | PropertyTypesEnum.ResidentialForSale
-    | PropertyTypesEnum.Land
-    | PropertyTypesEnum.Stands
-    | "";
-  min: number;
-  max: number;
+  residentialForSale:IMinMax,
+  commercialForSale:IMinMax,
+  stand:IMinMax,
+  land:IMinMax
 };
 
 export type IBedroomsFilter = {
-  isActive: boolean;
-  propertyType:
-    | PropertyTypesEnum.ResidentialForSale
-    | PropertyTypesEnum.ResidentialRentals
-    | "";
-  figure: string;
+  residentialForsaleFigure:string
+  residentialRentalsFigure:string
 };
 
 export type ITotalRoomsFilter = {
-  isActive: boolean;
-  propertyType:
-    | PropertyTypesEnum.ResidentialForSale
-    | PropertyTypesEnum.ResidentialRentals
-    | PropertyTypesEnum.CommercialForSale
-    | PropertyTypesEnum.CommercialRentals
-    | "";
-  figure: string;
+  residentialForsaleFigure:string
+  residentialRentalsFigure:string
+  commercialForsaleFigure:string
+  commercialRentalsFigure:string
 };
 
 export type ICurrencyFilter = {
-  isActive: boolean;
-  propertyType: IPropertyType | "";
-  currency: ICurrency | "";
+  residentialForsale:ICurrency | ""
+  residentialRentals:ICurrency | ""
+  commercialForsale:ICurrency | ""
+  commercialRentals:ICurrency | ""
+  stand: ICurrency | "";
+  land:ICurrency | "";
 };
 
 export type IBathroomsFilter = {
-  isActive: boolean;
-  propertyType:
-    | PropertyTypesEnum.ResidentialForSale
-    | PropertyTypesEnum.ResidentialRentals
-    | "";
-  figure: string;
+  residentialForsaleFigure:string
+  residentialRentalsFigure:string
 };
 
 export type IRoomsToRentFilter = {
-  isActive: boolean;
-  propertyType:
-    | PropertyTypesEnum.CommercialRentals
-    | PropertyTypesEnum.ResidentialRentals
-    | "";
-  figure: string;
+  residentialRentalsFigure:string
+  commercialRentalsFigure:string
 };
 
 export type IPropertyStructureTypeFilter = {
-  isActive: boolean;
-  propertyType: IPropertyType | "";
-  type: string;
+  residentialForsale:string
+  residentialRentals:string
+  commercialForsale:string
+  commercialRentals:string
+  stand: string;
+  land:string;
 };
 
-export type IPropertySizeFilter = {
-  isActive: boolean;
-  propertyType: IPropertyType | "";
+type ISize = {
   figure: string;
-  dimension: IDimensions;
+  dimension:IDimensions;
+}
+
+export type IPropertySizeFilter = {
+  residentialForsale:ISize
+  residentialRentals:ISize
+  commercialForsale:ISize
+  commercialRentals:ISize
+  stand: ISize;
+  land:ISize;
 };
 
 const PropertyFiltersContext = createContext<{
@@ -113,52 +102,92 @@ const PropertyFiltersContext = createContext<{
   setPriceFilter: Dispatch<SetStateAction<IPriceFilter>>;
 }>({
   currencyFilter: {
-    isActive: false,
-    propertyType: "",
-    currency: "",
+    residentialForsale:"",
+    residentialRentals:"",
+    commercialForsale:"",
+    commercialRentals:"",
+    stand:"",
+    land:""
   },
   totalRoomsFilter: {
-    isActive: false,
-    figure: "",
-    propertyType: "",
+    residentialForsaleFigure:"",
+    residentialRentalsFigure:"",
+    commercialForsaleFigure:"",
+    commercialRentalsFigure:""
   },
   priceFilter: {
-    max: 0,
-    min: 0,
-    isActive: false,
-    propertyType: "",
+    residentialForSale:{
+      max:0,
+      min:0
+    },
+    commercialForSale:{
+      max:0,
+      min:0
+    },
+    stand:{
+      max:0,
+      min:0
+    },
+    land:{
+      max:0,
+      min:0
+    }
   },
   rentFilter: {
-    isActive: false,
-    propertyType: "",
-    max: 0,
-    min: 0,
+    residentialRentals:{
+      max:0,
+      min:0
+    },
+    commercialRentals:{
+      max:0,
+      min:0
+    }
   },
   propertySizeFilter: {
-    isActive: false,
-    propertyType: "",
-    dimension: "m²",
-    figure: "",
+    residentialForsale:{
+      figure:"",
+      dimension:"m²"
+    },
+    residentialRentals:{
+      figure:"",
+      dimension:"m²"
+    },
+    commercialForsale:{
+      figure:"",
+      dimension:"m²"
+    },
+    commercialRentals:{
+      figure:"",
+      dimension:"m²"
+    },
+    stand:{
+      figure:"",
+      dimension:"m²"
+    },
+    land:{
+      figure:"",
+      dimension:"m²"
+    },
   },
   propertyStructureTypeFilter: {
-    isActive: false,
-    propertyType: "",
-    type: "",
+    residentialForsale:"",
+    residentialRentals:"",
+    commercialForsale:"",
+    commercialRentals:"",
+    stand:"",
+    land:""
   },
   bathroomsFilter: {
-    isActive: false,
-    propertyType: "",
-    figure: "",
+    residentialForsaleFigure:"",
+    residentialRentalsFigure:""
   },
   bedroomsFilter: {
-    isActive: false,
-    propertyType: "",
-    figure: "",
+    residentialForsaleFigure:"",
+    residentialRentalsFigure:""
   },
   roomsToRentFilter: {
-    isActive: false,
-    propertyType: "",
-    figure: "",
+    residentialRentalsFigure:"",
+    commercialRentalsFigure:""
   },
   setTotalRoomsFilter: () => {},
   setCurrencyFilter: () => {},
@@ -177,60 +206,100 @@ export const PropertyFiltersContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [currencyFilter, setCurrencyFilter] = useState<ICurrencyFilter>({
-    isActive: false,
-    propertyType: "",
-    currency: "",
+    residentialForsale:"",
+    residentialRentals:"",
+    commercialForsale:"",
+    commercialRentals:"",
+    stand:"",
+    land:""
   });
   const [totalRoomsFilter, setTotalRoomsFilter] = useState<ITotalRoomsFilter>({
-    isActive: false,
-    propertyType: "",
-    figure: "",
+    residentialForsaleFigure:"",
+    residentialRentalsFigure:"",
+    commercialForsaleFigure:"",
+    commercialRentalsFigure:""
   });
   const [priceFilter, setPriceFilter] = useState<IPriceFilter>({
-    max: 0,
-    min: 0,
-    isActive: false,
-    propertyType: "",
+    residentialForSale:{
+      max:0,
+      min:0
+    },
+    commercialForSale:{
+      max:0,
+      min:0
+    },
+    stand:{
+      max:0,
+      min:0
+    },
+    land:{
+      max:0,
+      min:0
+    }
   });
 
   const [propertySizeFilter, setPropertySizeFilter] =
     useState<IPropertySizeFilter>({
-      isActive: false,
-      propertyType: "",
-      dimension: "m²",
-      figure: "",
+      residentialForsale:{
+        figure:"",
+        dimension:"m²"
+      },
+      residentialRentals:{
+        figure:"",
+        dimension:"m²"
+      },
+      commercialForsale:{
+        figure:"",
+        dimension:"m²"
+      },
+      commercialRentals:{
+        figure:"",
+        dimension:"m²"
+      },
+      stand:{
+        figure:"",
+        dimension:"m²"
+      },
+      land:{
+        figure:"",
+        dimension:"m²"
+      },
     });
 
   const [propertyStructureTypeFilter, setPropertyStructureTypeFilter] =
     useState<IPropertyStructureTypeFilter>({
-      isActive: false,
-      propertyType: "",
-      type: "",
+      residentialForsale:"",
+    residentialRentals:"",
+    commercialForsale:"",
+    commercialRentals:"",
+    stand:"",
+    land:""
     });
   const [roomsToRentFilter, setRoomsToRentFilter] =
     useState<IRoomsToRentFilter>({
-      isActive: false,
-      propertyType: "",
-      figure: "",
+      residentialRentalsFigure:"",
+    commercialRentalsFigure:""
     });
 
   const [bedroomsFilter, setBedroomsFilter] = useState<IBedroomsFilter>({
-    isActive: false,
-    propertyType: "",
-    figure: "",
+    residentialForsaleFigure: "",
+    residentialRentalsFigure: "",
   });
 
   const [bathroomsFilter, setBathroomsFilter] = useState<IBathroomsFilter>({
-    isActive: false,
-    propertyType: "",
-    figure: "",
+    residentialForsaleFigure:"",
+    residentialRentalsFigure:""
   });
 
   const [rentFilter, setRentFilter] = useState<IRentFilter>({
-    isActive: false,
-    propertyType: "",
-    max: 0,
-    min: 0,
+    residentialRentals:{
+      max:0,
+      min:0
+    },
+    commercialRentals:{
+      max:0,
+      min:0
+    }
   });
 
   return (

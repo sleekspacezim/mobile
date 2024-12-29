@@ -85,5 +85,6 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
     flexDirection: "row",
+    paddingHorizontal: 10,
   },
 });

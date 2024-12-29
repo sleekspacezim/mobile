@@ -1,10 +1,12 @@
-import { FlatList, StyleSheet, View, ViewToken } from "react-native";
-import React, { useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import React from "react";
 import { Image } from "expo-image";
 
 import { IPropertyImageOrVideo } from "@/src/GlobalTypes/Property/Media/ImageOrVideoTypes";
 import ImageCard from "./ImageCard/ImageCard";
 import { propertyCardBorderRadius } from "../Constants/Constants";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import { PropertyTypesEnum } from "@/src/Utils/Constants";
 
 type Props = {
   media: IPropertyImageOrVideo[];
@@ -20,13 +22,13 @@ const standImage = require("@/assets/images/stand_forsale.jpg");
 
 const ImageCarousel: React.FC<Props> = ({ media, propertyType }) => {
   const placeholderImage = () => {
-    if (propertyType === "Commercial ForSale") return commercialForsaleImage;
-    else if (propertyType === "Commercial Rentals")
+    if (propertyType === PropertyTypesEnum.CommercialForSale) return commercialForsaleImage;
+    else if (propertyType === PropertyTypesEnum.CommercialRentals)
       return commercialRentalImage;
-    else if (propertyType === "Land") return landImage;
-    else if (propertyType === "Residential ForSale")
+    else if (propertyType === PropertyTypesEnum.Land) return landImage;
+    else if (propertyType === PropertyTypesEnum.ResidentialForSale)
       return residentialForsaleImage;
-    else if (propertyType === "Residential Rentals")
+    else if (propertyType === PropertyTypesEnum.ResidentialRentals)
       return residentialRentalImage;
     else return standImage;
   };

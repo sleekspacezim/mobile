@@ -49,12 +49,14 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
     manager: {
       profilePicture: { uri },
       name,
+      userId
     },
     propertyLocation: { displayName },
   },
 }) => {
   const iconSize = 22;
   const theme = useAppSelector((state) => state.theme.value);
+  const user = useAppSelector((state)=>state.user.value)
   const { navigateToProperty } = useNavigateToProperty(
     PropertyTypesEnum.ResidentialRentals,
     id
@@ -93,11 +95,11 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
             >
               <ThemedText type="subHeader">{type}</ThemedText>
               <Row style={{ gap: 5, alignItems: "center" }}>
-                <FavoriteContainer
+                {user.id !== userId && <FavoriteContainer
                   propertyId={id}
                   isPropertyFavorite={isFavorite}
                   propertyType={PropertyTypesEnum.ResidentialRentals}
-                />
+                />}
                 <ThreeDots
                   propertyId={id}
                   managerId={managerId}

@@ -6,7 +6,10 @@ import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { primary, lighterPrimary, gray } from "@/src/Theme/Colors";
-import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
+import {
+  IPropertyStructureTypeFilter,
+  usePropertyFiltersContext,
+} from "@/src/Context/PropertyFiltersContext";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import ResetFilterButton from "@/src/Components/Buttons/ResetFilter/ResetFilterButton";
@@ -15,38 +18,65 @@ import {
   propertyStructureTypeIcon,
   propertyStructureTypeOptions,
 } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Funcs";
+import usePropertyStructureFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/usePropertyStructureFilterFuncs";
+import {
+  activeOpacityOfTouchableOpacity,
+  PropertyTypesEnum,
+} from "@/src/Utils/Constants";
 
 type Props = {
   closeBottomSheet: IVoidFunc;
 };
 
 const PropertyStructureTypeFilter: React.FC<Props> = ({ closeBottomSheet }) => {
-  const { propertyStructureTypeFilter, setPropertyStructureTypeFilter } =
-    usePropertyFiltersContext();
+  const { propertyStructureTypeFilter } = usePropertyFiltersContext();
   const activePropertyType = useAppSelector(
     (state) => state.activePropertyType.value
   );
-  const [propertyStructureType, setPropertyStructureType] = useState<string>(
-    propertyStructureTypeFilter.type
+  const [propertyStructureType, setPropertyStructureType] =
+    useState<IPropertyStructureTypeFilter>(propertyStructureTypeFilter);
+
+  const {
+    handleSelectStructure,
+    color,
+    resetPropertyStructureTypeFilter,
+    applyPropertyStructureTypeFilter,
+  } = usePropertyStructureFilterFuncs(
+    propertyStructureType,
+    activePropertyType,
+    setPropertyStructureType
   );
 
   const handleFilterReset = () => {
-    setPropertyStructureType("");
-    setPropertyStructureTypeFilter({
-      isActive: false,
-      type: "",
-      propertyType: "",
-    });
+    resetPropertyStructureTypeFilter();
     closeBottomSheet();
   };
 
   const handleApplyFilter = () => {
-    setPropertyStructureTypeFilter({
-      isActive: true,
-      type: propertyStructureType,
-      propertyType: activePropertyType,
-    });
+    applyPropertyStructureTypeFilter();
     closeBottomSheet();
+  };
+
+  const isPropertyStructureTypeSelected = () => {
+    if (activePropertyType === PropertyTypesEnum.CommercialForSale) {
+      if (propertyStructureTypeFilter.commercialForsale) return true;
+      else return false;
+    } else if (activePropertyType === PropertyTypesEnum.CommercialRentals) {
+      if (propertyStructureTypeFilter.commercialRentals) return true;
+      else return false;
+    } else if (activePropertyType === PropertyTypesEnum.ResidentialForSale) {
+      if (propertyStructureTypeFilter.residentialForsale) return true;
+      else return false;
+    } else if (activePropertyType === PropertyTypesEnum.ResidentialRentals) {
+      if (propertyStructureTypeFilter.residentialRentals) return true;
+      else return false;
+    } else if (activePropertyType === PropertyTypesEnum.Stands) {
+      if (propertyStructureTypeFilter.stand) return true;
+      else return false;
+    } else {
+      if (propertyStructureTypeFilter.land) return true;
+      else return false;
+    }
   };
 
   return (
@@ -57,7 +87,7 @@ const PropertyStructureTypeFilter: React.FC<Props> = ({ closeBottomSheet }) => {
           <ThemedText type="subHeader">Property Structure Type</ThemedText>
         </Row>
         <View style={{ height: 30 }}>
-          {propertyStructureTypeFilter.type && (
+          {isPropertyStructureTypeSelected() && (
             <ResetFilterButton handleResetFunc={handleFilterReset} />
           )}
         </View>
@@ -66,21 +96,22 @@ const PropertyStructureTypeFilter: React.FC<Props> = ({ closeBottomSheet }) => {
         {propertyStructureTypeOptions(activePropertyType).map(
           (propertyStructureTypeOption) => (
             <TouchableOpacity
+              activeOpacity={activeOpacityOfTouchableOpacity}
               key={propertyStructureTypeOption}
-              onPress={() =>
-                setPropertyStructureType(propertyStructureTypeOption)
-              }
+              onPress={() => handleSelectStructure(propertyStructureTypeOption)}
               style={[
                 sharedPropertyStructureTypeStyles.propertyTypeOption,
                 {
-                  backgroundColor:
-                    propertyStructureType === propertyStructureTypeOption
-                      ? lighterPrimary
-                      : "transparent",
-                  borderColor:
-                    propertyStructureType === propertyStructureTypeOption
-                      ? primary
-                      : gray,
+                  backgroundColor: color(
+                    propertyStructureTypeOption,
+                    lighterPrimary,
+                    "transparent"
+                  ),
+                  borderColor: color(
+                    propertyStructureTypeOption,
+                    primary,
+                    gray
+                  ),
                 },
               ]}
             >
@@ -89,10 +120,7 @@ const PropertyStructureTypeFilter: React.FC<Props> = ({ closeBottomSheet }) => {
                 style={[
                   sharedPropertyStructureTypeStyles.propertyTypeOptionText,
                   {
-                    color:
-                      propertyStructureType === propertyStructureTypeOption
-                        ? primary
-                        : gray,
+                    color: color(propertyStructureTypeOption, primary, gray),
                   },
                 ]}
               >
