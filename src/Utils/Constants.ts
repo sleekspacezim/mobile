@@ -8,8 +8,8 @@ export const expoSecureValueKeyNames = {
   theme: "theme",
 };
 
-export const backEndUrl = "https://backend-1fpy.onrender.com";
-//export const backEndUrl = "http://192.168.254.196:8080";
+//export const backEndUrl = "https://backend-1fpy.onrender.com";
+export const backEndUrl = "http://192.168.60.195:8080";
 
 export const managerAccountUpdateMsg =
   "Remember, if you update your information, all your properties will also be updated, so make sure it is accurate.";

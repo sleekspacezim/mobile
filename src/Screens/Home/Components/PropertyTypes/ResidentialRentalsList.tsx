@@ -27,6 +27,7 @@ import { primary, pureWhite } from "@/src/Theme/Colors";
 import FlatListOnEndReachedError from "@/src/Components/FlatListOnEndReachedError/FlatListOnEndReachedError";
 import OutlinedButton from "@/src/Components/Buttons/Outlined/OutlinedButton";
 import { animatedHeaderHeight } from "../../Utils/Constants";
+import { useSortPropertiesContext } from "@/src/Context/SortPropertiesContext";
 
 type Props = {
   setTotalproperties: React.Dispatch<React.SetStateAction<number>>;
@@ -43,6 +44,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
     useState<boolean>(false);
   const [loadMorehttpError, setloadMoreHttpError] = useState<string>("");
   const [httpError, setHttpError] = useState<string>("");
+  const {sortResidentialRentalPropertiesBy} = useSortPropertiesContext()
   const { openReportModal, setOpenReportModal, selectedProperty } =
     useSharedContext();
   const { rentalResidentialProperties, setRentalResidentialProperties } =
@@ -61,6 +63,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
       isUserLoggedIn: accessToken ? true : false,
       accessToken,
       pageLimit,
+      sortBy:sortResidentialRentalPropertiesBy
     })
       .then(({ data: { properties, totalPages, count } }) => {
         setRentalResidentialProperties(properties);
@@ -84,6 +87,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
       isUserLoggedIn: accessToken ? true : false,
       accessToken,
       pageLimit,
+      sortBy:sortResidentialRentalPropertiesBy
     })
       .then(({ data: { properties, totalPages, count } }) => {
         setRentalResidentialProperties(properties);
@@ -109,6 +113,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
         isUserLoggedIn: accessToken ? true : false,
         accessToken,
         pageLimit,
+        sortBy:sortResidentialRentalPropertiesBy
       })
         .then(({ data: { properties, totalPages, count } }) => {
           setRentalResidentialProperties([
@@ -138,7 +143,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
 
   useEffect(() => {
     fetchProperties();
-  }, [accessToken]);
+  }, [accessToken,sortResidentialRentalPropertiesBy]);
 
   useEffect(() => {
     if (httpError) setTotalproperties(0);
