@@ -41,7 +41,7 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
     rentAmount,
     sizeNumber,
     sizeDimensions,
-    totalNumberOfRooms,
+    numberOfRooms,
     isFullHouse,
     isFavorite,
     managerId,
@@ -80,7 +80,7 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
   };
 
   const processTotalRoomsText = () => {
-    if (totalNumberOfRooms === 1) return "Total Rooms";
+    if (numberOfRooms === 1) return "Total Rooms";
     else return "Total rooms";
   };
 
@@ -144,7 +144,7 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
               />
             </IconContainer>
             <Row style={{ gap: 5 }}>
-              <RegularText>{totalNumberOfRooms}</RegularText>
+              <RegularText>{numberOfRooms}</RegularText>
               <ThemedText type="regular">{processTotalRoomsText()}</ThemedText>
             </Row>
           </View>

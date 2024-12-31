@@ -9,8 +9,9 @@ export const residentialStructuralTypes = [
   "Apartment",
   "Duplex",
   "Triplex",
+  "Flat"
 ];
-export const commercialStructuralTypes = ["Shop", "Building", "Land", "Other"];
+export const commercialStructuralTypes = ["Shop", "Building", "Rental Land", "Factory","Flat","Other"];
 export const landStructuralTypes = [
   "Residential",
   "Mine",
@@ -22,6 +23,7 @@ export const standStructuralTypes = [
   "Residential",
   "Commercial building",
   "Shop",
+  "Flat",
   "Other",
 ];
 
@@ -33,7 +35,7 @@ export const roomsToRentFilterList: string[] = [
   "5",
   "6",
   "7",
-  "8",
+  "8+",
   "full house",
 ];
 export const totalRoomsFilterList: string[] = [

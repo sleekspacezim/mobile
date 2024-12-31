@@ -27,6 +27,7 @@ import {
   ISortResidentialRentalPropertiesOptions,
   ISortStandOptions,
 } from "@/src/Context/SortPropertiesContext";
+import { ICurrency, IDimensions } from "@/src/GlobalTypes/Property/Common";
 
 const controller = new AbortController();
 
@@ -106,6 +107,16 @@ export const getAllResidentialRentalPropertiesHttpFunc = (requestData: {
   isUserLoggedIn: boolean;
   accessToken: string;
   sortBy: ISortResidentialRentalPropertiesOptions;
+  rentMin: number;
+  rentMax: number;
+  type: string;
+  currency: ICurrency | "";
+  sizeNumber: string;
+  sizeDimension: IDimensions|"";
+  bedrooms: string;
+  bathroom: string;
+  numberOfRooms: string;
+  roomsToRent: string;
 }) => {
   return axios.get<{
     properties: IResidentialRentalPropertyWithManager[];
@@ -113,8 +124,8 @@ export const getAllResidentialRentalPropertiesHttpFunc = (requestData: {
     count: number;
   }>(
     requestData.isUserLoggedIn
-      ? `${residentialRentalPropertiesRoutes.getAllResidentialRentalProperties}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`
-      : `${residentialRentalPropertiesRoutes.getAllResidentialRentalProperties}?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`,
+      ? `${residentialRentalPropertiesRoutes.getAllResidentialRentalProperties}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}&currency=${requestData.currency}&type=${requestData.type}&rent_min=${requestData.rentMin}&rent_max=${requestData.rentMax}&bedrooms=${requestData.bedrooms}&bathrooms=${requestData.bathroom}&size_number=${requestData.sizeNumber}&size_dimensions=${requestData.sizeDimension}&number_of_rooms=${requestData.numberOfRooms}&number_rooms_to_rent=${requestData.roomsToRent}`
+      : `${residentialRentalPropertiesRoutes.getAllResidentialRentalProperties}?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}&currency=${requestData.currency}&type=${requestData.type}&rent_min=${requestData.rentMin}&rent_max=${requestData.rentMax}&bedrooms=${requestData.bedrooms}&bathrooms=${requestData.bathroom}&size_number=${requestData.sizeNumber}&size_dimensions=${requestData.sizeDimension}&number_of_rooms=${requestData.numberOfRooms}&number_rooms_to_rent=${requestData.roomsToRent}`,
     {
       signal: controller.signal,
       headers: { Authorization: `Bearer ${requestData.accessToken}` },

@@ -1,4 +1,5 @@
 import { IManagerAccount } from "../../Manager/ManagerTypes";
+import { IStatus, ICurrency } from "../Common";
 import { IPropertyInsights } from "../Insights/InsightsTypes";
 import { IPropertyLocation, IPropertyLocationCreation } from "../Location/LocationTypes";
 import { IPropertyImageOrVideo, IPropertyImageOrVideoCreationOrUpdate } from "../Media/ImageOrVideoTypes";
@@ -6,6 +7,7 @@ import { IPropertyImageOrVideo, IPropertyImageOrVideoCreationOrUpdate } from "..
 export type ICommercialRentalPropertyCreation = {
     managerId: number;
     numberOfRooms: number;
+    numberOfRoomsToLet: number;
     rentAmount: number;
     sizeNumber: number;
     yearBuilt: number;
@@ -30,6 +32,7 @@ export type ICommercialRentalProperty = {
     managerId: number;
     uniqueId: number;
     numberOfRooms: number;
+    numberOfRoomsToLet: number;
     rentAmount: number;
     sizeNumber: number;
     yearBuilt: number;
@@ -57,6 +60,7 @@ export type ICommercialRentalPropertyWithManager = {
     managerId: number;
     uniqueId: number;
     numberOfRooms: number;
+    numberOfRoomsToLet: number;
     rentAmount: number;
     sizeNumber: number;
     yearBuilt: number;
@@ -84,6 +88,7 @@ export type ICommercialRentalPropertyUpdate = {
     managerId: number;
     uniqueId: number;
     numberOfRooms: number;
+    numberOfRoomsToLet: number;
     rentAmount: number;
     sizeNumber: number;
     yearBuilt: number;

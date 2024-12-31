@@ -1,4 +1,5 @@
 import { IManagerAccount } from "../../Manager/ManagerTypes";
+import { ICurrency, IStatus } from "../Common";
 import { IPropertyInsights } from "../Insights/InsightsTypes";
 import {
   IPropertyLocation,
@@ -11,7 +12,7 @@ import {
 
 export type IResidentialRentalPropertyCreation = {
   managerId: number;
-  totalNumberOfRooms: number;
+  numberOfRooms: number;
   rentAmount: number;
   sizeNumber: number;
   numberOfGarages: number;
@@ -47,7 +48,7 @@ export type IResidentialRentalProperty = {
   id: number;
   managerId: number;
   uniqueId: number;
-  totalNumberOfRooms: number;
+  numberOfRooms: number;
   rentAmount: number;
   sizeNumber: number;
   numberOfGarages: number;
@@ -86,7 +87,7 @@ export type IResidentialRentalPropertyWithManager = {
   id: number;
   managerId: number;
   uniqueId: number;
-  totalNumberOfRooms: number;
+  numberOfRooms: number;
   rentAmount: number;
   sizeNumber: number;
   numberOfGarages: number;
@@ -125,7 +126,7 @@ export type IResidentialRentalPropertyUpdate = {
   id: number;
   managerId: number;
   uniqueId: number;
-  totalNumberOfRooms: number;
+  numberOfRooms: number;
   rentAmount: number;
   sizeNumber: number;
   numberOfGarages: number;

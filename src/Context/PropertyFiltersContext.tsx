@@ -69,7 +69,7 @@ export type IPropertyStructureTypeFilter = {
 
 type ISize = {
   figure: string;
-  dimension:IDimensions;
+  dimension:IDimensions|"";
 }
 
 export type IPropertySizeFilter = {
@@ -146,27 +146,27 @@ const PropertyFiltersContext = createContext<{
   propertySizeFilter: {
     residentialForsale:{
       figure:"",
-      dimension:"m²"
+      dimension:""
     },
     residentialRentals:{
       figure:"",
-      dimension:"m²"
+      dimension:""
     },
     commercialForsale:{
       figure:"",
-      dimension:"m²"
+      dimension:""
     },
     commercialRentals:{
       figure:"",
-      dimension:"m²"
+      dimension:""
     },
     stand:{
       figure:"",
-      dimension:"m²"
+      dimension:""
     },
     land:{
       figure:"",
-      dimension:"m²"
+      dimension:""
     },
   },
   propertyStructureTypeFilter: {

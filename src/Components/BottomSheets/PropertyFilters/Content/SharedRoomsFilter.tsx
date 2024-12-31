@@ -44,10 +44,6 @@ const SharedRoomsFilter: React.FC<Props> = ({
     bathroomsFilter,
     bedroomsFilter,
     roomsToRentFilter,
-    setBathroomsFilter,
-    setBedroomsFilter,
-    setRoomsToRentFilter,
-    setTotalRoomsFilter,
   } = usePropertyFiltersContext();
   const [selectedTotalNumberOfRooms, setSelectedTotalNumberOfRooms] =
     useState<ITotalRoomsFilter>(totalRoomsFilter);

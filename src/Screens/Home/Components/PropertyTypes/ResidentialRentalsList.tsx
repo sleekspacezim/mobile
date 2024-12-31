@@ -1,33 +1,20 @@
-import {
-  Animated,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { Animated, StyleSheet, useWindowDimensions, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import {
-  BUTTON_MAX_WIDTH,
-  PropertyTypesEnum,
-  SCREEN_BREAK_POINT,
-} from "@/src/Utils/Constants";
+import { PropertyTypesEnum, SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
 import { getAllResidentialRentalPropertiesHttpFunc } from "@/src/HttpServices/Queries/Properties/PropertiesHttpFuncs";
 import HttpError from "@/src/Components/HttpError/HttpError";
 import LoadingSkeleton from "../LoadingSkeleton/LoadingSkeleton";
-import PropertyCard from "@/src/Components/PropertyCard/PropertyCard";
 import EmptyPropertyList from "@/src/Components/EmptyPropertyList/EmptyPropertyList";
 import ReportModal from "@/src/Components/Modals/Report/ReportModal";
 import { useSharedContext } from "@/src/Context/SharedContext";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { usePropertiesContext } from "@/src/Context/PropertiesContext";
-import ButtonSpinner from "@/src/Components/Spinners/ButtonSpinner";
-import { primary, pureWhite } from "@/src/Theme/Colors";
-import FlatListOnEndReachedError from "@/src/Components/FlatListOnEndReachedError/FlatListOnEndReachedError";
-import OutlinedButton from "@/src/Components/Buttons/Outlined/OutlinedButton";
 import { animatedHeaderHeight } from "../../Utils/Constants";
 import { useSortPropertiesContext } from "@/src/Context/SortPropertiesContext";
+import PropertiesMobileView from "@/src/Screens/Home/Components/PropertyTypes/Components/PropertiesMobileView";
+import PropertiesTableView from "./Components/PropertiesTableView";
+import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
 
 type Props = {
   setTotalproperties: React.Dispatch<React.SetStateAction<number>>;
@@ -44,7 +31,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
     useState<boolean>(false);
   const [loadMorehttpError, setloadMoreHttpError] = useState<string>("");
   const [httpError, setHttpError] = useState<string>("");
-  const {sortResidentialRentalPropertiesBy} = useSortPropertiesContext()
+  const { sortResidentialRentalPropertiesBy } = useSortPropertiesContext();
   const { openReportModal, setOpenReportModal, selectedProperty } =
     useSharedContext();
   const { rentalResidentialProperties, setRentalResidentialProperties } =
@@ -53,7 +40,16 @@ const ResidentialRentalsList: React.FC<Props> = ({
   const [pageNumber, setPageNumber] = useState<number>(1);
   const { width } = useWindowDimensions();
   const { accessToken } = useAppSelector((state) => state.user.value);
-  const theme = useAppSelector((state) => state.theme.value);
+  const {
+    rentFilter,
+    currencyFilter,
+    propertySizeFilter,
+    propertyStructureTypeFilter,
+    totalRoomsFilter,
+    roomsToRentFilter,
+    bathroomsFilter,
+    bedroomsFilter,
+  } = usePropertyFiltersContext();
 
   const pageLimit = width > SCREEN_BREAK_POINT ? 30 : 12;
 
@@ -63,7 +59,17 @@ const ResidentialRentalsList: React.FC<Props> = ({
       isUserLoggedIn: accessToken ? true : false,
       accessToken,
       pageLimit,
-      sortBy:sortResidentialRentalPropertiesBy
+      sortBy: sortResidentialRentalPropertiesBy,
+      rentMax: rentFilter.residentialRentals.max,
+      rentMin: rentFilter.residentialRentals.min,
+      currency: currencyFilter.residentialRentals,
+      type: propertyStructureTypeFilter.residentialRentals,
+      sizeDimension: propertySizeFilter.residentialRentals.dimension,
+      sizeNumber: propertySizeFilter.residentialRentals.figure,
+      bathroom: bathroomsFilter.residentialRentalsFigure,
+      bedrooms: bedroomsFilter.residentialRentalsFigure,
+      roomsToRent: roomsToRentFilter.residentialRentalsFigure,
+      numberOfRooms: totalRoomsFilter.residentialRentalsFigure,
     })
       .then(({ data: { properties, totalPages, count } }) => {
         setRentalResidentialProperties(properties);
@@ -87,7 +93,17 @@ const ResidentialRentalsList: React.FC<Props> = ({
       isUserLoggedIn: accessToken ? true : false,
       accessToken,
       pageLimit,
-      sortBy:sortResidentialRentalPropertiesBy
+      sortBy: sortResidentialRentalPropertiesBy,
+      rentMax: rentFilter.residentialRentals.max,
+      rentMin: rentFilter.residentialRentals.min,
+      currency: currencyFilter.residentialRentals,
+      type: propertyStructureTypeFilter.residentialRentals,
+      sizeDimension: propertySizeFilter.residentialRentals.dimension,
+      sizeNumber: propertySizeFilter.residentialRentals.figure,
+      bathroom: bathroomsFilter.residentialRentalsFigure,
+      bedrooms: bedroomsFilter.residentialRentalsFigure,
+      roomsToRent: roomsToRentFilter.residentialRentalsFigure,
+      numberOfRooms: totalRoomsFilter.residentialRentalsFigure,
     })
       .then(({ data: { properties, totalPages, count } }) => {
         setRentalResidentialProperties(properties);
@@ -113,7 +129,17 @@ const ResidentialRentalsList: React.FC<Props> = ({
         isUserLoggedIn: accessToken ? true : false,
         accessToken,
         pageLimit,
-        sortBy:sortResidentialRentalPropertiesBy
+        sortBy: sortResidentialRentalPropertiesBy,
+        rentMax: rentFilter.residentialRentals.max,
+        rentMin: rentFilter.residentialRentals.min,
+        currency: currencyFilter.residentialRentals,
+        type: propertyStructureTypeFilter.residentialRentals,
+        sizeDimension: propertySizeFilter.residentialRentals.dimension,
+        sizeNumber: propertySizeFilter.residentialRentals.figure,
+        bathroom: bathroomsFilter.residentialRentalsFigure,
+        bedrooms: bedroomsFilter.residentialRentalsFigure,
+        roomsToRent: roomsToRentFilter.residentialRentalsFigure,
+        numberOfRooms: totalRoomsFilter.residentialRentalsFigure,
       })
         .then(({ data: { properties, totalPages, count } }) => {
           setRentalResidentialProperties([
@@ -143,24 +169,11 @@ const ResidentialRentalsList: React.FC<Props> = ({
 
   useEffect(() => {
     fetchProperties();
-  }, [accessToken,sortResidentialRentalPropertiesBy]);
+  }, [accessToken, sortResidentialRentalPropertiesBy]);
 
   useEffect(() => {
     if (httpError) setTotalproperties(0);
   }, [httpError]);
-
-  const flatListFooter = () => {
-    if (numberOfpages >= pageNumber && !loadMorehttpError) {
-      return <ButtonSpinner backGroundColor={primary} />;
-    }
-    if (loadMorehttpError)
-      return (
-        <View style={{ width: width - 20 }}>
-          <FlatListOnEndReachedError retryFunc={loadMoreProperties} />
-        </View>
-      );
-    else return null;
-  };
 
   const text =
     "We currently do not have Residential Rental Properties, please try again soon. Please checkout other property types in the meantime.";
@@ -197,96 +210,32 @@ const ResidentialRentalsList: React.FC<Props> = ({
         !isLoading &&
         rentalResidentialProperties.length > 0 &&
         width <= SCREEN_BREAK_POINT && (
-          <Animated.FlatList
-            onScroll={Animated.event(
-              [
-                {
-                  nativeEvent: {
-                    contentOffset: {
-                      y: scrollAnimation,
-                    },
-                  },
-                },
-              ],
-              { useNativeDriver: true }
-            )}
-            scrollEventThrottle={16}
-            bounces={false}
-            data={rentalResidentialProperties}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={{
-              gap: 20,
-              alignItems: "center",
-              justifyContent: "center",
-              paddingTop: animatedHeaderHeight + 20,
-            }}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            horizontal={false}
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefreshing}
-                onRefresh={handleRefresh}
-                progressBackgroundColor={theme === "dark" ? pureWhite : primary}
-                tintColor={primary}
-                colors={[theme === "dark" ? primary : pureWhite]}
-              />
-            }
-            ListFooterComponent={flatListFooter()}
-            onEndReached={loadMorehttpError ? undefined : loadMoreProperties}
-            onEndReachedThreshold={0.8}
-            renderItem={({ item }) => (
-              <PropertyCard
-                type={PropertyTypesEnum.ResidentialRentals}
-                property={item}
-              />
-            )}
+          <PropertiesMobileView
+            propertyType={PropertyTypesEnum.ResidentialRentals}
+            loadMorehttpError={loadMorehttpError}
+            pageNumber={pageNumber}
+            numberOfpages={numberOfpages}
+            isRefreshing={isRefreshing}
+            scrollAnimation={scrollAnimation}
+            loadMoreProperties={loadMoreProperties}
+            handleRefresh={handleRefresh}
           />
         )}
       {!httpError &&
         !isLoading &&
         rentalResidentialProperties.length > 0 &&
         width > SCREEN_BREAK_POINT && (
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefreshing}
-                onRefresh={handleRefresh}
-              />
-            }
-          >
-            <View style={styles.largeScreenWrapper}>
-              {rentalResidentialProperties.map((property) => (
-                <PropertyCard
-                  type={PropertyTypesEnum.ResidentialRentals}
-                  key={property.id}
-                  property={property}
-                />
-              ))}
-            </View>
-            {loadMorehttpError ? (
-              <View style={styles.loadMoreErrorContainerTablet}>
-                <FlatListOnEndReachedError retryFunc={loadMoreProperties} />
-              </View>
-            ) : (
-              numberOfpages >= pageNumber && (
-                <View style={styles.loadMoreContainer}>
-                  <OutlinedButton
-                    color={primary}
-                    title="load more"
-                    onPressFunc={() => {
-                      setAreMorePropertiesLoading(true);
-                      loadMoreProperties();
-                    }}
-                    width={BUTTON_MAX_WIDTH}
-                    isDisabled={areMorePropertiesLoading}
-                    isLoading={areMorePropertiesLoading}
-                  />
-                </View>
-              )
-            )}
-          </ScrollView>
+          <PropertiesTableView
+            propertyType={PropertyTypesEnum.ResidentialRentals}
+            loadMorehttpError={loadMorehttpError}
+            pageNumber={pageNumber}
+            numberOfpages={numberOfpages}
+            areMorePropertiesLoading={areMorePropertiesLoading}
+            isRefreshing={isRefreshing}
+            loadMoreProperties={loadMoreProperties}
+            handleRefresh={handleRefresh}
+            setAreMorePropertiesLoading={setAreMorePropertiesLoading}
+          />
         )}
       {openReportModal && (
         <ReportModal
@@ -310,24 +259,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     paddingBottom: 10,
-  },
-  largeScreenWrapper: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-    paddingHorizontal: 10,
-    paddingTop: 10,
-  },
-  loadMoreContainer: {
-    marginTop: 10,
-    paddingHorizontal: 10,
-    alignItems: "center",
-    width: "100%",
-  },
-  loadMoreErrorContainerTablet: {
-    width: BUTTON_MAX_WIDTH,
-    alignItems: "center",
-    marginTop: 10,
-    alignSelf: "center",
   },
 });
