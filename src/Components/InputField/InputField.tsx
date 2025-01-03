@@ -70,6 +70,7 @@ const InputField: React.FC<Props> = ({
     else if (type === "number") return "number-pad";
     else return "default";
   };
+
   return (
     <View style={styles(width, height, theme).container}>
       {label && (

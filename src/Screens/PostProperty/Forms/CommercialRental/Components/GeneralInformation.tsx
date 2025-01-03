@@ -35,7 +35,8 @@ const GeneralInformation: React.FC<Props> = ({
   const location = useAppSelector((state) => state.mapLocation.value);
   const [showOtherPropertyTypeInput, setShowOtherPropertyTypeInput] =
     useState<boolean>(false);
-
+  const [showNumberOfRoomsToLetInput, setShowNumberOfRoomsToLetInput] =
+    useState<boolean>(false);
   useEffect(() => {
     if (formError) {
       setFormError("");
@@ -48,8 +49,11 @@ const GeneralInformation: React.FC<Props> = ({
   useEffect(() => {
     if (propertyDetails.type === "Other") {
       setShowOtherPropertyTypeInput(true);
+    } else if (propertyDetails.type === "Building") {
+      setShowNumberOfRoomsToLetInput(true);
     } else {
       setShowOtherPropertyTypeInput(false);
+      setShowNumberOfRoomsToLetInput(false);
     }
   }, [propertyDetails.type]);
 
@@ -124,6 +128,14 @@ const GeneralInformation: React.FC<Props> = ({
               value: "Land",
             },
             {
+              label: "Factory",
+              value: "Factory",
+            },
+            {
+              label: "Flat",
+              value: "Flat",
+            },
+            {
               label: "Building",
               value: "Building",
             },
@@ -158,7 +170,32 @@ const GeneralInformation: React.FC<Props> = ({
             )}
           </View>
         )}
-        <View>
+        {showNumberOfRoomsToLetInput && (
+          <View>
+            <InputField
+              textValue={propertyDetails.numberOfRoomsToLet}
+              placeHolder=""
+              width={"100%"}
+              handleOnChangeText={(e) =>
+                setPropertyDetails({
+                  ...propertyDetails,
+                  numberOfRoomsToLet: e,
+                })
+              }
+              height={57}
+              contentType="none"
+              type="number"
+              label="Number of rooms to Let"
+              backgroundColor="transparent"
+              isRequired
+              borderColor={formError === "roomsToLet" ? red : gray}
+            />
+            {formError === "roomsToLet" && (
+              <Text style={styles.errorText}>invalid size</Text>
+            )}
+          </View>
+        )}
+        {(propertyDetails.type === "Building" || propertyDetails.type === "Other") && <View>
           <InputField
             textValue={propertyDetails?.numberOfRooms}
             placeHolder=""
@@ -179,7 +216,7 @@ const GeneralInformation: React.FC<Props> = ({
           {formError === "numberOfRooms" && (
             <Text style={styles.errorText}>invalid size</Text>
           )}
-        </View>
+        </View>}
 
         <CheckBoxField
           label="Is FullSpace"
@@ -192,7 +229,6 @@ const GeneralInformation: React.FC<Props> = ({
         <View>
           <PropertyLocationInput
             borderColor={formError === "location" ? red : gray}
-            propertType={PropertyTypesEnum.ResidentialRentals}
           />
           {formError === "location" && (
             <Text style={styles.errorText}>invalid location</Text>
@@ -236,7 +272,7 @@ const GeneralInformation: React.FC<Props> = ({
               {
                 label: "Acres",
                 value: "Acres",
-              }
+              },
             ]}
           />
         </Row>

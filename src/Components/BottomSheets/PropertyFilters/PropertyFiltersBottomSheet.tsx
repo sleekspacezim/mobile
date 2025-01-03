@@ -4,15 +4,15 @@ import { useSharedValue, withSpring } from "react-native-reanimated";
 import { INoPropsReactComponent } from "@/src/GlobalTypes/Types";
 import { useBottomSheetsContext } from "@/src/Context/BottomSheetsContext";
 import BottomSheetAnimationWrapper from "../BottomSheetAnimationWrapper";
-import RentFilter from "./Content/Rent/RentFilter";
+import SharedRoomsFilter from "./Content/SharedRoomsFilter";
+import CurrencyFilter from "./Content/CurrencyFilter";
+import PropertyStructureTypeFilter from "./Content/PropertyStructureTypeFilter";
 
 const PropertyFiltersBottomSheet: INoPropsReactComponent = () => {
   const translateY = useSharedValue(1);
-  const initialBottomSheetHeight = -160;
-  const {
-    propertyFiltersBottomSheet,
-    setPropertyFiltersBottomSheet
-  } = useBottomSheetsContext();
+  const initialBottomSheetHeight = -200;
+  const { propertyFiltersBottomSheet, setPropertyFiltersBottomSheet } =
+    useBottomSheetsContext();
 
   const scrollTo = useCallback((destination: number) => {
     "worklet";
@@ -20,31 +20,53 @@ const PropertyFiltersBottomSheet: INoPropsReactComponent = () => {
   }, []);
 
   const closeBottomSheetWithoutScrollingToTheBottom = () => {
-    scrollTo(0);
     setTimeout(() => {
-      setPropertyFiltersBottomSheet({
-        type: "All Filters",
-        isOpen: false,
-      });
+      setPropertyFiltersBottomSheet("");
     }, 300);
+    scrollTo(0);
+  };
+
+  const filterComponent = () => {
+    if (propertyFiltersBottomSheet === "Currency")
+      return (
+        <CurrencyFilter
+          closeBottomSheet={closeBottomSheetWithoutScrollingToTheBottom}
+        />
+      );
+    else if (propertyFiltersBottomSheet === "Type")
+      return (
+        <PropertyStructureTypeFilter
+          closeBottomSheet={closeBottomSheetWithoutScrollingToTheBottom}
+        />
+      );
+    else
+      return (
+        <SharedRoomsFilter
+          filterType={propertyFiltersBottomSheet}
+          closeBottomSheet={closeBottomSheetWithoutScrollingToTheBottom}
+        />
+      );
   };
 
   return (
     <BottomSheetAnimationWrapper
-      initialBottomSheetHeight={initialBottomSheetHeight}
+      initialBottomSheetHeight={
+        propertyFiltersBottomSheet === "Currency"
+          ? -145
+          : propertyFiltersBottomSheet === "Type"
+          ? -330
+          : initialBottomSheetHeight
+      }
       translateY={translateY}
       scrollTo={scrollTo}
       closeBottomSheet={() => {
-        setPropertyFiltersBottomSheet({
-          type: "All Filters",
-          isOpen: false,
-        });
+        setPropertyFiltersBottomSheet("");
       }}
       closeBottomSheetWithoutScrollingToTheBottom={
         closeBottomSheetWithoutScrollingToTheBottom
       }
     >
-      <RentFilter />
+      {filterComponent()}
     </BottomSheetAnimationWrapper>
   );
 };

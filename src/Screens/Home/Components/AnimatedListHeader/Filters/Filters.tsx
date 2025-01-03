@@ -1,64 +1,75 @@
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, View } from "react-native";
 import React from "react";
 
 import FilterItem from "./FilterItem/FilterItem";
-import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 import { IPropertyFilter } from "../../../Types/Types";
+import { INoPropsReactComponent } from "@/src/GlobalTypes/Types";
+import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import { PropertyTypesEnum } from "@/src/Utils/Constants";
 
-type Props = {
-  propertyType: IPropertyType;
-};
-
-const Filters: React.FC<Props> = ({ propertyType }) => {
-  const residentialRentalList:IPropertyFilter[] = [
+const Filters: INoPropsReactComponent = () => {
+  const activePropertyType = useAppSelector(
+    (state) => state.activePropertyType.value
+  );
+  const residentialRentalList: IPropertyFilter[] = [
     "Filters",
     "Rent",
+    "Currency",
     "Rooms to rent",
+    "Total rooms",
     "Bedrooms",
-    "Size",
     "Bathrooms",
+    "Size",
     "Type",
     "All Filters",
     "Reset Filters",
   ];
-  const residentialForsaleList:IPropertyFilter[] = [
+  const residentialForsaleList: IPropertyFilter[] = [
     "Filters",
     "Price",
-    "Size",
+    "Currency",
+    "Total rooms",
     "Bedrooms",
     "Bathrooms",
+    "Size",
     "Type",
     "All Filters",
     "Reset Filters",
   ];
-  const commercialRentalList:IPropertyFilter[] = [
+  const commercialRentalList: IPropertyFilter[] = [
     "Filters",
     "Rent",
-    "Size",
-    "Type",
+    "Currency",
     "Rooms to rent",
-    "All Filters",
-    "Reset Filters",
-  ];
-  const commercialForsaleList:IPropertyFilter[] = [
-    "Filters",
-    "Price",
+    "Total rooms",
     "Size",
     "Type",
     "All Filters",
     "Reset Filters",
   ];
-  const standList:IPropertyFilter[] = [
+  const commercialForsaleList: IPropertyFilter[] = [
     "Filters",
     "Price",
+    "Currency",
+    "Total rooms",
     "Size",
     "Type",
     "All Filters",
     "Reset Filters",
   ];
-  const landList:IPropertyFilter[] = [
+  const standList: IPropertyFilter[] = [
     "Filters",
     "Price",
+    "Currency",
+    "Size",
+    "Type",
+    "All Filters",
+    "Reset Filters",
+  ];
+  const landList: IPropertyFilter[] = [
+    "Filters",
+    "Price",
+    "Currency",
     "Size",
     "Type",
     "All Filters",
@@ -66,12 +77,14 @@ const Filters: React.FC<Props> = ({ propertyType }) => {
   ];
 
   const filterList: () => string[] = () => {
-    if (propertyType === "Commercial ForSale") return commercialForsaleList;
-    else if (propertyType === "Commercial Rentals") return commercialRentalList;
-    else if (propertyType === "Land") return landList;
-    else if (propertyType === "Residential ForSale")
+    if (activePropertyType === PropertyTypesEnum.CommercialForSale)
+      return commercialForsaleList;
+    else if (activePropertyType === PropertyTypesEnum.CommercialRentals)
+      return commercialRentalList;
+    else if (activePropertyType === PropertyTypesEnum.Land) return landList;
+    else if (activePropertyType === PropertyTypesEnum.ResidentialForSale)
       return residentialForsaleList;
-    else if (propertyType === "Residential Rentals")
+    else if (activePropertyType === PropertyTypesEnum.ResidentialRentals)
       return residentialRentalList;
     else return standList;
   };
@@ -84,7 +97,10 @@ const Filters: React.FC<Props> = ({ propertyType }) => {
         showsHorizontalScrollIndicator={false}
         horizontal
         renderItem={({ item }) => (
-          <FilterItem filterItem={item as IPropertyFilter} propertType={propertyType} />
+          <FilterItem
+            filterItem={item as IPropertyFilter}
+            activePropertyType={activePropertyType}
+          />
         )}
       />
     </View>
@@ -92,5 +108,3 @@ const Filters: React.FC<Props> = ({ propertyType }) => {
 };
 
 export default Filters;
-
-const styles = StyleSheet.create({});

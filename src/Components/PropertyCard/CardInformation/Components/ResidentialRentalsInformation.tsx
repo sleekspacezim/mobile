@@ -41,7 +41,7 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
     rentAmount,
     sizeNumber,
     sizeDimensions,
-    totalNumberOfRooms,
+    numberOfRooms,
     isFullHouse,
     isFavorite,
     managerId,
@@ -49,12 +49,14 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
     manager: {
       profilePicture: { uri },
       name,
+      userId
     },
     propertyLocation: { displayName },
   },
 }) => {
   const iconSize = 22;
   const theme = useAppSelector((state) => state.theme.value);
+  const user = useAppSelector((state)=>state.user.value)
   const { navigateToProperty } = useNavigateToProperty(
     PropertyTypesEnum.ResidentialRentals,
     id
@@ -78,7 +80,7 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
   };
 
   const processTotalRoomsText = () => {
-    if (totalNumberOfRooms === 1) return "Total Rooms";
+    if (numberOfRooms === 1) return "Total Rooms";
     else return "Total rooms";
   };
 
@@ -93,17 +95,18 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
             >
               <ThemedText type="subHeader">{type}</ThemedText>
               <Row style={{ gap: 5, alignItems: "center" }}>
-                <FavoriteContainer
+                {user.id !== userId && <FavoriteContainer
                   propertyId={id}
                   isPropertyFavorite={isFavorite}
                   propertyType={PropertyTypesEnum.ResidentialRentals}
-                />
+                />}
                 <ThreeDots
                   propertyId={id}
                   managerId={managerId}
                   propertyType={PropertyTypesEnum.ResidentialRentals}
                   type="property"
                   isFavorite={isFavorite}
+                  userId={userId}
                 />
               </Row>
             </Row>
@@ -142,7 +145,7 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
               />
             </IconContainer>
             <Row style={{ gap: 5 }}>
-              <RegularText>{totalNumberOfRooms}</RegularText>
+              <RegularText>{numberOfRooms}</RegularText>
               <ThemedText type="regular">{processTotalRoomsText()}</ThemedText>
             </Row>
           </View>

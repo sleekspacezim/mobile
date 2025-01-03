@@ -1,4 +1,5 @@
 import React from "react";
+import { IDimensions } from "./Property/Common";
 
 export type IVoidFunc = () => void;
 export type INoPropsReactComponent = React.FC;

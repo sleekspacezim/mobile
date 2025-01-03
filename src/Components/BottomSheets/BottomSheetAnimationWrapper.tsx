@@ -5,6 +5,7 @@ import Animated, {
   runOnJS,
   SharedValue,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
 } from "react-native-reanimated";
 
@@ -29,8 +30,12 @@ const BottomSheetAnimationWrapper: React.FC<Props> = ({
   closeBottomSheet,
   closeBottomSheetWithoutScrollingToTheBottom
 }) => {
+  const bottomSheetHeight = useSharedValue(initialBottomSheetHeight);
   const theme = useAppSelector((state) => state.theme.value);
   const { height } = useWindowDimensions();
+  const derivedHeight = useDerivedValue(() => {
+    return initialBottomSheetHeight;
+  });
 
   const context = useSharedValue({ y: 0 });
   const gesture = Gesture.Pan()
@@ -39,17 +44,17 @@ const BottomSheetAnimationWrapper: React.FC<Props> = ({
     })
     .onUpdate((event) => {
       translateY.value = event.translationY + context.value.y;
-      translateY.value = Math.max(translateY.value, initialBottomSheetHeight);
+      translateY.value = Math.max(translateY.value, derivedHeight.value);
     })
     .onEnd(() => {
-      if (translateY.value > initialBottomSheetHeight / 2) {
+      if (translateY.value > derivedHeight.value / 2) {
         scrollTo(0);
         runOnJS(closeBottomSheet)();
-      } else scrollTo(initialBottomSheetHeight);
+      } else scrollTo(derivedHeight.value);
     });
 
   useEffect(() => {
-    scrollTo(initialBottomSheetHeight);
+    scrollTo(derivedHeight.value);
   }, []);
 
   const transformStyle = useAnimatedStyle(() => {
@@ -74,7 +79,7 @@ const BottomSheetAnimationWrapper: React.FC<Props> = ({
             styles.bottomSheet,
             transformStyle,
             {
-              backgroundColor: theme === "light" ? pureWhite : dark.darkGray,
+              backgroundColor: theme === "light" ? pureWhite : dark.background,
               top: height,
               height: height,
             },

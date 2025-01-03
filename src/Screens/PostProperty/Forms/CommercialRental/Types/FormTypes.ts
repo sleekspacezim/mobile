@@ -1,9 +1,11 @@
+import { ICurrency } from "@/src/GlobalTypes/Property/Common";
 import * as ImagePicker from "expo-image-picker";
 
 export type ICommercialRentalGeneralInfo = {
   numberOfRooms: string;
   rentAmount: string;
   currency: ICurrency;
+  numberOfRoomsToLet:string,
   sizeNumber: string;
   sizeDimensions: string;
   type: string;
@@ -20,6 +22,7 @@ export type IGeneralInfoFormError =
   | ""
   | "propertySize"
   | "numberOfRooms"
+  |"roomsToLet"
   | "type"
   | "location";
 

@@ -33,12 +33,15 @@ import MessageModal from "@/src/Components/Modals/MessageModal";
 import useUpdatePropertyFavorite from "@/src/Components/PropertyCard/Hooks/useUpdatePropertyFavorite";
 import Row from "@/src/Components/Row/Row";
 import { useSharedContext } from "@/src/Context/SharedContext";
+import { PropertyTypesEnum } from "@/src/Utils/Constants";
 
 type Props = {
   closeBottomSheetWithoutScrollingToTheBottom: () => void;
 };
 
-const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrollingToTheBottom }) => {
+const PropertyCardOptions: React.FC<Props> = ({
+  closeBottomSheetWithoutScrollingToTheBottom,
+}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [httpError, setHttpError] = useState<string>("");
   const { setOpenReportModal, selectedProperty } = useSharedContext();
@@ -58,7 +61,7 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
   } = useUpdatePropertyFavorite(selectedProperty.id);
 
   const onShare = async () => {
-    closeBottomSheetWithoutScrollingToTheBottom()
+    closeBottomSheetWithoutScrollingToTheBottom();
     setTimeout(async () => {
       try {
         await Share.share({
@@ -72,43 +75,44 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
   };
 
   const addFavoritePropertyMutationFn = () => {
-    if (selectedProperty.type === "Commercial ForSale")
+    if (selectedProperty.type === PropertyTypesEnum.CommercialForSale)
       return addFavoriteCommercialForSalePropertyHttpFunc;
-    else if (selectedProperty.type === "Commercial Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.CommercialRentals)
       return addFavoriteCommercialRentalPropertyHttpFunc;
-    else if (selectedProperty.type === "Residential Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialRentals)
       return addFavoriteResidentialRentalPropertyHttpFunc;
-    else if (selectedProperty.type === "Residential ForSale")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialForSale)
       return addFavoriteResidentialForSalePropertyHttpFunc;
-    else if (selectedProperty.type === "Land")
+    else if (selectedProperty.type === PropertyTypesEnum.Land)
       return addLandFavoritePropertyHttpFunc;
     else return addStandFavoritePropertyHttpFunc;
   };
 
   const removeFavoritePropertyMutationFn = () => {
-    if (selectedProperty.type === "Commercial ForSale")
+    if (selectedProperty.type === PropertyTypesEnum.CommercialForSale)
       return removeFavoriteCommercialForSalePropertyHttpFunc;
-    else if (selectedProperty.type === "Commercial Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.CommercialRentals)
       return removeFavoriteCommercialRentalPropertyHttpFunc;
-    else if (selectedProperty.type === "Residential Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialRentals)
       return removeFavoriteResidentialRentalPropertyHttpFunc;
-    else if (selectedProperty.type === "Residential ForSale")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialForSale)
       return removeFavoriteResidentialForSalePropertyHttpFunc;
-    else if (selectedProperty.type === "Land")
+    else if (selectedProperty.type === PropertyTypesEnum.Land)
       return removeLandFavoritePropertyHttpFunc;
     else return removeStandFavoritePropertyHttpFunc;
   };
 
   const updatePropertyFavorite = () => {
-    if (selectedProperty.type === "Commercial ForSale")
+    if (selectedProperty.type === PropertyTypesEnum.CommercialForSale)
       updateOnSaleCommercialProperties();
-    else if (selectedProperty.type === "Commercial Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.CommercialRentals)
       updateRentalCommercialProperties();
-    else if (selectedProperty.type === "Residential Rentals")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialRentals)
       updateRentalResidentialProperties();
-    else if (selectedProperty.type === "Residential ForSale")
+    else if (selectedProperty.type === PropertyTypesEnum.ResidentialForSale)
       updateOnSaleResidentialProperties();
-    else if (selectedProperty.type === "Land") updateLandProperties();
+    else if (selectedProperty.type === PropertyTypesEnum.Land)
+      updateLandProperties();
     else return updateStandProperties();
   };
 
@@ -116,7 +120,7 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
     mutationFn: addFavoritePropertyMutationFn(),
     onSuccess(_data) {
       updatePropertyFavorite();
-      closeBottomSheetWithoutScrollingToTheBottom()
+      closeBottomSheetWithoutScrollingToTheBottom();
     },
     onError(error: any) {
       if (error.response?.data?.error) {
@@ -148,7 +152,7 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
     },
   });
 
-  const propertyContent = [
+  const contentWithFavorites = [
     {
       name: "Share",
       icon: (
@@ -218,9 +222,38 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
     },
   ];
 
+  const contentListWithoutFavorites = [
+    {
+      name: "Share",
+      icon: (
+        <MaterialCommunityIcons
+          name="share-outline"
+          size={iconSize}
+          color={iconColor}
+        />
+      ),
+      onPressFunc: onShare,
+    },
+    {
+      name: "Report",
+      icon: <Octicons name="report" size={iconSize} color={iconColor} />,
+      onPressFunc: () => {
+        closeBottomSheetWithoutScrollingToTheBottom();
+        setTimeout(() => {
+          setOpenReportModal(true);
+        }, 300);
+      },
+    },
+  ];
+
+  const getContentList = () => {
+    if (id === selectedProperty.userId) return contentListWithoutFavorites;
+    else return contentWithFavorites;
+  };
+
   return (
     <View style={styles.bottomSheetContainer}>
-      {propertyContent.map(({ name, icon, onPressFunc }) => (
+      {getContentList().map(({ name, icon, onPressFunc }) => (
         <TouchableHighlight
           key={name}
           disabled={isLoading}

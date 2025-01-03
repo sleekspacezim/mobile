@@ -7,32 +7,32 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import RegularText from "@/src/Components/RegularText/RegularText";
 import Row from "@/src/Components/Row/Row";
 import { primary } from "@/src/Theme/Colors";
-import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import { PropertyTypesEnum } from "@/src/Utils/Constants";
 
 type Props = {
   totalProperties: number;
-  activePropertyType: IPropertyType;
 };
 
-const TotalProperties: React.FC<Props> = ({
-  totalProperties,
-  activePropertyType,
-}) => {
+const TotalProperties: React.FC<Props> = ({ totalProperties }) => {
+  const activePropertyType = useAppSelector(
+    (state) => state.activePropertyType.value
+  );
   return (
     <View style={styles.container}>
       <Row style={styles.row}>
-        {(activePropertyType === "Residential Rentals" ||
-          activePropertyType === "Residential ForSale") && (
+        {(activePropertyType === PropertyTypesEnum.ResidentialRentals ||
+          activePropertyType === PropertyTypesEnum.ResidentialForSale) && (
           <MaterialIcons name="home" size={24} color={primary} />
         )}
-        {(activePropertyType === "Commercial Rentals" ||
-          activePropertyType === "Commercial ForSale") && (
+        {(activePropertyType === PropertyTypesEnum.CommercialRentals ||
+          activePropertyType === PropertyTypesEnum.CommercialForSale) && (
           <FontAwesome name="building" size={24} color={primary} />
         )}
-        {activePropertyType === "Land" && (
+        {activePropertyType === PropertyTypesEnum.Land && (
           <MaterialIcons name="landscape" size={24} color={primary} />
         )}
-        {activePropertyType === "Stands" && (
+        {activePropertyType === PropertyTypesEnum.Stands && (
           <FontAwesome5 name="inbox" size={24} color={primary} />
         )}
 

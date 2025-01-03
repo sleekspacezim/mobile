@@ -11,6 +11,7 @@ import {
   IStandOtherInfo,
 } from "../Types/FormTypes";
 import { IStandPropertyCreation } from "@/src/GlobalTypes/Property/Stand/StandTypes";
+import { IStatus } from "@/src/GlobalTypes/Property/Common";
 
 export const processGeneralPropertyDetails = (
   generalPropertyDetails: IStandGeneralInfo,
@@ -95,7 +96,7 @@ export const createPropertyToBeSubmitted: (
 });
 
 export const generalPropertyInfoIntialState: IStandGeneralInfo = {
-  price: "0",
+  price: "",
   sizeNumber: "",
   level: "ground",
   type: "Residential",

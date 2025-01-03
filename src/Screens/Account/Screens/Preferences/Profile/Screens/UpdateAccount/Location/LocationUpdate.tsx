@@ -43,11 +43,13 @@ import { ISearchLocation } from "@/src/GlobalTypes/LocationIQ/LocationIQTypes";
 import { IUser } from "@/src/GlobalTypes/User/UserTypes";
 import { addMapLocation } from "@/src/Redux/Slices/MapLocationSlice/MapLocationSlice";
 import RegularText from "@/src/Components/RegularText/RegularText";
+import MapModal from "@/src/Components/Modals/Map/MapModal";
 
 const LocationUpdate: INoPropsReactComponent = () => {
   const user = useAppSelector((state) => state.user.value);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openSuccessModal, setOpenSuccessModal] = useState<boolean>(false);
+  const [openMapModal, setOpenMapModal] = useState<boolean>(false);
   const [updateError, setUpdateError] = useState<string>("");
   const [userData, setUserData] = useState<IUser | null>(null);
   const [
@@ -204,12 +206,7 @@ const LocationUpdate: INoPropsReactComponent = () => {
               <TouchableOpacity
                 style={styles.mapContainer}
                 onPress={() =>
-                  router.push({
-                    pathname: "/map",
-                    params: {
-                      from: "profile",
-                    },
-                  })
+                  setOpenMapModal(true)
                 }
               >
                 <Feather name="map" size={20} color={primary} />
@@ -252,6 +249,10 @@ const LocationUpdate: INoPropsReactComponent = () => {
             message={updateError}
             type="error"
             handleCancel={() => setUpdateError("")}
+          />
+          <MapModal
+            isModalOpen={openMapModal}
+            closeModal={() => setOpenMapModal(false)}
           />
         </View>
       </StackScreen>

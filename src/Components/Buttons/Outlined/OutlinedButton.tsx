@@ -21,6 +21,7 @@ type Props = {
   iconPosition?: "left" | "right";
   icon?: React.ReactNode;
   color?: string;
+  height?: DimensionValue;
   isLoading?: boolean;
 };
 
@@ -33,13 +34,18 @@ const OutlinedButton: React.FC<Props> = ({
   icon,
   color,
   isLoading,
+  height,
 }) => {
   return (
     <TouchableOpacity
       onPress={onPressFunc}
       style={[
         styles.container,
-        { width: width ? width : "100%", borderColor: color ? color : primary },
+        {
+          width: width ? width : "100%",
+          borderColor: color ? color : primary,
+          height: height ? height : 50,
+        },
       ]}
       disabled={isDisabled ? isDisabled : false}
       activeOpacity={activeOpacityOfTouchableOpacity}

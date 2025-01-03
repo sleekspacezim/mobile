@@ -13,8 +13,10 @@ const Colors = {
   white: "aliceblue",
   pureWhite: "#fff",
   lightPrimary: "#d1c0e3",
+  lighterPrimary:  "rgba(110, 124, 230, 0.2)",
   purple: "#b400a6",
   gray: "#7c7484",
+  //gray:"gray",
   green:"#1dac08",
   lightGray:"#E4E4E4",
   light: {
@@ -50,4 +52,5 @@ export const {
   purple,
   green,
   lightGray,
+  lighterPrimary,
 } = Colors;

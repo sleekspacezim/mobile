@@ -1,138 +1,93 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
-import { dark, gray, primary } from "@/src/Theme/Colors";
+import { dark, gray, lighterPrimary, primary } from "@/src/Theme/Colors";
 import { family, medium, small } from "@/src/Theme/Font";
 import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
 import { IPropertyFilter } from "@/src/Screens/Home/Types/Types";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import Row from "@/src/Components/Row/Row";
-import { activeOpacityOfTouchableOpacity } from "@/src/Utils/Constants";
+import {
+  activeOpacityOfTouchableOpacity,
+  PropertyTypesEnum,
+} from "@/src/Utils/Constants";
 import { useBottomSheetsContext } from "@/src/Context/BottomSheetsContext";
+import RentFilterModal from "@/src/Components/Modals/PropertyFilters/RentFilterModal";
+import AreaSizeFilterModal from "@/src/Components/Modals/PropertyFilters/AreaSizeFilterModal";
+import AllFiltersModal from "@/src/Components/Modals/PropertyFilters/AllFiltersModal/AllFiltersModal";
+import PriceFilterModal from "@/src/Components/Modals/PropertyFilters/PriceFilterModal";
+import useFilterItemFuncs from "./Hooks/useFilterItemFuncs";
+import useResetFiltersFunc from "./Hooks/useResetFiltersFunc";
 
 type Props = {
   filterItem: IPropertyFilter;
-  propertType: IPropertyType;
+  activePropertyType: IPropertyType;
 };
 
-const FilterItem: React.FC<Props> = ({ filterItem, propertType }) => {
+const FilterItem: React.FC<Props> = ({ filterItem, activePropertyType }) => {
+  const [openRentFilterModal, setOpenRentFilterModal] =
+    useState<boolean>(false);
+  const [openAreaSizeFilterModal, setOpenAreaSizeFilterModal] =
+    useState<boolean>(false);
+  const [openAllFiltersModal, setOpenAllFiltersModal] =
+    useState<boolean>(false);
+  const [openPriceFilterModal, setOpenPriceFilterModal] =
+    useState<boolean>(false);
   const {
     priceFilter,
     propertySizeFilter,
-    propertyTypeFilter,
+    propertyStructureTypeFilter,
     rentFilter,
+    totalRoomsFilter,
     roomsToRentFilter,
     bathroomsFilter,
     bedroomsFilter,
+    currencyFilter,
   } = usePropertyFiltersContext();
+  const {handleResetFilters} = useResetFiltersFunc()
   const { setPropertyFiltersBottomSheet } = useBottomSheetsContext();
+  const { filterName, isFilterActive } = useFilterItemFuncs
+(
+    filterItem,
+    activePropertyType,
+    rentFilter,
+    currencyFilter,
+    priceFilter,
+    bathroomsFilter,
+    bedroomsFilter,
+    roomsToRentFilter,
+    totalRoomsFilter,
+    propertySizeFilter,
+    propertyStructureTypeFilter
+  );
 
   const theme = useAppSelector((state) => state.theme.value);
 
-  const isFilterActive = () => {
-    if (
-      filterItem === "Bathrooms" &&
-      bathroomsFilter.isActive &&
-      propertType === bathroomsFilter.propertyType
-    ) {
-      return true;
-    }
-    if (
-      filterItem === "Bedrooms" &&
-      bedroomsFilter.isActive &&
-      propertType === bedroomsFilter.propertyType
-    ) {
-      return true;
-    }
-    if (
-      filterItem === "Price" &&
-      priceFilter.isActive &&
-      propertType === priceFilter.propertyType
-    ) {
-      return true;
-    }
-    if (
-      filterItem === "Size" &&
-      propertySizeFilter.isActive &&
-      propertType === propertySizeFilter.propertyType
-    ) {
-      return true;
-    }
-    if (
-      filterItem === "Type" &&
-      propertyTypeFilter.isActive &&
-      propertType === propertyTypeFilter.propertyType
-    ) {
-      return true;
-    }
-    if (
-      filterItem === "Rent" &&
-      rentFilter.isActive &&
-      propertType === rentFilter.propertyType
-    ) {
-      return true;
-    }
-    if (
-      filterItem === "Rooms to rent" &&
-      roomsToRentFilter.isActive &&
-      propertType === roomsToRentFilter.propertyType
-    ) {
-      return true;
-    } else return false;
-  };
-
   const handleFilterPress = () => {
     if (filterItem === "Bathrooms") {
-      setPropertyFiltersBottomSheet({
-        type: "Bathrooms",
-        isOpen: true,
-      });
-    }
-    if (filterItem === "Bedrooms") {
-      setPropertyFiltersBottomSheet({
-        type: "Bedrooms",
-        isOpen: true,
-      });
-    }
-    if (filterItem === "Price") {
-      setPropertyFiltersBottomSheet({
-        type: "Price",
-        isOpen: true,
-      });
-    }
-    if (filterItem === "Size") {
-      setPropertyFiltersBottomSheet({
-        type: "Size",
-        isOpen: true,
-      });
-    }
-    if (filterItem === "Type") {
-      setPropertyFiltersBottomSheet({
-        type: "Type",
-        isOpen: true,
-      });
-    }
-    if (filterItem === "Rent") {
-      setPropertyFiltersBottomSheet({
-        type: "Rent",
-        isOpen: true,
-      });
-    }
-    if (filterItem === "Rooms to rent") {
-      setPropertyFiltersBottomSheet({
-        type: "Rooms to rent",
-        isOpen: true,
-      });
-    }
-    if (filterItem === "Reset Filters") {
-      console.log("reset");
+      setPropertyFiltersBottomSheet("Bathrooms");
+    } else if (filterItem === "Currency") {
+      setPropertyFiltersBottomSheet("Currency");
+    } else if (filterItem === "Bedrooms") {
+      setPropertyFiltersBottomSheet("Bedrooms");
+    } else if (filterItem === "Price") {
+      setOpenPriceFilterModal(true);
+    } else if (filterItem === "Size") {
+      setOpenAreaSizeFilterModal(true);
+    } else if (filterItem === "Type") {
+      setPropertyFiltersBottomSheet("Type");
+    } else if (filterItem === "Rent") {
+      setOpenRentFilterModal(true);
+    } else if (filterItem === "Rooms to rent") {
+      setPropertyFiltersBottomSheet("Rooms to rent");
+    } else if (filterItem === "Total rooms") {
+      setPropertyFiltersBottomSheet("Total rooms");
+    } else if (filterItem === "Reset Filters") {
+      handleResetFilters()
     } else {
-      setPropertyFiltersBottomSheet({
-        type: "All Filters",
-        isOpen: true,
-      });
+      setOpenAllFiltersModal(true);
     }
   };
 
@@ -143,6 +98,7 @@ const FilterItem: React.FC<Props> = ({ filterItem, propertType }) => {
       style={[
         styles.container,
         {
+          backgroundColor: isFilterActive() ? lighterPrimary : "transparent",
           borderColor:
             filterItem === "Reset Filters"
               ? "transparent"
@@ -187,9 +143,46 @@ const FilterItem: React.FC<Props> = ({ filterItem, propertType }) => {
               },
             ]}
           >
-            {filterItem}
+            {filterName()}
           </Text>
         </Row>
+      )}
+      {openRentFilterModal && (
+        <RentFilterModal
+          isFilterModalOpen={openRentFilterModal}
+          propertyType={
+            (activePropertyType as PropertyTypesEnum.CommercialRentals) ||
+            "" ||
+            PropertyTypesEnum.ResidentialRentals
+          }
+          closeModal={() => setOpenRentFilterModal(false)}
+        />
+      )}
+      {openPriceFilterModal && (
+        <PriceFilterModal
+          isFilterModalOpen={openPriceFilterModal}
+          propertyType={
+            (activePropertyType as PropertyTypesEnum.CommercialForSale) ||
+            "" ||
+            PropertyTypesEnum.ResidentialForSale ||
+            PropertyTypesEnum.Stands ||
+            PropertyTypesEnum.Land
+          }
+          closeModal={() => setOpenPriceFilterModal(false)}
+        />
+      )}
+      {openAreaSizeFilterModal && (
+        <AreaSizeFilterModal
+          closeModal={() => setOpenAreaSizeFilterModal(false)}
+          isFilterModalOpen={openAreaSizeFilterModal}
+          propertyType={activePropertyType}
+        />
+      )}
+      {openAllFiltersModal && (
+        <AllFiltersModal
+          closeModal={() => setOpenAllFiltersModal(false)}
+          isFilterModalOpen={openAllFiltersModal}
+        />
       )}
     </TouchableOpacity>
   );
@@ -211,5 +204,6 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: family,
+    paddingTop: 2,
   },
 });

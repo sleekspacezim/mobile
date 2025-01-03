@@ -82,13 +82,10 @@ const SearchLocationModal: React.FC<Props> = ({
           handleCancel={handleCancel}
           propertyType={activePropertyType}
         />
-        <PropertyTypeList
-          activePropertyType={activePropertyType}
-          setActivePropertyType={setActivePropertyType}
-        />
+        <PropertyTypeList />
         <ScrollView showsVerticalScrollIndicator={false}>
           {searchLocationHistory.length > 0 ? (
-            <View>
+            <View style={{paddingHorizontal: 10}}>
               <Row style={styles.recentSearchesContainer}>
                 <ThemedText
                   type="subHeader"
@@ -160,7 +157,7 @@ const styles = StyleSheet.create({
     height: "100%",
     flexDirection: "column",
     paddingVertical: 10,
-    paddingHorizontal: 10,
+    //paddingHorizontal: 10,
     gap: 15,
   },
   recentSearchesContainer: {

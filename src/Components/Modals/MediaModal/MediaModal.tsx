@@ -36,7 +36,6 @@ const MediaModal: React.FC<Props> = ({
 }) => {
   const [permission, requestPermission] = useCameraPermissions();
   const theme = useAppSelector((state) => state.theme.value);
-  const[isLoading,setIsLoading] = useState<boolean>(false)
 
   useEffect(() => {
     requestPermission();

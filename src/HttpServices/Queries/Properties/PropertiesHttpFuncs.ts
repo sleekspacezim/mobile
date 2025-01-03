@@ -19,6 +19,15 @@ import { ICommercialRentalProperty } from "@/src/GlobalTypes/Property/Commercial
 import { IResidentialPropertyForSale } from "@/src/GlobalTypes/Property/Residential/ForSaleTypes";
 import { IStandProperty } from "@/src/GlobalTypes/Property/Stand/StandTypes";
 import { ILandProperty } from "@/src/GlobalTypes/Property/Land/LandTypes";
+import {
+  ISortCommercialForSalePropertiesOptions,
+  ISortCommercialRentalPropertiesOptions,
+  ISortLandOptions,
+  ISortResidentialForSalePropertiesOptions,
+  ISortResidentialRentalPropertiesOptions,
+  ISortStandOptions,
+} from "@/src/Context/SortPropertiesContext";
+import { ICurrency, IDimensions } from "@/src/GlobalTypes/Property/Common";
 
 const controller = new AbortController();
 
@@ -35,6 +44,7 @@ export const getAllCommercialPropertiesForSaleHttpFunc = (requestData: {
   pageLimit: number;
   isUserLoggedIn: boolean;
   accessToken: string;
+  sortBy: ISortCommercialForSalePropertiesOptions;
 }) => {
   return axios.get<{
     properties: ICommercialPropertyForSale[];
@@ -42,8 +52,8 @@ export const getAllCommercialPropertiesForSaleHttpFunc = (requestData: {
     count: number;
   }>(
     requestData.isUserLoggedIn
-      ? `${commercialPropertiesForSaleRoutes.getAllCommercialForSaleProperties}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}`
-      : `${commercialPropertiesForSaleRoutes.getAllCommercialForSaleProperties}?page=${requestData.page}&pageLimit=${requestData.pageLimit}`,
+      ? `${commercialPropertiesForSaleRoutes.getAllCommercialForSaleProperties}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`
+      : `${commercialPropertiesForSaleRoutes.getAllCommercialForSaleProperties}?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`,
     {
       signal: controller.signal,
       headers: { Authorization: `Bearer ${requestData.accessToken}` },
@@ -66,6 +76,7 @@ export const getAllCommercialRentalPropertiesHttpFunc = (requestData: {
   pageLimit: number;
   isUserLoggedIn: boolean;
   accessToken: string;
+  sortBy: ISortCommercialRentalPropertiesOptions;
 }) => {
   return axios.get<{
     properties: ICommercialRentalProperty[];
@@ -73,12 +84,12 @@ export const getAllCommercialRentalPropertiesHttpFunc = (requestData: {
     count: number;
   }>(
     requestData.isUserLoggedIn
-      ? `${commercialRentalPropertiesRoutes.getAllCommercialRentalProperties}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}`
-      : `${commercialRentalPropertiesRoutes.getAllCommercialRentalProperties}?page=${requestData.page}&pageLimit=${requestData.pageLimit}`,
+      ? `${commercialRentalPropertiesRoutes.getAllCommercialRentalProperties}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`
+      : `${commercialRentalPropertiesRoutes.getAllCommercialRentalProperties}?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`,
     {
       signal: controller.signal,
       headers: { Authorization: `Bearer ${requestData.accessToken}` },
-    },
+    }
   );
 };
 
@@ -95,6 +106,17 @@ export const getAllResidentialRentalPropertiesHttpFunc = (requestData: {
   pageLimit: number;
   isUserLoggedIn: boolean;
   accessToken: string;
+  sortBy: ISortResidentialRentalPropertiesOptions;
+  rentMin: number;
+  rentMax: number;
+  type: string;
+  currency: ICurrency | "";
+  sizeNumber: string;
+  sizeDimension: IDimensions|"";
+  bedrooms: string;
+  bathroom: string;
+  numberOfRooms: string;
+  roomsToRent: string;
 }) => {
   return axios.get<{
     properties: IResidentialRentalPropertyWithManager[];
@@ -102,8 +124,8 @@ export const getAllResidentialRentalPropertiesHttpFunc = (requestData: {
     count: number;
   }>(
     requestData.isUserLoggedIn
-      ? `${residentialRentalPropertiesRoutes.getAllResidentialRentalProperties}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}`
-      : `${residentialRentalPropertiesRoutes.getAllResidentialRentalProperties}?page=${requestData.page}&pageLimit=${requestData.pageLimit}`,
+      ? `${residentialRentalPropertiesRoutes.getAllResidentialRentalProperties}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}&currency=${requestData.currency}&type=${requestData.type}&rent_min=${requestData.rentMin}&rent_max=${requestData.rentMax}&bedrooms=${requestData.bedrooms}&bathrooms=${requestData.bathroom}&size_number=${requestData.sizeNumber}&size_dimensions=${requestData.sizeDimension}&number_of_rooms=${requestData.numberOfRooms}&number_of_rooms_to_rent=${requestData.roomsToRent}`
+      : `${residentialRentalPropertiesRoutes.getAllResidentialRentalProperties}?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}&currency=${requestData.currency}&type=${requestData.type}&rent_min=${requestData.rentMin}&rent_max=${requestData.rentMax}&bedrooms=${requestData.bedrooms}&bathrooms=${requestData.bathroom}&size_number=${requestData.sizeNumber}&size_dimensions=${requestData.sizeDimension}&number_of_rooms=${requestData.numberOfRooms}&number_of_rooms_to_rent=${requestData.roomsToRent}`,
     {
       signal: controller.signal,
       headers: { Authorization: `Bearer ${requestData.accessToken}` },
@@ -126,6 +148,7 @@ export const getAllResidentialPropertiesForSaleHttpFunc = (requestData: {
   pageLimit: number;
   isUserLoggedIn: boolean;
   accessToken: string;
+  sortBy: ISortResidentialForSalePropertiesOptions;
 }) => {
   return axios.get<{
     properties: IResidentialPropertyForSale[];
@@ -133,12 +156,12 @@ export const getAllResidentialPropertiesForSaleHttpFunc = (requestData: {
     count: number;
   }>(
     requestData.isUserLoggedIn
-    ? `${residentialPropertiesForSaleRoutes.getAllResidentialForSaleProperties}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}`
-    : `${residentialPropertiesForSaleRoutes.getAllResidentialForSaleProperties}?page=${requestData.page}&pageLimit=${requestData.pageLimit}`,
-  {
-    signal: controller.signal,
-    headers: { Authorization: `Bearer ${requestData.accessToken}` },
-  }
+      ? `${residentialPropertiesForSaleRoutes.getAllResidentialForSaleProperties}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`
+      : `${residentialPropertiesForSaleRoutes.getAllResidentialForSaleProperties}?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`,
+    {
+      signal: controller.signal,
+      headers: { Authorization: `Bearer ${requestData.accessToken}` },
+    }
   );
 };
 
@@ -155,6 +178,7 @@ export const getAllStandsHttpFunc = (requestData: {
   pageLimit: number;
   isUserLoggedIn: boolean;
   accessToken: string;
+  sortBy: ISortStandOptions;
 }) => {
   return axios.get<{
     properties: IStandProperty[];
@@ -162,12 +186,12 @@ export const getAllStandsHttpFunc = (requestData: {
     count: number;
   }>(
     requestData.isUserLoggedIn
-    ? `${standRoutes.getAllGetOnePostDeleteAndUpdateStand}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}`
-    : `${standRoutes.getAllGetOnePostDeleteAndUpdateStand}?page=${requestData.page}&pageLimit=${requestData.pageLimit}`,
-  {
-    signal: controller.signal,
-    headers: { Authorization: `Bearer ${requestData.accessToken}` },
-  }
+      ? `${standRoutes.getAllGetOnePostDeleteAndUpdateStand}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`
+      : `${standRoutes.getAllGetOnePostDeleteAndUpdateStand}?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`,
+    {
+      signal: controller.signal,
+      headers: { Authorization: `Bearer ${requestData.accessToken}` },
+    }
   );
 };
 
@@ -184,6 +208,7 @@ export const getAllLandPropertiesHttpFunc = (requestData: {
   pageLimit: number;
   isUserLoggedIn: boolean;
   accessToken: string;
+  sortBy: ISortLandOptions;
 }) => {
   return axios.get<{
     properties: ICommercialPropertyForSale[];
@@ -191,12 +216,12 @@ export const getAllLandPropertiesHttpFunc = (requestData: {
     count: number;
   }>(
     requestData.isUserLoggedIn
-    ? `${landRoutes.getAllGetOnePostDeleteAndUpdateLand}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}`
-    : `${landRoutes.getAllGetOnePostDeleteAndUpdateLand}?page=${requestData.page}&pageLimit=${requestData.pageLimit}`,
-  {
-    signal: controller.signal,
-    headers: { Authorization: `Bearer ${requestData.accessToken}` },
-  }
+      ? `${landRoutes.getAllGetOnePostDeleteAndUpdateLand}/logged-in?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`
+      : `${landRoutes.getAllGetOnePostDeleteAndUpdateLand}?page=${requestData.page}&pageLimit=${requestData.pageLimit}&sortBy=${requestData.sortBy}`,
+    {
+      signal: controller.signal,
+      headers: { Authorization: `Bearer ${requestData.accessToken}` },
+    }
   );
 };
 

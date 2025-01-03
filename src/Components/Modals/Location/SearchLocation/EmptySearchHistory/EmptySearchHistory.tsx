@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
     alignItems: "center",
+    paddingHorizontal: 10,
   },
   emptySubContainer: {
     gap: 5,
