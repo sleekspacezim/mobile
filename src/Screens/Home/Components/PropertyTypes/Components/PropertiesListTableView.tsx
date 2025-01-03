@@ -27,7 +27,7 @@ type Props = {
   setAreMorePropertiesLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const PropertiesTableView: React.FC<Props> = ({
+const PropertiesListTableView: React.FC<Props> = ({
   pageNumber,
   numberOfpages,
   areMorePropertiesLoading,
@@ -305,7 +305,7 @@ const PropertiesTableView: React.FC<Props> = ({
   );
 };
 
-export default PropertiesTableView;
+export default PropertiesListTableView;
 
 const styles = StyleSheet.create({
   largeScreenWrapper: {

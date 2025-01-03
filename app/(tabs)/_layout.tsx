@@ -83,6 +83,7 @@ const TabsLayout = () => {
                 name="chats"
                 options={{
                   title: tabsMenu.chats,
+                  unmountOnBlur:true,
                   tabBarIcon: ({ color, focused }) => (
                     <TabsIcons
                       focused={focused}
@@ -99,6 +100,7 @@ const TabsLayout = () => {
                 name="postproperty"
                 options={{
                   title: "Post A Property",
+                  unmountOnBlur:true,
                   tabBarIcon: ({ color, focused }) => (
                     <TabsIcons
                       focused={focused}
@@ -113,6 +115,7 @@ const TabsLayout = () => {
                 name="favorites"
                 options={{
                   title: "My Favorites",
+                  unmountOnBlur:true,
                   tabBarIcon: ({ color, focused }) => (
                     <TabsIcons
                       focused={focused}
@@ -133,6 +136,7 @@ const TabsLayout = () => {
                 options={{
                   headerShown: segments[3] === undefined ? true : false,
                   title: "My Account",
+                  unmountOnBlur:true,
                   tabBarStyle: [
                     styles.tabStyles,
                     {
@@ -167,20 +171,10 @@ const TabsLayout = () => {
                 }}
               />
               <Tabs.Screen
-                name="map"
-                options={{
-                  title: "none",
-                  href: null,
-                  headerShown: false,
-                  tabBarStyle: {
-                    display: "none",
-                  },
-                }}
-              />
-              <Tabs.Screen
                 name="(property)"
                 options={{
                   title: "none",
+                  unmountOnBlur:true,
                   href: null,
                   headerShown: false,
                   tabBarStyle: {

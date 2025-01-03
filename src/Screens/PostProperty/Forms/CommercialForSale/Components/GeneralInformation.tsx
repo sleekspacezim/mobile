@@ -123,6 +123,14 @@ const GeneralInformation: React.FC<Props> = ({
               value: "Land",
             },
             {
+              label: "Factory",
+              value: "Factory",
+            },
+            {
+              label: "Flat",
+              value: "Flat",
+            },
+            {
               label: "Building",
               value: "Building",
             },
@@ -157,7 +165,7 @@ const GeneralInformation: React.FC<Props> = ({
             )}
           </View>
         )}
-        <View>
+        {(propertyDetails.type === "Building" || propertyDetails.type==="Other" )&& <View>
           <InputField
             textValue={propertyDetails?.numberOfRooms}
             placeHolder=""
@@ -178,7 +186,7 @@ const GeneralInformation: React.FC<Props> = ({
           {formError === "numberOfRooms" && (
             <Text style={styles.errorText}>invalid size</Text>
           )}
-        </View>
+        </View>}
 
         <CheckBoxField
           label="Is Negotiable"
@@ -191,7 +199,6 @@ const GeneralInformation: React.FC<Props> = ({
         <View>
           <PropertyLocationInput
             borderColor={formError === "location" ? red : gray}
-            propertType={PropertyTypesEnum.ResidentialRentals}
           />
           {formError === "location" && (
             <Text style={styles.errorText}>invalid location</Text>

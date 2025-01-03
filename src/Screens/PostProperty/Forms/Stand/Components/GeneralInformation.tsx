@@ -128,6 +128,10 @@ const GeneralInformation: React.FC<Props> = ({
               value: "Shop",
             },
             {
+              label: "Flat",
+              value: "Flat",
+            },
+            {
               label: "Commercial Building",
               value: "Commercial Building",
             },
@@ -232,7 +236,6 @@ const GeneralInformation: React.FC<Props> = ({
         <View>
           <PropertyLocationInput
             borderColor={formError === "location" ? red : gray}
-            propertType={PropertyTypesEnum.ResidentialRentals}
           />
           {formError === "location" && (
             <Text style={styles.errorText}>invalid location</Text>

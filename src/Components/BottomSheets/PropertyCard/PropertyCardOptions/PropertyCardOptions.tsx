@@ -39,7 +39,9 @@ type Props = {
   closeBottomSheetWithoutScrollingToTheBottom: () => void;
 };
 
-const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrollingToTheBottom }) => {
+const PropertyCardOptions: React.FC<Props> = ({
+  closeBottomSheetWithoutScrollingToTheBottom,
+}) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [httpError, setHttpError] = useState<string>("");
   const { setOpenReportModal, selectedProperty } = useSharedContext();
@@ -59,7 +61,7 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
   } = useUpdatePropertyFavorite(selectedProperty.id);
 
   const onShare = async () => {
-    closeBottomSheetWithoutScrollingToTheBottom()
+    closeBottomSheetWithoutScrollingToTheBottom();
     setTimeout(async () => {
       try {
         await Share.share({
@@ -109,7 +111,8 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
       updateRentalResidentialProperties();
     else if (selectedProperty.type === PropertyTypesEnum.ResidentialForSale)
       updateOnSaleResidentialProperties();
-    else if (selectedProperty.type === PropertyTypesEnum.Land) updateLandProperties();
+    else if (selectedProperty.type === PropertyTypesEnum.Land)
+      updateLandProperties();
     else return updateStandProperties();
   };
 
@@ -117,7 +120,7 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
     mutationFn: addFavoritePropertyMutationFn(),
     onSuccess(_data) {
       updatePropertyFavorite();
-      closeBottomSheetWithoutScrollingToTheBottom()
+      closeBottomSheetWithoutScrollingToTheBottom();
     },
     onError(error: any) {
       if (error.response?.data?.error) {
@@ -149,7 +152,7 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
     },
   });
 
-  const propertyContent = [
+  const contentWithFavorites = [
     {
       name: "Share",
       icon: (
@@ -219,9 +222,38 @@ const PropertyCardOptions: React.FC<Props> = ({ closeBottomSheetWithoutScrolling
     },
   ];
 
+  const contentListWithoutFavorites = [
+    {
+      name: "Share",
+      icon: (
+        <MaterialCommunityIcons
+          name="share-outline"
+          size={iconSize}
+          color={iconColor}
+        />
+      ),
+      onPressFunc: onShare,
+    },
+    {
+      name: "Report",
+      icon: <Octicons name="report" size={iconSize} color={iconColor} />,
+      onPressFunc: () => {
+        closeBottomSheetWithoutScrollingToTheBottom();
+        setTimeout(() => {
+          setOpenReportModal(true);
+        }, 300);
+      },
+    },
+  ];
+
+  const getContentList = () => {
+    if (id === selectedProperty.userId) return contentListWithoutFavorites;
+    else return contentWithFavorites;
+  };
+
   return (
     <View style={styles.bottomSheetContainer}>
-      {propertyContent.map(({ name, icon, onPressFunc }) => (
+      {getContentList().map(({ name, icon, onPressFunc }) => (
         <TouchableHighlight
           key={name}
           disabled={isLoading}

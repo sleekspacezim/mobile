@@ -29,6 +29,12 @@ export const processGeneralPropertyDetails = (
     setGeneralInfoFormError("propertySize");
   } else if (+generalPropertyDetails.totalNumberOfRooms < 1) {
     setGeneralInfoFormError("totalNumberOfpropertyRooms");
+  } else if (
+    generalPropertyDetails.numberOfRoomsToLet !== "fullHouse" &&
+    +generalPropertyDetails.numberOfRoomsToLet >
+      +generalPropertyDetails.totalNumberOfRooms
+  ) {
+    setGeneralInfoFormError("totalNumberOfpropertyRooms");
   } else if (!location.lat) {
     setGeneralInfoFormError("location");
   } else if (+generalPropertyDetails.storeys < 1) {
@@ -104,7 +110,7 @@ export const createPropertyToBeSubmitted: (
     storeys: +propertyGeneralDetails.storeys,
     rentAmount: +propertyGeneralDetails.rentAmount,
     currency: propertyGeneralDetails.currency,
-    totalNumberOfRooms: +propertyGeneralDetails.totalNumberOfRooms,
+    numberOfRooms: +propertyGeneralDetails.totalNumberOfRooms,
     numberOfRoomsToLet: +propertyGeneralDetails.numberOfRoomsToLet,
     bedrooms: +propertyInteriorInfo.bedrooms,
     bathrooms: +propertyInteriorInfo.bathrooms,
@@ -158,7 +164,7 @@ export const createPropertyToBeSubmitted: (
 });
 
 export const generalPropertyInfoIntialState: IResidentialRentalGeneralInfo = {
-  rentAmount: "0",
+  rentAmount: "",
   sizeNumber: "",
   numberOfRoomsToLet: "1",
   totalNumberOfRooms: "1",

@@ -7,7 +7,6 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import { router } from "expo-router";
 import { FontAwesome6, Ionicons } from "@expo/vector-icons";
 
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
@@ -26,18 +25,17 @@ import Row from "../../../Row/Row";
 import ThemedText from "../../../ThemedText/ThemedText";
 import RegularText from "../../../RegularText/RegularText";
 import { activeOpacityOfTouchableOpacity } from "@/src/Utils/Constants";
-import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 
 type Props = {
   handleCancel: IVoidFunc;
   isModalVisible: boolean;
-  propertyType?: IPropertyType;
+  setOpenMapModal: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 const GetLocationModal: React.FC<Props> = ({
   isModalVisible,
-  propertyType,
   handleCancel,
+  setOpenMapModal
 }) => {
   const { width } = useWindowDimensions();
   const theme = useAppSelector((state) => state.theme.value);
@@ -81,13 +79,7 @@ const GetLocationModal: React.FC<Props> = ({
             activeOpacity={activeOpacityOfTouchableOpacity}
               onPress={() => {
                 handleCancel();
-                router.push({
-                  pathname: "/map",
-                  params: {
-                    from: "post property",
-                    propertyType,
-                  },
-                });
+                setOpenMapModal(true)
               }}
               style={[
                 styles.mediaOption,

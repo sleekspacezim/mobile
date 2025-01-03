@@ -9,18 +9,17 @@ import { family, small } from "@/src/Theme/Font";
 import { shortenString } from "@/src/Utils/Funcs";
 import GetLocationModal from "../Modals/Location/GetLocation/GetLocationModal";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import MapModal from "../Modals/Map/MapModal";
 
 type Props = {
   borderColor: string;
-  propertType: IPropertyType;
 };
 
 const PropertyLocationInput: React.FC<Props> = ({
-  borderColor,
-  propertType,
+  borderColor
 }) => {
   const [openLocationModal, setOpenLocationModal] = useState<boolean>(false);
+  const [openMapModal, setOpenMapModal] = useState<boolean>(false);
   const location = useAppSelector((state) => state.mapLocation.value);
 
   const processDisplayName = (diplayPlace: string) => {
@@ -29,10 +28,7 @@ const PropertyLocationInput: React.FC<Props> = ({
 
   const getPropertyInputValue = () => {
     if (location.lat && location.lon) {
-      return shortenString(
-        processDisplayName(location.display_name),
-        37
-      );
+      return shortenString(processDisplayName(location.display_name), 37);
     } else return "Enter Property Location";
   };
 
@@ -57,8 +53,12 @@ const PropertyLocationInput: React.FC<Props> = ({
       </Pressable>
       <GetLocationModal
         isModalVisible={openLocationModal}
-        propertyType={propertType}
         handleCancel={() => setOpenLocationModal(false)}
+        setOpenMapModal={setOpenMapModal}
+      />
+      <MapModal
+        isModalOpen={openMapModal}
+        closeModal={() => setOpenMapModal(false)}
       />
     </View>
   );

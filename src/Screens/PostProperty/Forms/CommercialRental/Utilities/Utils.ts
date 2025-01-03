@@ -11,6 +11,7 @@ import {
   IGeneralInfoFormError,
 } from "../Types/FormTypes";
 import { ICommercialRentalPropertyCreation } from "@/src/GlobalTypes/Property/Commercial/RentalTypes";
+import { IStatus } from "@/src/GlobalTypes/Property/Common";
 
 export const processGeneralPropertyDetails = (
   generalPropertyDetails: ICommercialRentalGeneralInfo,
@@ -20,7 +21,10 @@ export const processGeneralPropertyDetails = (
   >,
   location: ISearchLocation
 ) => {
-  if (+generalPropertyDetails.rentAmount < 10) {
+  if (
+    !generalPropertyDetails.rentAmount ||
+    +generalPropertyDetails.rentAmount < 10
+  ) {
     setGeneralInfoFormError("rentAmount");
   } else if (+generalPropertyDetails.sizeNumber < 0) {
     setGeneralInfoFormError("propertySize");
@@ -31,6 +35,11 @@ export const processGeneralPropertyDetails = (
     !generalPropertyDetails.otherType
   ) {
     setGeneralInfoFormError("type");
+  } else if (
+    generalPropertyDetails.type === "Building" &&
+    !generalPropertyDetails.numberOfRoomsToLet
+  ) {
+    setGeneralInfoFormError("roomsToLet");
   } else if (!location.lat) {
     setGeneralInfoFormError("location");
   } else if (+generalPropertyDetails.storeys < 1) {
@@ -66,7 +75,12 @@ export const createPropertyToBeSubmitted: (
     storeys: +propertyGeneralDetails.storeys,
     rentAmount: +propertyGeneralDetails.rentAmount,
     currency: propertyGeneralDetails.currency,
-    numberOfRooms: +propertyGeneralDetails.numberOfRooms,
+    numberOfRooms: propertyGeneralDetails.numberOfRooms
+      ? +propertyGeneralDetails.numberOfRooms
+      : 0,
+    numberOfRoomsToLet: propertyGeneralDetails.numberOfRoomsToLet
+      ? +propertyGeneralDetails.numberOfRoomsToLet
+      : 0,
     otherInteriorFeatures: propertyFeaturesInfo.otherInteriorFeatures
       ? removeBlankSpacesFromWordsInAnArray(
           propertyFeaturesInfo.otherInteriorFeatures.split(",")
@@ -109,9 +123,10 @@ export const createPropertyToBeSubmitted: (
 });
 
 export const generalPropertyInfoIntialState: ICommercialRentalGeneralInfo = {
-  rentAmount: "0",
+  rentAmount: "",
   sizeNumber: "",
-  numberOfRooms: "0",
+  numberOfRooms: "",
+  numberOfRoomsToLet: "",
   type: "Shop",
   sizeDimensions: "Square meters",
   yearBuilt: "",

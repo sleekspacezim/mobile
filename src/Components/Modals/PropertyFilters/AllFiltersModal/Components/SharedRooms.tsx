@@ -10,7 +10,8 @@ import { sharedRoomsFilterStyles } from "@/src/Screens/Home/Components/AnimatedL
 import {
   bathRoomsFilterList,
   bedRoomsFilterList,
-  roomsToRentFilterList,
+  roomsToRentCommercialPropertyFilterList,
+  roomsToRentResidentialPropertyFilterList,
   totalRoomsFilterList,
 } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Contants";
 import {
@@ -21,6 +22,7 @@ import {
 } from "@/src/Context/PropertyFiltersContext";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 import useSharedRoomsFilterFuncs from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/FilterItem/Hooks/useSharedRoomsFilterFuncs";
+import { PropertyTypesEnum } from "@/src/Utils/Constants";
 
 type Props = {
   propertyType: IPropertyType;
@@ -75,6 +77,11 @@ const SharedRooms: React.FC<Props> = ({
     setSelectedNumberOfRoomsToRent,
     setSelectedTotalNumberOfRooms
   );
+  const getRoomsToRent = () => {
+    if (propertyType === PropertyTypesEnum.CommercialRentals)
+      return roomsToRentCommercialPropertyFilterList;
+    else return roomsToRentResidentialPropertyFilterList;
+  };
 
   return (
     <View style={styles.container}>
@@ -90,7 +97,7 @@ const SharedRooms: React.FC<Props> = ({
       </Row>
       <View style={sharedRoomsFilterStyles.roomContainer}>
         {filterType === "Rooms to rent" &&
-          roomsToRentFilterList.map((numberOfRooms) => (
+          getRoomsToRent().map((numberOfRooms) => (
             <TouchableOpacity
               style={[
                 sharedRoomsFilterStyles.room,
@@ -114,7 +121,7 @@ const SharedRooms: React.FC<Props> = ({
                   },
                 ]}
               >
-                {numberOfRooms}
+                {numberOfRooms === "8plus" ? "8+" : numberOfRooms}
               </Text>
             </TouchableOpacity>
           ))}
@@ -144,7 +151,7 @@ const SharedRooms: React.FC<Props> = ({
                   },
                 ]}
               >
-                {numberOfRooms}
+                {numberOfRooms === "8plus" ? "8+" : numberOfRooms}
               </Text>
             </TouchableOpacity>
           ))}
@@ -174,7 +181,7 @@ const SharedRooms: React.FC<Props> = ({
                   },
                 ]}
               >
-                {numberOfRooms}
+                {numberOfRooms === "8plus" ? "8+" : numberOfRooms}
               </Text>
             </TouchableOpacity>
           ))}
@@ -190,7 +197,6 @@ const SharedRooms: React.FC<Props> = ({
                     lighterPrimary,
                     "transparent"
                   ),
-
                   borderColor: totalRoomsColor(numberOfRooms, primary, gray),
                 },
               ]}
@@ -205,7 +211,7 @@ const SharedRooms: React.FC<Props> = ({
                   },
                 ]}
               >
-                {numberOfRooms}
+                {numberOfRooms === "8plus" ? "8+" : numberOfRooms}
               </Text>
             </TouchableOpacity>
           ))}

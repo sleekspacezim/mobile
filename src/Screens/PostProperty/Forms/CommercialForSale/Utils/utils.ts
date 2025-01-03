@@ -11,6 +11,7 @@ import {
   ICommercialForSaleFeaturesInfo,
   ICommercialForSaleOtherInfo,
 } from "../Types/FormTypes";
+import { IStatus } from "@/src/GlobalTypes/Property/Common";
 
 export const processGeneralPropertyDetails = (
   generalPropertyDetails: ICommercialForSaleGeneralInfo,
@@ -66,7 +67,9 @@ export const createPropertyToBeSubmitted: (
     storeys: +propertyGeneralDetails.storeys,
     price: +propertyGeneralDetails.price,
     currency: propertyGeneralDetails.currency,
-    numberOfRooms: +propertyGeneralDetails.numberOfRooms,
+    numberOfRooms: propertyGeneralDetails.numberOfRooms
+      ? +propertyGeneralDetails.numberOfRooms
+      : 0,
     otherInteriorFeatures: propertyFeaturesInfo.otherInteriorFeatures
       ? removeBlankSpacesFromWordsInAnArray(
           propertyFeaturesInfo.otherInteriorFeatures.split(",")
@@ -104,9 +107,9 @@ export const createPropertyToBeSubmitted: (
 });
 
 export const generalPropertyInfoIntialState: ICommercialForSaleGeneralInfo = {
-  price: "0",
+  price: "",
   sizeNumber: "",
-  numberOfRooms: "0",
+  numberOfRooms: "",
   type: "Shop",
   sizeDimensions: "Square meters",
   yearBuilt: "",

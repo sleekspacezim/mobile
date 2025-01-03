@@ -9,9 +9,16 @@ export const residentialStructuralTypes = [
   "Apartment",
   "Duplex",
   "Triplex",
-  "Flat"
+  "Flat",
 ];
-export const commercialStructuralTypes = ["Shop", "Building", "Rental Land", "Factory","Flat","Other"];
+export const commercialStructuralTypes = [
+  "Shop",
+  "Building",
+  "Land",
+  "Factory",
+  "Flat",
+  "Other",
+];
 export const landStructuralTypes = [
   "Residential",
   "Mine",
@@ -27,7 +34,7 @@ export const standStructuralTypes = [
   "Other",
 ];
 
-export const roomsToRentFilterList: string[] = [
+export const roomsToRentResidentialPropertyFilterList: string[] = [
   "1",
   "2",
   "3",
@@ -35,9 +42,23 @@ export const roomsToRentFilterList: string[] = [
   "5",
   "6",
   "7",
-  "8+",
+  "8plus",
   "full house",
 ];
+
+export const roomsToRentCommercialPropertyFilterList: string[] = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8plus",
+  "full space",
+];
+
+
 export const totalRoomsFilterList: string[] = [
   "1",
   "2",
@@ -46,7 +67,7 @@ export const totalRoomsFilterList: string[] = [
   "5",
   "6",
   "7",
-  "8+",
+  "8plus",
 ];
 export const bathRoomsFilterList: string[] = [
   "1",
@@ -56,7 +77,7 @@ export const bathRoomsFilterList: string[] = [
   "5",
   "6",
   "7",
-  "8+",
+  "8plus",
 ];
 export const bedRoomsFilterList: string[] = [
   "1",
@@ -66,5 +87,5 @@ export const bedRoomsFilterList: string[] = [
   "5",
   "6",
   "7",
-  "8+",
+  "8plus",
 ];

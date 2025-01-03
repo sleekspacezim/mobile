@@ -20,6 +20,7 @@ type Props =
       propertyType: IPropertyType;
       type: "property";
       isFavorite: boolean;
+      userId:number;
     }
   | {
       type: "user";
@@ -41,6 +42,7 @@ const ThreeDots: React.FC<Props> = (props) => {
             managerId: props.managerId,
             type: props.propertyType,
             isFavorite: props.isFavorite,
+            userId:props.userId
           });
         }
         setIsPropertyCardBottomSheetOpen(true);

@@ -28,7 +28,7 @@ type Props = {
   loadMoreProperties: IVoidFunc;
 } 
 
-const PropertiesMobileView: React.FC<Props> = ({
+const PropertiesListMobileView: React.FC<Props> = ({
   scrollAnimation,
   propertyType,
   isRefreshing,
@@ -344,4 +344,4 @@ const PropertiesMobileView: React.FC<Props> = ({
   );
 };
 
-export default PropertiesMobileView;
+export default PropertiesListMobileView;

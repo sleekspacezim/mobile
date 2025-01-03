@@ -11,7 +11,8 @@ export type ISelectedPropertyDetails = {
   id: number;
   managerId: number;
   type: IPropertyType | "";
-  isFavorite: boolean
+  isFavorite: boolean;
+  userId:number;
 };
 
 const SharedContext = createContext<{
@@ -24,6 +25,7 @@ const SharedContext = createContext<{
   selectedProperty: {
     id: 0,
     managerId: 0,
+    userId:0,
     type: "",
     isFavorite:false
   },
@@ -41,6 +43,7 @@ export const SharedContextProvider = ({
     useState<ISelectedPropertyDetails>({
       id: 0,
       managerId: 0,
+      userId:0,
       type: "",
       isFavorite:false
     });

@@ -44,7 +44,7 @@ const OutlinedButton: React.FC<Props> = ({
         {
           width: width ? width : "100%",
           borderColor: color ? color : primary,
-          height: height ? height : "auto",
+          height: height ? height : 50,
         },
       ]}
       disabled={isDisabled ? isDisabled : false}

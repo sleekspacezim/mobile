@@ -1,23 +1,28 @@
+import { Modal, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
-import { router, useLocalSearchParams } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
-import { SafeAreaView } from "react-native-safe-area-context";
 
-import Map from "@/src/Components/Map/Map";
+import { IVoidFunc } from "@/src/GlobalTypes/Types";
+import { useAppDispatch, useAppSelector } from "@/src/Redux/Hooks/Config";
+import { dark, pureWhite } from "@/src/Theme/Colors";
 import {
   harareMapRegion,
   searchPropertyLocationTutorialText,
 } from "@/src/Utils/Constants";
-import Screen from "@/src/Components/ScreenWrapper/Screen";
-import { IMapCoordinates } from "@/src/Components/Map/Types/MapTypes";
-import MessageModal from "@/src/Components/Modals/MessageModal";
-import { ISearchLocation } from "@/src/GlobalTypes/LocationIQ/LocationIQTypes";
-import { locationReverseGeoCodingHttpFunc } from "@/src/HttpServices/Mutations/LocationIQ/LocationIQHttpFuncs";
-import { useAppSelector, useAppDispatch } from "@/src/Redux/Hooks/Config";
-import { addMapLocation } from "@/src/Redux/Slices/MapLocationSlice/MapLocationSlice";
+import MessageModal from "../MessageModal";
+import Map from "../../Map/Map";
+import { IMapCoordinates } from "../../Map/Types/MapTypes";
 import { numberToString } from "@/src/Utils/Funcs";
+import { locationReverseGeoCodingHttpFunc } from "@/src/HttpServices/Mutations/LocationIQ/LocationIQHttpFuncs";
+import { ISearchLocation } from "@/src/GlobalTypes/LocationIQ/LocationIQTypes";
+import { addMapLocation } from "@/src/Redux/Slices/MapLocationSlice/MapLocationSlice";
 
-const MapScreen = () => {
+type Props = {
+  isModalOpen: boolean;
+  closeModal: IVoidFunc;
+};
+
+const MapModal: React.FC<Props> = ({ isModalOpen, closeModal }) => {
   const { location } = useAppSelector((state) => state.user.value);
   const [coordinates, setCoordinates] = useState<IMapCoordinates>({
     latitude: location?.lat ? +location.lat : harareMapRegion.latitude,
@@ -26,21 +31,7 @@ const MapScreen = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [locationHttpError, setLocationHttpError] = useState<string>("");
   const dipatch = useAppDispatch();
-  const { from, propertyType } = useLocalSearchParams();
-
-  const navigateBack = () => {
-    if (from === "post property") {
-      router.replace({
-        pathname: "postproperty",
-        params: {
-          propertyType,
-        },
-      });
-    }
-    if (from === "profile") {
-      router.push("/account/profile/location");
-    }
-  };
+  const theme = useAppSelector((state) => state.theme.value);
 
   const reverseGeocodingMutation = useMutation({
     mutationFn: locationReverseGeoCodingHttpFunc,
@@ -61,7 +52,7 @@ const MapScreen = () => {
         type: "",
       };
       dipatch(addMapLocation(currentLocation));
-      navigateBack();
+      closeModal();
     },
     onError: (error: any) => {
       if (error.response?.data?.error) {
@@ -85,12 +76,21 @@ const MapScreen = () => {
 
   const handleModalCancel = () => {
     setLocationHttpError("");
-    navigateBack();
+    closeModal();
   };
 
   return (
-    <Screen>
-      <SafeAreaView style={{ flex: 1 }}>
+    <Modal
+      visible={isModalOpen}
+      onRequestClose={closeModal}
+      animationType="fade"
+    >
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: theme === "dark" ? dark.background : pureWhite },
+        ]}
+      >
         <Map
           type="get_location"
           region={
@@ -105,7 +105,7 @@ const MapScreen = () => {
           }
           mapType="hybrid"
           tutorialText={searchPropertyLocationTutorialText}
-          handleCloseMap={navigateBack}
+          handleCloseMap={closeModal}
           handleDoneFunc={handleDone}
           onDragFunc={setCoordinates}
           doneBtnIsLoading={isLoading}
@@ -117,9 +117,15 @@ const MapScreen = () => {
           handleCancel={handleModalCancel}
           isModalVisible={locationHttpError ? true : false}
         />
-      </SafeAreaView>
-    </Screen>
+      </View>
+    </Modal>
   );
 };
 
-export default MapScreen;
+export default MapModal;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

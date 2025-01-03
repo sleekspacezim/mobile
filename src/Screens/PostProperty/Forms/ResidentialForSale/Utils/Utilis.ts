@@ -13,8 +13,8 @@ import {
   removeBlankSpacesFromWordsInAnArray,
 } from "@/src/Utils/Funcs";
 import { ISearchLocation } from "@/src/GlobalTypes/LocationIQ/LocationIQTypes";
-import { IResidentialRentalPropertyCreation } from "@/src/GlobalTypes/Property/Residential/RentalTypes";
 import { IResidentialPropertyForSaleCreation } from "@/src/GlobalTypes/Property/Residential/ForSaleTypes";
+import { IStatus } from "@/src/GlobalTypes/Property/Common";
 
 export const processGeneralPropertyDetails = (
   generalPropertyDetails: IResidentialForSaleGeneralInfo,
@@ -24,7 +24,7 @@ export const processGeneralPropertyDetails = (
   >,
   location: ISearchLocation
 ) => {
-  if (+generalPropertyDetails.price < 10) {
+  if (!generalPropertyDetails.price && +generalPropertyDetails.price < 10) {
     setGeneralInfoFormError("price");
   } else if (+generalPropertyDetails.sizeNumber < 0) {
     setGeneralInfoFormError("propertySize");
@@ -150,7 +150,7 @@ export const createPropertyToBeSubmitted: (
 });
 
 export const generalPropertyInfoIntialState: IResidentialForSaleGeneralInfo = {
-  price: "0",
+  price: "",
   sizeNumber: "",
   numberOfRooms: "1",
   type: "Single family home",

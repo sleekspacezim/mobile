@@ -12,8 +12,8 @@ import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { usePropertiesContext } from "@/src/Context/PropertiesContext";
 import { animatedHeaderHeight } from "../../Utils/Constants";
 import { useSortPropertiesContext } from "@/src/Context/SortPropertiesContext";
-import PropertiesMobileView from "@/src/Screens/Home/Components/PropertyTypes/Components/PropertiesMobileView";
-import PropertiesTableView from "./Components/PropertiesTableView";
+import PropertiesListMobileView from "@/src/Screens/Home/Components/PropertyTypes/Components/PropertiesListMobileView";
+import PropertiesListTableView from "./Components/PropertiesListTableView";
 import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
 
 type Props = {
@@ -169,7 +169,18 @@ const ResidentialRentalsList: React.FC<Props> = ({
 
   useEffect(() => {
     fetchProperties();
-  }, [accessToken, sortResidentialRentalPropertiesBy]);
+  }, [
+    accessToken,
+    sortResidentialRentalPropertiesBy,
+    rentFilter.residentialRentals,
+    currencyFilter.residentialRentals,
+    propertySizeFilter.residentialRentals,
+    propertyStructureTypeFilter.residentialRentals,
+    roomsToRentFilter.residentialRentalsFigure,
+    totalRoomsFilter.residentialRentalsFigure,
+    bathroomsFilter.residentialRentalsFigure,
+    bedroomsFilter.residentialRentalsFigure,
+  ]);
 
   useEffect(() => {
     if (httpError) setTotalproperties(0);
@@ -210,7 +221,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
         !isLoading &&
         rentalResidentialProperties.length > 0 &&
         width <= SCREEN_BREAK_POINT && (
-          <PropertiesMobileView
+          <PropertiesListMobileView
             propertyType={PropertyTypesEnum.ResidentialRentals}
             loadMorehttpError={loadMorehttpError}
             pageNumber={pageNumber}
@@ -225,7 +236,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
         !isLoading &&
         rentalResidentialProperties.length > 0 &&
         width > SCREEN_BREAK_POINT && (
-          <PropertiesTableView
+          <PropertiesListTableView
             propertyType={PropertyTypesEnum.ResidentialRentals}
             loadMorehttpError={loadMorehttpError}
             pageNumber={pageNumber}

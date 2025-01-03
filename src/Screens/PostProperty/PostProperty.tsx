@@ -18,6 +18,7 @@ import ManagerSignUpBtns from "../Account/Screens/Preferences/ManagerAccount/Scr
 import HttpError from "@/src/Components/HttpError/HttpError";
 import LoadingSkeleton from "./Forms/Shared/LoadingSkeleton";
 import { noManagerError } from "@/src/Utils/Constants";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 
 const PostProperty: INoPropsReactComponent = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -27,7 +28,7 @@ const PostProperty: INoPropsReactComponent = () => {
   const { propertType } = useLocalSearchParams();
 
   const fetchManager = () => {
-    setHttpError("")
+    setHttpError("");
     getManagerByUserId(user)
       .then((res) => {
         dispatch(addManagerAccount(res.data.response));
@@ -46,7 +47,7 @@ const PostProperty: INoPropsReactComponent = () => {
           setHttpError("Something went wrong");
           setIsLoading(false);
         }
-      });
+      })
   };
 
   useEffect(() => {

@@ -73,6 +73,16 @@ export const propertyStructureTypeIcon = (propertyStructureType: string) => {
         color={primary}
       />
     );
+  else if (propertyStructureType === "Flat")
+    return (
+      <MaterialCommunityIcons
+        name="office-building"
+        size={iconSize}
+        color={primary}
+      />
+    );
+  else if (propertyStructureType === "Factory")
+    return <MaterialIcons name="factory" size={iconSize} color={primary} />;
   else
     return <MaterialIcons name="apartment" size={iconSize} color={primary} />;
 };

@@ -106,6 +106,7 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
                   propertyType={PropertyTypesEnum.ResidentialRentals}
                   type="property"
                   isFavorite={isFavorite}
+                  userId={userId}
                 />
               </Row>
             </Row>

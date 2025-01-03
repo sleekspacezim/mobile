@@ -23,7 +23,8 @@ import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import {
   bathRoomsFilterList,
   bedRoomsFilterList,
-  roomsToRentFilterList,
+  roomsToRentCommercialPropertyFilterList,
+  roomsToRentResidentialPropertyFilterList,
   totalRoomsFilterList,
 } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Contants";
 import ResetFilterButton from "@/src/Components/Buttons/ResetFilter/ResetFilterButton";
@@ -175,6 +176,12 @@ const SharedRoomsFilter: React.FC<Props> = ({
     }
   };
 
+  const getRoomsToRent = () => {
+    if (activePropertyType === PropertyTypesEnum.CommercialRentals)
+      return roomsToRentCommercialPropertyFilterList;
+    else return roomsToRentResidentialPropertyFilterList;
+  };
+
   return (
     <View style={styles.container}>
       <Row style={styles.headerContainer}>
@@ -211,7 +218,7 @@ const SharedRoomsFilter: React.FC<Props> = ({
       </Row>
       <View style={sharedRoomsFilterStyles.roomContainer}>
         {filterType === "Rooms to rent" &&
-          roomsToRentFilterList.map((numberOfRooms) => (
+          getRoomsToRent().map((numberOfRooms) => (
             <TouchableOpacity
               activeOpacity={activeOpacityOfTouchableOpacity}
               style={[
@@ -236,7 +243,7 @@ const SharedRoomsFilter: React.FC<Props> = ({
                   },
                 ]}
               >
-                {numberOfRooms}
+                {numberOfRooms === "8plus" ? "8+" : numberOfRooms}
               </Text>
             </TouchableOpacity>
           ))}
@@ -267,7 +274,7 @@ const SharedRoomsFilter: React.FC<Props> = ({
                   },
                 ]}
               >
-                {numberOfRooms}
+                {numberOfRooms === "8plus" ? "8+" : numberOfRooms}
               </Text>
             </TouchableOpacity>
           ))}
@@ -298,7 +305,7 @@ const SharedRoomsFilter: React.FC<Props> = ({
                   },
                 ]}
               >
-                {numberOfRooms}
+                {numberOfRooms === "8plus" ? "8+" : numberOfRooms}
               </Text>
             </TouchableOpacity>
           ))}
@@ -329,7 +336,7 @@ const SharedRoomsFilter: React.FC<Props> = ({
                   },
                 ]}
               >
-                {numberOfRooms}
+                {numberOfRooms === "8plus" ? "8+" : numberOfRooms}
               </Text>
             </TouchableOpacity>
           ))}

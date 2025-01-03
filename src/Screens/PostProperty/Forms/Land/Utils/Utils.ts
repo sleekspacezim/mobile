@@ -11,6 +11,7 @@ import {
   ILandFeaturesInfo,
   ILandOtherInfo,
 } from "../Types/FormTypes";
+import { IStatus } from "@/src/GlobalTypes/Property/Common";
 
 export const processGeneralPropertyDetails = (
   generalPropertyDetails: ILandGeneralInfo,
@@ -86,7 +87,7 @@ export const createPropertyToBeSubmitted: (
 });
 
 export const generalPropertyInfoIntialState: ILandGeneralInfo = {
-  price: "0",
+  price: "",
   sizeNumber: "",
   type: "Residential",
   sizeDimensions: "Square meters",

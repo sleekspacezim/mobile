@@ -112,9 +112,13 @@ const useFilterItemFuncs = (
         roomsToRentFilter.commercialRentalsFigure &&
         activePropertyType === PropertyTypesEnum.CommercialRentals
       )
-        return roomsToRentFilter.commercialRentalsFigure === "full house"
-          ? "Rent full house"
-          : `${roomsToRentFilter.commercialRentalsFigure}  ${
+        return roomsToRentFilter.commercialRentalsFigure === "full space"
+          ? "Rent full space"
+          : `${
+              roomsToRentFilter.commercialRentalsFigure === "8plus"
+                ? "8+"
+                : roomsToRentFilter.commercialRentalsFigure
+            }  ${
               roomsToRentFilter.commercialRentalsFigure === "1"
                 ? "Room to rent"
                 : filterItem
@@ -125,7 +129,11 @@ const useFilterItemFuncs = (
       )
         return roomsToRentFilter.residentialRentalsFigure === "full house"
           ? "Rent full house"
-          : `${roomsToRentFilter.residentialRentalsFigure}  ${
+          : `${
+              roomsToRentFilter.residentialRentalsFigure === "8plus"
+                ? "8+"
+                : roomsToRentFilter.residentialRentalsFigure
+            }  ${
               roomsToRentFilter.residentialRentalsFigure === "1"
                 ? "Room to rent"
                 : filterItem
@@ -136,7 +144,11 @@ const useFilterItemFuncs = (
         bathroomsFilter.residentialForsaleFigure &&
         activePropertyType === PropertyTypesEnum.ResidentialForSale
       )
-        return `${bathroomsFilter.residentialForsaleFigure} ${
+        return `${
+          bathroomsFilter.residentialForsaleFigure === "8plus"
+            ? "8+"
+            : bathroomsFilter.residentialForsaleFigure
+        } ${
           bathroomsFilter.residentialForsaleFigure === "1"
             ? "bathroom"
             : filterItem
@@ -145,7 +157,11 @@ const useFilterItemFuncs = (
         bathroomsFilter.residentialRentalsFigure &&
         activePropertyType === PropertyTypesEnum.ResidentialRentals
       )
-        return `${bathroomsFilter.residentialRentalsFigure} ${
+        return `${
+          bathroomsFilter.residentialRentalsFigure === "8plus"
+            ? "8+"
+            : bathroomsFilter.residentialRentalsFigure
+        } ${
           bathroomsFilter.residentialRentalsFigure === "1"
             ? "bathroom"
             : filterItem
@@ -156,7 +172,11 @@ const useFilterItemFuncs = (
         activePropertyType === PropertyTypesEnum.ResidentialForSale &&
         bedroomsFilter.residentialForsaleFigure
       )
-        return `${bedroomsFilter.residentialForsaleFigure} ${
+        return `${
+          bedroomsFilter.residentialForsaleFigure === "8plus"
+            ? "8+"
+            : bedroomsFilter.residentialForsaleFigure
+        } ${
           bedroomsFilter.residentialForsaleFigure === "1"
             ? "Bedroom"
             : filterItem
@@ -165,7 +185,11 @@ const useFilterItemFuncs = (
         activePropertyType === PropertyTypesEnum.ResidentialRentals &&
         bedroomsFilter.residentialRentalsFigure
       ) {
-        return `${bedroomsFilter.residentialRentalsFigure} ${
+        return `${
+          bedroomsFilter.residentialRentalsFigure === "8plus"
+            ? "8+"
+            : bedroomsFilter.residentialRentalsFigure
+        } ${
           bedroomsFilter.residentialRentalsFigure === "1"
             ? "Bedroom"
             : filterItem
@@ -176,22 +200,38 @@ const useFilterItemFuncs = (
         totalRoomsFilter.commercialForsaleFigure &&
         activePropertyType === PropertyTypesEnum.CommercialForSale
       )
-        return `${totalRoomsFilter.commercialForsaleFigure} ${filterItem}`;
+        return `${
+          totalRoomsFilter.commercialForsaleFigure === "8plus"
+            ? "8+"
+            : totalRoomsFilter.commercialForsaleFigure
+        } ${filterItem}`;
       else if (
         totalRoomsFilter.commercialRentalsFigure &&
         activePropertyType === PropertyTypesEnum.CommercialRentals
       )
-        return `${totalRoomsFilter.commercialRentalsFigure} ${filterItem}`;
+        return `${
+          totalRoomsFilter.commercialRentalsFigure === "8plus"
+            ? "8+"
+            : totalRoomsFilter.commercialRentalsFigure
+        } ${filterItem}`;
       else if (
         totalRoomsFilter.residentialForsaleFigure &&
         activePropertyType === PropertyTypesEnum.ResidentialForSale
       )
-        return `${totalRoomsFilter.residentialForsaleFigure} ${filterItem}`;
+        return `${
+          totalRoomsFilter.residentialForsaleFigure === "8plus"
+            ? "8+"
+            : totalRoomsFilter.residentialForsaleFigure
+        } ${filterItem}`;
       else if (
         totalRoomsFilter.residentialRentalsFigure &&
         activePropertyType === PropertyTypesEnum.ResidentialRentals
       )
-        return `${totalRoomsFilter.residentialRentalsFigure} ${filterItem}`;
+        return `${
+          totalRoomsFilter.residentialRentalsFigure === "8plus"
+            ? "8+"
+            : totalRoomsFilter.residentialRentalsFigure
+        } ${filterItem}`;
       else return filterItem;
     } else if (filterItem === "Currency") {
       if (
