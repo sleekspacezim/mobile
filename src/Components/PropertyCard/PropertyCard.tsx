@@ -9,11 +9,11 @@ import { ICommercialRentalPropertyWithManager } from "@/src/GlobalTypes/Property
 import { IStandPropertyWithManager } from "@/src/GlobalTypes/Property/Stand/StandTypes";
 import { ILandPropertyWithManager } from "@/src/GlobalTypes/Property/Land/LandTypes";
 import ImageCarousel from "./ImageCarousel/ImageCarousel";
-import StandInformation from "./CardInformation/Components/Stand";
-import LandInformation from "./CardInformation/Components/Land";
+import StandInformation from "./CardInformation/Components/StandInformation";
+import LandInformation from "./CardInformation/Components/LandInformation";
 import CommercialForSaleInformation from "./CardInformation/Components/CommercialForSale";
-import CommercialRentalsInformation from "./CardInformation/Components/CommercialRentals";
-import ResidentialForSaleInformation from "./CardInformation/Components/ResidentialForSale";
+import CommercialRentalsInformation from "./CardInformation/Components/CommercialRentalsInformation";
+import ResidentialForSaleInformation from "./CardInformation/Components/ResidentialForSaleInformation";
 import ResidentialRentalsInformation from "./CardInformation/Components/ResidentialRentalsInformation";
 import { propertyCardTabletWidth } from "./Constants/Constants";
 

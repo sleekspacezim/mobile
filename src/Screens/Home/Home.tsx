@@ -6,14 +6,19 @@ import { INoPropsReactComponent } from "@/src/GlobalTypes/Types";
 import AnimatedListHeader from "./Components/AnimatedListHeader/AnimatedListHeader";
 import ResidentialRentalsList from "./Components/PropertyTypes/ResidentialRentalsList";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
-import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 import { IPropertiesViewType } from "./Types/Types";
 import SortAndViewType from "./Components/SortAndViewType/SortAndViewType";
-import { useAppDispatch, useAppSelector } from "@/src/Redux/Hooks/Config";
-import { setActivePropertyType } from "@/src/Redux/Slices/ActivePropertyTypeSlice/ActiveProperty";
+import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import ResidentialForSaleList from "./Components/PropertyTypes/ResidentialForSaleList";
+import CommercialForSaleList from "./Components/PropertyTypes/CommercialForSaleList";
+import CommercialRentalsList from "./Components/PropertyTypes/CommercialRentalsList";
+import StandsList from "./Components/PropertyTypes/StandsList";
+import LandsList from "./Components/PropertyTypes/LandsList";
 
 const Home: INoPropsReactComponent = () => {
-  const activePropertyType = useAppSelector((state)=>state.activePropertyType.value)
+  const activePropertyType = useAppSelector(
+    (state) => state.activePropertyType.value
+  );
   const [propertiesViewType, setPropertiesViewType] =
     useState<IPropertiesViewType>("list");
   const [totalProperties, setTotalproperties] = useState<number>(0);
@@ -25,10 +30,42 @@ const Home: INoPropsReactComponent = () => {
         totalProperties={totalProperties}
         scrollAnimation={scrollAnimation}
       />
-      <ResidentialRentalsList
-        setTotalproperties={setTotalproperties}
-        scrollAnimation={scrollAnimation}
-      />
+      {activePropertyType === PropertyTypesEnum.ResidentialRentals && (
+        <ResidentialRentalsList
+          setTotalproperties={setTotalproperties}
+          scrollAnimation={scrollAnimation}
+        />
+      )}
+      {activePropertyType === PropertyTypesEnum.ResidentialForSale && (
+        <ResidentialForSaleList
+          setTotalproperties={setTotalproperties}
+          scrollAnimation={scrollAnimation}
+        />
+      )}
+      {activePropertyType === PropertyTypesEnum.CommercialForSale && (
+        <CommercialForSaleList
+          setTotalproperties={setTotalproperties}
+          scrollAnimation={scrollAnimation}
+        />
+      )}
+      {activePropertyType === PropertyTypesEnum.CommercialRentals && (
+        <CommercialRentalsList
+          setTotalproperties={setTotalproperties}
+          scrollAnimation={scrollAnimation}
+        />
+      )}
+      {activePropertyType === PropertyTypesEnum.Stands && (
+        <StandsList
+          setTotalproperties={setTotalproperties}
+          scrollAnimation={scrollAnimation}
+        />
+      )}
+      {activePropertyType === PropertyTypesEnum.Land && (
+        <LandsList
+          setTotalproperties={setTotalproperties}
+          scrollAnimation={scrollAnimation}
+        />
+      )}
       {totalProperties > 0 && (
         <SortAndViewType
           propertiesViewType={propertiesViewType}

@@ -14,7 +14,6 @@ export const residentialStructuralTypes = [
 export const commercialStructuralTypes = [
   "Shop",
   "Building",
-  "Land",
   "Factory",
   "Flat",
   "Other",

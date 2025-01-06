@@ -1,5 +1,5 @@
 import { IManagerAccount } from "../../Manager/ManagerTypes";
-import { IStatus } from "../Common";
+import { ICurrency, IStatus } from "../Common";
 import { IPropertyInsights } from "../Insights/InsightsTypes";
 import { IPropertyLocation, IPropertyLocationCreation } from "../Location/LocationTypes";
 import { IPropertyImageOrVideo, IPropertyImageOrVideoCreationOrUpdate } from "../Media/ImageOrVideoTypes";
@@ -20,7 +20,7 @@ export type ICommercialPropertyForSale = {
   storeys: number;
   type: string;
   sizeDimensions: string;
-  currency: string;
+  currency: ICurrency;
   marketingStatement: string;
   otherInteriorFeatures: string[];
   otherExteriorFeatures: string[];
@@ -41,7 +41,7 @@ export type ICommercialPropertyForSaleCreation = {
     status: IStatus;
     yearBuilt: number;
     storeys: number;
-    currency: string;
+    currency: ICurrency;
     type: string;
     sizeDimensions: string;
     marketingStatement: string;
@@ -66,7 +66,7 @@ export type ICommercialPropertyForSaleWithManager = {
     yearBuilt: number;
     storeys: number;
     type: string;
-    currency: string;
+    currency: ICurrency;
     sizeDimensions: string;
     marketingStatement: string;
     otherInteriorFeatures: string[];
@@ -92,7 +92,7 @@ export type ICommercialPropertyForSaleUpdate = {
     yearBuilt: number;
     storeys: number;
     type: string;
-    currency: string;
+    currency: ICurrency;
     sizeDimensions: string;
     marketingStatement: string;
     otherInteriorFeatures: string[];

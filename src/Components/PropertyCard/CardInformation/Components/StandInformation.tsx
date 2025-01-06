@@ -1,41 +1,40 @@
 import { View } from "react-native";
 import React from "react";
 
-import { IResidentialRentalPropertyWithManager } from "@/src/GlobalTypes/Property/Residential/RentalTypes";
-import Row from "@/src/Components/Row/Row";
-import { red } from "@/src/Theme/Colors";
-import ManagerImage from "./ManagerImage/ManagerImage";
-import { PropertyTypesEnum } from "@/src/Utils/Constants";
+import { IStandPropertyWithManager } from "@/src/GlobalTypes/Property/Stand/StandTypes";
 import CardInformation from "../CardInformation";
-import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";
-import useNavigateToProperty from "../../Hooks/useNavigateToProperty";
-import Location from "./PropertyLocation/Location";
-import TypeDotsAndFavorite from "./TypeDotsAndFavorite/TypeDotsAndFavorite";
+import { PropertyTypesEnum } from "@/src/Utils/Constants";
+import Row from "@/src/Components/Row/Row";
+import ManagerImage from "./ManagerImage/ManagerImage";
 import NameRentOrPrice from "./NameRentOrPrice/NameRentOrPrice";
-import Features from "./Features/Features";
-import PostTimeAndStatus from "./PostTimeAndStatus/PostTimeAndStatus";
+import TypeDotsAndFavorite from "./TypeDotsAndFavorite/TypeDotsAndFavorite";
 import { cardInfoStyles } from "./Shared/styles";
+import useNavigateToProperty from "../../Hooks/useNavigateToProperty";
+import Features from "./Features/Features";
+import Location from "./PropertyLocation/Location";
+import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";
+import { red } from "@/src/Theme/Colors";
+import PostTimeAndStatus from "./PostTimeAndStatus/PostTimeAndStatus";
 
 type Props = {
-  property: IResidentialRentalPropertyWithManager;
+  property: IStandPropertyWithManager;
   isOnfavoritesScreen?: boolean;
 };
 
-const ResidentialRentalsInformation: React.FC<Props> = ({
+const StandInformation: React.FC<Props> = ({
   isOnfavoritesScreen,
   property: {
     id,
     postedTime,
-    numberOfRoomsToLet,
+    price,
     type,
     currency,
-    rentAmount,
     sizeNumber,
     sizeDimensions,
-    numberOfRooms,
-    isFullHouse,
     isFavorite,
     managerId,
+    isServiced,
+    level,
     status,
     manager: {
       profilePicture: { uri },
@@ -46,11 +45,11 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
   },
 }) => {
   const { navigateToProperty } = useNavigateToProperty(
-    PropertyTypesEnum.ResidentialRentals,
+    PropertyTypesEnum.Stands,
     id
   );
-  const {details,btnContainer,infoContainer} = cardInfoStyles
-  
+  const { details, btnContainer, infoContainer } = cardInfoStyles;
+
   const processSizeDimensions = () => {
     if (sizeDimensions === "Acres") {
       if (sizeNumber === 1) return "Acre";
@@ -61,17 +60,16 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
     else return sizeDimensions;
   };
 
-  const processRoomsText = () => {
-    if (isFullHouse) return "Full House";
+  const processServiced = () => {
+    if (isServiced) return "isServiced";
     else {
-      if (numberOfRoomsToLet === 1) return "Room to rent";
-      else return "Rooms to rent";
+      return "notServiced";
     }
   };
 
-  const processTotalRoomsText = () => {
-    if (numberOfRooms === 1) return "Total room";
-    else return "Total rooms";
+  const processLevel = () => {
+    if (!level) return "--";
+    else return level;
   };
 
   return (
@@ -84,29 +82,28 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
               isFavorite={isFavorite}
               id={id}
               userId={userId}
-              propertyType={PropertyTypesEnum.ResidentialRentals}
+              propertyType={PropertyTypesEnum.Stands}
               managerId={managerId}
               type={type}
             />
             <NameRentOrPrice
               name={name}
-              type="rental"
+              type="sale"
               currency={currency}
-              amount={rentAmount}
+              amount={price}
             />
           </View>
         </Row>
       </View>
       <View style={infoContainer}>
         <Features
-          featureOne={numberOfRoomsToLet}
-          featureOneText={processRoomsText()}
-          featureTwo={numberOfRooms}
-          featureTwoText={processTotalRoomsText()}
-          propertyType={PropertyTypesEnum.ResidentialRentals}
+          featureOne={processServiced()}
+          featureOneText={"serviced"}
+          featureTwo={processLevel()}
+          featureTwoText={"level"}
+          propertyType={PropertyTypesEnum.Stands}
           sizeNumber={sizeNumber}
           dimension={processSizeDimensions()}
-          isFullHouseOrSpace={isFullHouse}
         />
         <Location displayName={displayName} />
         <View style={details}>
@@ -127,4 +124,4 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
   );
 };
 
-export default ResidentialRentalsInformation;
+export default StandInformation;

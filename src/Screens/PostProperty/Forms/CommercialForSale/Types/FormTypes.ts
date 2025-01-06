@@ -1,3 +1,4 @@
+import { ICurrency } from "@/src/GlobalTypes/Property/Common";
 import * as ImagePicker from "expo-image-picker";
 
 export type ICommercialForSaleGeneralInfo = {
