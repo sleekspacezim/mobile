@@ -247,7 +247,8 @@ const PropertyCardOptions: React.FC<Props> = ({
   ];
 
   const getContentList = () => {
-    if (id === selectedProperty.userId) return contentListWithoutFavorites;
+    if (id === selectedProperty.userId || !id)
+      return contentListWithoutFavorites;
     else return contentWithFavorites;
   };
 

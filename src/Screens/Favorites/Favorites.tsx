@@ -14,5 +14,3 @@ const Favorites = (props: Props) => {
 }
 
 export default Favorites
-
-const styles = StyleSheet.create({})

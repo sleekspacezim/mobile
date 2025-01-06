@@ -1,20 +1,24 @@
-import { Animated, useWindowDimensions, View } from "react-native";
+import {
+  Animated,
+  useWindowDimensions,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { PropertyTypesEnum, SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
-import { getAllResidentialRentalPropertiesHttpFunc } from "@/src/HttpServices/Queries/Properties/PropertiesHttpFuncs";
-import HttpError from "@/src/Components/HttpError/HttpError";
-import LoadingSkeleton from "../LoadingSkeleton/LoadingSkeleton";
-import EmptyPropertyList from "@/src/Components/EmptyPropertyList/EmptyPropertyList";
-import ReportModal from "@/src/Components/Modals/Report/ReportModal";
-import { useSharedContext } from "@/src/Context/SharedContext";
-import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { usePropertiesContext } from "@/src/Context/PropertiesContext";
-import { animatedHeaderHeight } from "../../Utils/Constants";
-import { useSortPropertiesContext } from "@/src/Context/SortPropertiesContext";
-import PropertiesListMobileView from "@/src/Screens/Home/Components/PropertyTypes/Components/PropertiesListMobileView";
-import PropertiesListTableView from "./Components/PropertiesListTableView";
 import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
+import { useSharedContext } from "@/src/Context/SharedContext";
+import { useSortPropertiesContext } from "@/src/Context/SortPropertiesContext";
+import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import { PropertyTypesEnum, SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
+import { getAllLandPropertiesHttpFunc } from "@/src/HttpServices/Queries/Properties/PropertiesHttpFuncs";
+import EmptyPropertyList from "@/src/Components/EmptyPropertyList/EmptyPropertyList";
+import HttpError from "@/src/Components/HttpError/HttpError";
+import ReportModal from "@/src/Components/Modals/Report/ReportModal";
+import { animatedHeaderHeight } from "../../Utils/Constants";
+import LoadingSkeleton from "../LoadingSkeleton/LoadingSkeleton";
+import PropertiesListMobileView from "./Components/PropertiesListMobileView";
+import PropertiesListTableView from "./Components/PropertiesListTableView";
 import { propertyTypeStyles } from "./Shared/Styles";
 
 type Props = {
@@ -22,7 +26,7 @@ type Props = {
   scrollAnimation: Animated.Value;
 };
 
-const ResidentialRentalsList: React.FC<Props> = ({
+const LandsList: React.FC<Props> = ({
   setTotalproperties,
   scrollAnimation,
 }) => {
@@ -32,48 +36,39 @@ const ResidentialRentalsList: React.FC<Props> = ({
     useState<boolean>(false);
   const [loadMorehttpError, setloadMoreHttpError] = useState<string>("");
   const [httpError, setHttpError] = useState<string>("");
-  const { sortResidentialRentalPropertiesBy } = useSortPropertiesContext();
+  const { sortLandPropertiesBy } = useSortPropertiesContext();
   const { openReportModal, setOpenReportModal, selectedProperty } =
     useSharedContext();
-  const { rentalResidentialProperties, setRentalResidentialProperties } =
-    usePropertiesContext();
+  const { landProperties, setLandProperties } = usePropertiesContext();
   const [numberOfpages, setNumberOfPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const { width } = useWindowDimensions();
   const { accessToken } = useAppSelector((state) => state.user.value);
   const {
-    rentFilter,
+    priceFilter,
     currencyFilter,
     propertySizeFilter,
     propertyStructureTypeFilter,
-    totalRoomsFilter,
-    roomsToRentFilter,
-    bathroomsFilter,
-    bedroomsFilter,
   } = usePropertyFiltersContext();
 
   const pageLimit = width > SCREEN_BREAK_POINT ? 30 : 12;
 
   const fetchProperties = () => {
-    getAllResidentialRentalPropertiesHttpFunc({
+    getAllLandPropertiesHttpFunc({
       page: 1,
       isUserLoggedIn: accessToken ? true : false,
       accessToken,
       pageLimit,
-      sortBy: sortResidentialRentalPropertiesBy,
-      rentMax: rentFilter.residentialRentals.max,
-      rentMin: rentFilter.residentialRentals.min,
-      currency: currencyFilter.residentialRentals,
-      type: propertyStructureTypeFilter.residentialRentals,
-      sizeDimension: propertySizeFilter.residentialRentals.dimension,
-      sizeNumber: propertySizeFilter.residentialRentals.figure,
-      bathroom: bathroomsFilter.residentialRentalsFigure,
-      bedrooms: bedroomsFilter.residentialRentalsFigure,
-      roomsToRent: roomsToRentFilter.residentialRentalsFigure,
-      numberOfRooms: totalRoomsFilter.residentialRentalsFigure,
+      sortBy: sortLandPropertiesBy,
+      priceMax: priceFilter.land.max,
+      priceMin: priceFilter.land.min,
+      currency: currencyFilter.land,
+      type: propertyStructureTypeFilter.land,
+      sizeDimension: propertySizeFilter.land.dimension,
+      sizeNumber: propertySizeFilter.land.figure,
     })
       .then(({ data: { properties, totalPages, count } }) => {
-        setRentalResidentialProperties(properties);
+        setLandProperties(properties);
         setNumberOfPages(totalPages);
         setTotalproperties(count);
         setPageNumber((value) => value + 1);
@@ -89,25 +84,21 @@ const ResidentialRentalsList: React.FC<Props> = ({
   };
 
   const refreshProperties = () => {
-    getAllResidentialRentalPropertiesHttpFunc({
+    getAllLandPropertiesHttpFunc({
       page: 1,
       isUserLoggedIn: accessToken ? true : false,
       accessToken,
       pageLimit,
-      sortBy: sortResidentialRentalPropertiesBy,
-      rentMax: rentFilter.residentialRentals.max,
-      rentMin: rentFilter.residentialRentals.min,
-      currency: currencyFilter.residentialRentals,
-      type: propertyStructureTypeFilter.residentialRentals,
-      sizeDimension: propertySizeFilter.residentialRentals.dimension,
-      sizeNumber: propertySizeFilter.residentialRentals.figure,
-      bathroom: bathroomsFilter.residentialRentalsFigure,
-      bedrooms: bedroomsFilter.residentialRentalsFigure,
-      roomsToRent: roomsToRentFilter.residentialRentalsFigure,
-      numberOfRooms: totalRoomsFilter.residentialRentalsFigure,
+      sortBy: sortLandPropertiesBy,
+      priceMax: priceFilter.land.max,
+      priceMin: priceFilter.land.min,
+      currency: currencyFilter.land,
+      type: propertyStructureTypeFilter.land,
+      sizeDimension: propertySizeFilter.land.dimension,
+      sizeNumber: propertySizeFilter.land.figure,
     })
       .then(({ data: { properties, totalPages, count } }) => {
-        setRentalResidentialProperties(properties);
+        setLandProperties(properties);
         setNumberOfPages(totalPages);
         setTotalproperties(count);
         setPageNumber((value) => value + 1);
@@ -125,28 +116,21 @@ const ResidentialRentalsList: React.FC<Props> = ({
   const loadMoreProperties = () => {
     setloadMoreHttpError("");
     if (numberOfpages >= pageNumber) {
-      getAllResidentialRentalPropertiesHttpFunc({
+      getAllLandPropertiesHttpFunc({
         page: pageNumber,
         isUserLoggedIn: accessToken ? true : false,
         accessToken,
         pageLimit,
-        sortBy: sortResidentialRentalPropertiesBy,
-        rentMax: rentFilter.residentialRentals.max,
-        rentMin: rentFilter.residentialRentals.min,
-        currency: currencyFilter.residentialRentals,
-        type: propertyStructureTypeFilter.residentialRentals,
-        sizeDimension: propertySizeFilter.residentialRentals.dimension,
-        sizeNumber: propertySizeFilter.residentialRentals.figure,
-        bathroom: bathroomsFilter.residentialRentalsFigure,
-        bedrooms: bedroomsFilter.residentialRentalsFigure,
-        roomsToRent: roomsToRentFilter.residentialRentalsFigure,
-        numberOfRooms: totalRoomsFilter.residentialRentalsFigure,
+        sortBy: sortLandPropertiesBy,
+        priceMax: priceFilter.land.max,
+        priceMin: priceFilter.land.min,
+        currency: currencyFilter.land,
+        type: propertyStructureTypeFilter.land,
+        sizeDimension: propertySizeFilter.land.dimension,
+        sizeNumber: propertySizeFilter.land.figure,
       })
         .then(({ data: { properties, totalPages, count } }) => {
-          setRentalResidentialProperties([
-            ...rentalResidentialProperties,
-            ...properties,
-          ]);
+          setLandProperties([...landProperties, ...properties]);
           setNumberOfPages(totalPages);
           setTotalproperties(count);
           setPageNumber((value) => value + 1);
@@ -172,15 +156,11 @@ const ResidentialRentalsList: React.FC<Props> = ({
     fetchProperties();
   }, [
     accessToken,
-    sortResidentialRentalPropertiesBy,
-    rentFilter.residentialRentals,
-    currencyFilter.residentialRentals,
-    propertySizeFilter.residentialRentals,
-    propertyStructureTypeFilter.residentialRentals,
-    roomsToRentFilter.residentialRentalsFigure,
-    totalRoomsFilter.residentialRentalsFigure,
-    bathroomsFilter.residentialRentalsFigure,
-    bedroomsFilter.residentialRentalsFigure,
+    sortLandPropertiesBy,
+    priceFilter.land,
+    currencyFilter.land,
+    propertySizeFilter.land,
+    propertyStructureTypeFilter.land,
   ]);
 
   useEffect(() => {
@@ -188,9 +168,10 @@ const ResidentialRentalsList: React.FC<Props> = ({
   }, [httpError]);
 
   const text =
-    "We currently do not have Residential Rental Properties, please try again soon. Please checkout other property types in the meantime.";
+    "We currently do not have Land properties, please try again soon. Please checkout other property types in the meantime.";
+
   return (
-    <View style={propertyTypeStyles.container}>
+  <View style={propertyTypeStyles.container}>
       {isLoading && <LoadingSkeleton addAnimatedPaddingTop />}
       {httpError && (
         <View
@@ -208,7 +189,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
           />
         </View>
       )}
-      {!httpError && !isLoading && rentalResidentialProperties.length < 1 && (
+      {!httpError && !isLoading && landProperties.length < 1 && (
         <View
           style={{
             flex: 1,
@@ -220,10 +201,10 @@ const ResidentialRentalsList: React.FC<Props> = ({
       )}
       {!httpError &&
         !isLoading &&
-        rentalResidentialProperties.length > 0 &&
+        landProperties.length > 0 &&
         width <= SCREEN_BREAK_POINT && (
           <PropertiesListMobileView
-            propertyType={PropertyTypesEnum.ResidentialRentals}
+            propertyType={PropertyTypesEnum.Land}
             loadMorehttpError={loadMorehttpError}
             pageNumber={pageNumber}
             numberOfpages={numberOfpages}
@@ -235,10 +216,10 @@ const ResidentialRentalsList: React.FC<Props> = ({
         )}
       {!httpError &&
         !isLoading &&
-        rentalResidentialProperties.length > 0 &&
+        landProperties.length > 0 &&
         width > SCREEN_BREAK_POINT && (
           <PropertiesListTableView
-            propertyType={PropertyTypesEnum.ResidentialRentals}
+            propertyType={PropertyTypesEnum.Land}
             loadMorehttpError={loadMorehttpError}
             pageNumber={pageNumber}
             numberOfpages={numberOfpages}
@@ -263,4 +244,4 @@ const ResidentialRentalsList: React.FC<Props> = ({
   );
 };
 
-export default ResidentialRentalsList;
+export default LandsList;

@@ -165,28 +165,31 @@ const GeneralInformation: React.FC<Props> = ({
             )}
           </View>
         )}
-        {(propertyDetails.type === "Building" || propertyDetails.type==="Other" )&& <View>
-          <InputField
-            textValue={propertyDetails?.numberOfRooms}
-            placeHolder=""
-            width={160}
-            handleOnChangeText={(e) =>
-              setPropertyDetails({
-                ...propertyDetails,
-                numberOfRooms: e,
-              })
-            }
-            height={57}
-            contentType="none"
-            type="number"
-            label="Number of rooms"
-            backgroundColor="transparent"
-            borderColor={formError === "numberOfRooms" ? red : gray}
-          />
-          {formError === "numberOfRooms" && (
-            <Text style={styles.errorText}>invalid size</Text>
-          )}
-        </View>}
+        {(propertyDetails.type === "Building" ||
+          propertyDetails.type === "Flat") && (
+          <View>
+            <InputField
+              textValue={propertyDetails?.numberOfRooms}
+              placeHolder=""
+              width={160}
+              handleOnChangeText={(e) =>
+                setPropertyDetails({
+                  ...propertyDetails,
+                  numberOfRooms: e,
+                })
+              }
+              height={57}
+              contentType="none"
+              type="number"
+              label="Number of rooms"
+              backgroundColor="transparent"
+              borderColor={formError === "numberOfRooms" ? red : gray}
+            />
+            {formError === "numberOfRooms" && (
+              <Text style={styles.errorText}>invalid size</Text>
+            )}
+          </View>
+        )}
 
         <CheckBoxField
           label="Is Negotiable"
@@ -242,7 +245,7 @@ const GeneralInformation: React.FC<Props> = ({
               {
                 label: "Acres",
                 value: "Acres",
-              }
+              },
             ]}
           />
         </Row>
