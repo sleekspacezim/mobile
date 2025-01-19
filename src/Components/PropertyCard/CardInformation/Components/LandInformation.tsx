@@ -19,10 +19,12 @@ import Location from "./PropertyLocation/Location";
 type Props = {
   property: ILandPropertyWithManager;
   isOnfavoritesScreen?: boolean;
+  setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
 };
 
 const LandInformation: React.FC<Props> = ({
   isOnfavoritesScreen,
+  setTotalProperties,
   property: {
     id,
     postedTime,
@@ -87,6 +89,7 @@ const LandInformation: React.FC<Props> = ({
               propertyType={PropertyTypesEnum.Land}
               managerId={managerId}
               type={type}
+              setTotalProperties={setTotalProperties}
             />
             <NameRentOrPrice
               name={name}
@@ -111,13 +114,6 @@ const LandInformation: React.FC<Props> = ({
         <View style={details}>
           <PostTimeAndStatus status={status} postedTime={postedTime} />
           <View style={btnContainer}>
-            {isOnfavoritesScreen && (
-              <CustomButton
-                title="remove"
-                color={red}
-                onPressFunc={() => console.log(id)}
-              />
-            )}
             <CustomButton title="view" onPressFunc={navigateToProperty} />
           </View>
         </View>

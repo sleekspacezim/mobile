@@ -12,6 +12,7 @@ import { SharedContextProvider } from "@/src/Context/SharedContext";
 import { PropertiesContextProvider } from "@/src/Context/PropertiesContext";
 import { PropertyFiltersContextProvider } from "@/src/Context/PropertyFiltersContext";
 import { BottomSheetsContextProvider } from "@/src/Context/BottomSheetsContext";
+import { FavoritesPropertiesContextProvider } from "@/src/Context/FavoritesPropertiesContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,34 +37,36 @@ const RootLayout = () => {
     <Provider store={store}>
       <SharedContextProvider>
         <PropertiesContextProvider>
-          <PropertyFiltersContextProvider>
-            <BottomSheetsContextProvider>
-              <RootSiblingParent>
-                <QueryClientProvider client={queryClient}>
-                  <GestureHandlerRootView style={{ flex: 1 }}>
-                    <Stack
-                      screenOptions={{
-                        headerShown: false,
-                      }}
-                    >
-                      <Stack.Screen
-                        name="(tabs)"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="index"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="(auth)"
-                        options={{ headerShown: false }}
-                      />
-                    </Stack>
-                  </GestureHandlerRootView>
-                </QueryClientProvider>
-              </RootSiblingParent>
-            </BottomSheetsContextProvider>
-          </PropertyFiltersContextProvider>
+          <FavoritesPropertiesContextProvider>
+            <PropertyFiltersContextProvider>
+              <BottomSheetsContextProvider>
+                <RootSiblingParent>
+                  <QueryClientProvider client={queryClient}>
+                    <GestureHandlerRootView style={{ flex: 1 }}>
+                      <Stack
+                        screenOptions={{
+                          headerShown: false,
+                        }}
+                      >
+                        <Stack.Screen
+                          name="(tabs)"
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                          name="index"
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                          name="(auth)"
+                          options={{ headerShown: false }}
+                        />
+                      </Stack>
+                    </GestureHandlerRootView>
+                  </QueryClientProvider>
+                </RootSiblingParent>
+              </BottomSheetsContextProvider>
+            </PropertyFiltersContextProvider>
+          </FavoritesPropertiesContextProvider>
         </PropertiesContextProvider>
       </SharedContextProvider>
     </Provider>

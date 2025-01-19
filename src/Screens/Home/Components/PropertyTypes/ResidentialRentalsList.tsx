@@ -13,7 +13,7 @@ import { usePropertiesContext } from "@/src/Context/PropertiesContext";
 import { animatedHeaderHeight } from "../../Utils/Constants";
 import { useSortPropertiesContext } from "@/src/Context/SortPropertiesContext";
 import PropertiesListMobileView from "@/src/Screens/Home/Components/PropertyTypes/Components/PropertiesListMobileView";
-import PropertiesListTableView from "./Components/PropertiesListTableView";
+import PropertiesListTabletView from "./Components/PropertiesListTabletView";
 import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
 import { propertyTypeStyles } from "./Shared/Styles";
 
@@ -237,7 +237,7 @@ const ResidentialRentalsList: React.FC<Props> = ({
         !isLoading &&
         rentalResidentialProperties.length > 0 &&
         width > SCREEN_BREAK_POINT && (
-          <PropertiesListTableView
+          <PropertiesListTabletView
             propertyType={PropertyTypesEnum.ResidentialRentals}
             loadMorehttpError={loadMorehttpError}
             pageNumber={pageNumber}

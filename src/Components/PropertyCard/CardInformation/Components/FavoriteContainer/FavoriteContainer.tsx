@@ -29,6 +29,7 @@ type Props = {
   propertyId: number;
   isPropertyFavorite: boolean;
   propertyType: IPropertyType;
+  setTotalProperties?: React.Dispatch<React.SetStateAction<number>>;
 };
 
 type IPropertyLoading = {
@@ -40,6 +41,7 @@ const FavoriteContainer: React.FC<Props> = ({
   propertyId,
   isPropertyFavorite,
   propertyType,
+  setTotalProperties,
 }) => {
   const [loader, setLoader] = useState<IPropertyLoading>({
     isLoading: true,
@@ -87,16 +89,31 @@ const FavoriteContainer: React.FC<Props> = ({
   };
 
   const updatePropertyFavorite = () => {
-    if (propertyType === PropertyTypesEnum.CommercialForSale)
+    if (propertyType === PropertyTypesEnum.CommercialForSale) {
+      if (setTotalProperties !== undefined)
+        setTotalProperties((prev) => prev - 1);
       updateOnSaleCommercialProperties();
-    else if (propertyType === PropertyTypesEnum.CommercialRentals)
+    } else if (propertyType === PropertyTypesEnum.CommercialRentals) {
+      if (setTotalProperties !== undefined)
+        setTotalProperties((prev) => prev - 1);
       updateRentalCommercialProperties();
-    else if (propertyType === PropertyTypesEnum.ResidentialRentals)
+    } else if (propertyType === PropertyTypesEnum.ResidentialRentals) {
+      if (setTotalProperties !== undefined)
+        setTotalProperties((prev) => prev - 1);
       updateRentalResidentialProperties();
-    else if (propertyType === PropertyTypesEnum.ResidentialForSale)
+    } else if (propertyType === PropertyTypesEnum.ResidentialForSale) {
+      if (setTotalProperties !== undefined)
+        setTotalProperties((prev) => prev - 1);
       updateOnSaleResidentialProperties();
-    else if (propertyType === PropertyTypesEnum.Land) updateLandProperties();
-    else return updateStandProperties();
+    } else if (propertyType === PropertyTypesEnum.Land) {
+      if (setTotalProperties !== undefined)
+        setTotalProperties((prev) => prev - 1);
+      updateLandProperties();
+    } else {
+      if (setTotalProperties !== undefined)
+        setTotalProperties((prev) => prev - 1);
+      updateStandProperties();
+    }
   };
 
   const addFavoritePropertyMutation = useMutation({

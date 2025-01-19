@@ -1,3 +1,4 @@
+import { useFavoritesPropertiesContext } from "@/src/Context/FavoritesPropertiesContext";
 import { usePropertiesContext } from "@/src/Context/PropertiesContext";
 import { useSearchByLocationPropertyResultsContext } from "@/src/Context/SearchByLocationPropertyResultsContext";
 
@@ -26,6 +27,21 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
     setStandPropertiesSearchResults,
   } = useSearchByLocationPropertyResultsContext();
 
+  const {
+    landFavoriteProperties,
+    standFavoriteProperties,
+    rentalCommercialFavoriteProperties,
+    rentalResidentialFavoriteProperties,
+    onSaleCommercialFavoriteProperties,
+    onSaleResidentialFavoriteProperties,
+    setLandFavoriteProperties,
+    setOnSaleCommercialFavoriteProperties,
+    setOnSaleResidentialFavoriteProperties,
+    setRentalCommercialFavoriteProperties,
+    setRentalResidentialFavoriteProperties,
+    setStandFavoriteProperties,
+  } = useFavoritesPropertiesContext();
+
   const updateRentalCommercialProperties = () => {
     setRentalCommercialProperties((properties) =>
       properties.map((property) =>
@@ -41,6 +57,11 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
             ? { ...property, isFavorite: !property.isFavorite }
             : property
         )
+      );
+    }
+    if (rentalCommercialFavoriteProperties.length > 0) {
+      setRentalCommercialFavoriteProperties((properties) =>
+        properties.filter((property) => property.id !== propertyId)
       );
     }
   };
@@ -62,6 +83,11 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
         )
       );
     }
+    if (onSaleCommercialFavoriteProperties.length > 0) {
+      setOnSaleCommercialFavoriteProperties((properties) =>
+        properties.filter((property) => property.id !== propertyId)
+      );
+    }
   };
 
   const updateRentalResidentialProperties = () => {
@@ -79,6 +105,11 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
             ? { ...property, isFavorite: !property.isFavorite }
             : property
         )
+      );
+    }
+    if (rentalResidentialFavoriteProperties.length > 0) {
+      setRentalResidentialFavoriteProperties((properties) =>
+        properties.filter((property) => property.id !== propertyId)
       );
     }
   };
@@ -100,6 +131,11 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
         )
       );
     }
+    if (onSaleResidentialFavoriteProperties.length > 0) {
+      setOnSaleResidentialFavoriteProperties((properties) =>
+        properties.filter((property) => property.id !== propertyId)
+      );
+    }
   };
 
   const updateStandProperties = () => {
@@ -119,6 +155,11 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
         )
       );
     }
+    if (standFavoriteProperties.length > 0) {
+      setStandFavoriteProperties((properties) =>
+        properties.filter((property) => property.id !== propertyId)
+      );
+    }
   };
 
   const updateLandProperties = () => {
@@ -136,6 +177,11 @@ const useUpdatePropertyFavorite = (propertyId: number) => {
             ? { ...property, isFavorite: !property.isFavorite }
             : property
         )
+      );
+    }
+    if (landFavoriteProperties.length > 0) {
+      setLandFavoriteProperties((properties) =>
+        properties.filter((property) => property.id !== propertyId)
       );
     }
   };

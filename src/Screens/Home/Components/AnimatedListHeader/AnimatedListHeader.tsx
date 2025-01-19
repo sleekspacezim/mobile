@@ -9,14 +9,15 @@ import React, { useState } from "react";
 
 import PropertyTypeList from "@/src/Components/PropertyTypeList/PropertyTypeList";
 import { animatedHeaderHeight } from "../../Utils/Constants";
-import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import { useAppDispatch, useAppSelector } from "@/src/Redux/Hooks/Config";
 import { dark, gray, pureWhite } from "@/src/Theme/Colors";
 import { SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
 import SearchBar from "./SearchBar/SearchBar";
 import Filters from "./Filters/Filters";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
-import TotalProperties from "./TotalProperties/TotalProperties";
+import TotalProperties from "../../../../Components/TotalProperties/TotalProperties";
 import SearchLocationModal from "@/src/Components/Modals/Location/SearchLocation/SearchLocationModal";
+import { setActivePropertyType } from "@/src/Redux/Slices/ActivePropertyTypeSlice/ActiveProperty";
 
 type Props = {
   activePropertyType: IPropertyType;
@@ -32,6 +33,7 @@ const AnimatedListHeader: React.FC<Props> = ({
   const [openSearchModal, setOpenSearchModal] = useState<boolean>(false);
   const theme = useAppSelector((state) => state.theme.value);
   const { width } = useWindowDimensions();
+  const dispatch = useAppDispatch();
   const [offsetAnimation] = useState(new Animated.Value(0));
   const [clampedScroll, setClampedScroll] = useState(
     Animated.diffClamp(
@@ -77,11 +79,14 @@ const AnimatedListHeader: React.FC<Props> = ({
       {width > SCREEN_BREAK_POINT ? (
         <View style={styles.tabletContainer}>
           <SearchBar onPressFunc={() => setOpenSearchModal(true)} />
-          <PropertyTypeList />
-          <Filters />
-          <TotalProperties
-            totalProperties={totalProperties}
+          <PropertyTypeList
+            activePropertyType={activePropertyType}
+            setActivePropertyType={(type: IPropertyType) =>
+              dispatch(setActivePropertyType(type))
+            }
           />
+          <Filters />
+          <TotalProperties totalProperties={totalProperties} activePropertyType={activePropertyType}/>
         </View>
       ) : (
         <Animated.View
@@ -96,11 +101,14 @@ const AnimatedListHeader: React.FC<Props> = ({
           onLayout={onLayout}
         >
           <SearchBar onPressFunc={() => setOpenSearchModal(true)} />
-          <PropertyTypeList />
-          <Filters />
-          <TotalProperties
-            totalProperties={totalProperties}
+          <PropertyTypeList
+            activePropertyType={activePropertyType}
+            setActivePropertyType={(type: IPropertyType) =>
+              dispatch(setActivePropertyType(type))
+            }
           />
+          <Filters />
+          <TotalProperties totalProperties={totalProperties} activePropertyType={activePropertyType}/>
         </Animated.View>
       )}
       {openSearchModal && (

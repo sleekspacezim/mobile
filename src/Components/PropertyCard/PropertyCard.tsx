@@ -21,29 +21,46 @@ type Props =
   | {
       type: PropertyTypesEnum.ResidentialRentals;
       property: IResidentialRentalPropertyWithManager;
+      isOnfavoritesScreen?: boolean;
+      setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
     }
   | {
       type: PropertyTypesEnum.ResidentialForSale;
       property: IResidentialPropertyForSaleWithManager;
+      isOnfavoritesScreen?: boolean;
+      setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
     }
   | {
       type: PropertyTypesEnum.CommercialForSale;
       property: ICommercialPropertyForSaleWithManager;
+      isOnfavoritesScreen?: boolean;
+      setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
     }
   | {
       type: PropertyTypesEnum.CommercialRentals;
       property: ICommercialRentalPropertyWithManager;
+      isOnfavoritesScreen?: boolean;
+      setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
     }
   | {
       type: PropertyTypesEnum.Stands;
       property: IStandPropertyWithManager;
+      isOnfavoritesScreen?: boolean;
+      setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
     }
   | {
       type: PropertyTypesEnum.Land;
       property: ILandPropertyWithManager;
+      isOnfavoritesScreen?: boolean;
+      setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
     };
 
-const PropertyCard: React.FC<Props> = ({ type, property }) => {
+const PropertyCard: React.FC<Props> = ({
+  type,
+  property,
+  isOnfavoritesScreen,
+  setTotalProperties
+}) => {
   const { width } = useWindowDimensions();
   return (
     <View
@@ -55,22 +72,46 @@ const PropertyCard: React.FC<Props> = ({ type, property }) => {
     >
       <ImageCarousel media={property.media} propertyType={type} />
       {type === PropertyTypesEnum.Stands && (
-        <StandInformation property={property} />
+        <StandInformation
+          property={property}
+          isOnfavoritesScreen={isOnfavoritesScreen}
+          setTotalProperties={setTotalProperties}
+        />
       )}
       {type === PropertyTypesEnum.Land && (
-        <LandInformation property={property} />
+        <LandInformation
+          property={property}
+          isOnfavoritesScreen={isOnfavoritesScreen}
+          setTotalProperties={setTotalProperties}
+        />
       )}
       {type === PropertyTypesEnum.CommercialForSale && (
-        <CommercialForSaleInformation property={property} />
+        <CommercialForSaleInformation
+          property={property}
+          isOnfavoritesScreen={isOnfavoritesScreen}
+          setTotalProperties={setTotalProperties}
+        />
       )}
       {type === PropertyTypesEnum.CommercialRentals && (
-        <CommercialRentalsInformation property={property} />
+        <CommercialRentalsInformation
+          property={property}
+          isOnfavoritesScreen={isOnfavoritesScreen}
+          setTotalProperties={setTotalProperties}
+        />
       )}
       {type === PropertyTypesEnum.ResidentialForSale && (
-        <ResidentialForSaleInformation property={property} />
+        <ResidentialForSaleInformation
+          property={property}
+          isOnfavoritesScreen={isOnfavoritesScreen}
+          setTotalProperties={setTotalProperties}
+        />
       )}
       {type === PropertyTypesEnum.ResidentialRentals && (
-        <ResidentialRentalsInformation property={property} />
+        <ResidentialRentalsInformation
+          property={property}
+          isOnfavoritesScreen={isOnfavoritesScreen}
+          setTotalProperties={setTotalProperties}
+        />
       )}
     </View>
   );

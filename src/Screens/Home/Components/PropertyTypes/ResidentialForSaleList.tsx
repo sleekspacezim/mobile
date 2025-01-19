@@ -14,7 +14,7 @@ import ReportModal from "@/src/Components/Modals/Report/ReportModal";
 import { animatedHeaderHeight } from "../../Utils/Constants";
 import LoadingSkeleton from "../LoadingSkeleton/LoadingSkeleton";
 import PropertiesListMobileView from "./Components/PropertiesListMobileView";
-import PropertiesListTableView from "./Components/PropertiesListTableView";
+import PropertiesListTabletView from "./Components/PropertiesListTabletView";
 import { propertyTypeStyles } from "./Shared/Styles";
 
 type Props = {
@@ -233,7 +233,7 @@ const ResidentialForSaleList: React.FC<Props> = ({
         !isLoading &&
         onSaleResidentialProperties.length > 0 &&
         width > SCREEN_BREAK_POINT && (
-          <PropertiesListTableView
+          <PropertiesListTabletView
             propertyType={PropertyTypesEnum.ResidentialForSale}
             loadMorehttpError={loadMorehttpError}
             pageNumber={pageNumber}

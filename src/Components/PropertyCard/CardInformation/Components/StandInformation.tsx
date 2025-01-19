@@ -19,10 +19,12 @@ import PostTimeAndStatus from "./PostTimeAndStatus/PostTimeAndStatus";
 type Props = {
   property: IStandPropertyWithManager;
   isOnfavoritesScreen?: boolean;
+  setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
 };
 
 const StandInformation: React.FC<Props> = ({
   isOnfavoritesScreen,
+  setTotalProperties,
   property: {
     id,
     postedTime,
@@ -85,6 +87,7 @@ const StandInformation: React.FC<Props> = ({
               propertyType={PropertyTypesEnum.Stands}
               managerId={managerId}
               type={type}
+              setTotalProperties={setTotalProperties}
             />
             <NameRentOrPrice
               name={name}
@@ -109,13 +112,6 @@ const StandInformation: React.FC<Props> = ({
         <View style={details}>
           <PostTimeAndStatus status={status} postedTime={postedTime} />
           <View style={btnContainer}>
-            {isOnfavoritesScreen && (
-              <CustomButton
-                title="remove"
-                color={red}
-                onPressFunc={() => console.log(id)}
-              />
-            )}
             <CustomButton title="view" onPressFunc={navigateToProperty} />
           </View>
         </View>

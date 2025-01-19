@@ -18,10 +18,12 @@ import Location from './PropertyLocation/Location';
 type Props = {
   property: ICommercialRentalPropertyWithManager;
   isOnfavoritesScreen?: boolean;
+  setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
 }
 
 const CommercialRentalsInformation:React.FC<Props> = ({
   isOnfavoritesScreen,
+  setTotalProperties,
   property: {
     id,
     postedTime,
@@ -86,6 +88,7 @@ const CommercialRentalsInformation:React.FC<Props> = ({
               propertyType={PropertyTypesEnum.CommercialRentals}
               managerId={managerId}
               type={type}
+              setTotalProperties={setTotalProperties}
             />
             <NameRentOrPrice
               name={name}
@@ -111,13 +114,6 @@ const CommercialRentalsInformation:React.FC<Props> = ({
         <View style={details}>
           <PostTimeAndStatus status={status} postedTime={postedTime} />
           <View style={btnContainer}>
-            {isOnfavoritesScreen && (
-              <CustomButton
-                title="remove"
-                color={red}
-                onPressFunc={() => console.log(id)}
-              />
-            )}
             <CustomButton title="view" onPressFunc={navigateToProperty} />
           </View>
         </View>
