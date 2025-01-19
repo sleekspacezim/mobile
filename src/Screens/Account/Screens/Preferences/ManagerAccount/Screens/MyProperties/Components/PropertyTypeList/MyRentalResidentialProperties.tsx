@@ -1,74 +1,53 @@
-import {
-  Animated,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { View, useWindowDimensions } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { usePropertiesContext } from "@/src/Context/PropertiesContext";
-import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
-import { useSharedContext } from "@/src/Context/SharedContext";
-import { useSortPropertiesContext } from "@/src/Context/SortPropertiesContext";
-import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import { PropertyTypesEnum, SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
-import { getAllStandsHttpFunc } from "@/src/HttpServices/Queries/Properties/PropertiesHttpFuncs";
+import { IResidentialRentalPropertyWithManager } from "@/src/GlobalTypes/Property/Residential/RentalTypes";
+import { getManagerResidentialRentalProperties } from "@/src/HttpServices/Queries/Manager/ManagerHttpFuncs";
 import EmptyPropertyList from "@/src/Components/EmptyPropertyList/EmptyPropertyList";
 import HttpError from "@/src/Components/HttpError/HttpError";
 import ReportModal from "@/src/Components/Modals/Report/ReportModal";
-import { animatedHeaderHeight } from "../../Utils/Constants";
-import LoadingSkeleton from "../LoadingSkeleton/LoadingSkeleton";
-import PropertiesListMobileView from "./Components/PropertiesListMobileView";
-import PropertiesListTabletView from "./Components/PropertiesListTabletView";
-import { propertyTypeStyles } from "./Shared/Styles";
+import { useSharedContext } from "@/src/Context/SharedContext";
+import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import LoadingSkeleton from "@/src/Screens/Home/Components/LoadingSkeleton/LoadingSkeleton";
+import { SCREEN_BREAK_POINT, PropertyTypesEnum } from "@/src/Utils/Constants";
+import { myPropertyTypeStyles } from "../Shared/Styles";
+import PropertiesListMobileView from "@/src/Components/PropertiesListMobileView/PropertiesListMobileView";
+import PropertiesListTabletView from "@/src/Components/PropertiesListTabletView/PropertiesListTabletView";
 
 type Props = {
   setTotalproperties: React.Dispatch<React.SetStateAction<number>>;
-  scrollAnimation: Animated.Value;
 };
 
-const StandsList: React.FC<Props> = ({
+const MyRentalResidentialProperties: React.FC<Props> = ({
   setTotalproperties,
-  scrollAnimation,
 }) => {
+  const [properties, setProperties] = useState<
+    IResidentialRentalPropertyWithManager[]
+  >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [areMorePropertiesLoading, setAreMorePropertiesLoading] =
     useState<boolean>(false);
   const [loadMorehttpError, setloadMoreHttpError] = useState<string>("");
   const [httpError, setHttpError] = useState<string>("");
-  const { sortStandPropertiesBy } = useSortPropertiesContext();
-  const { openReportModal, setOpenReportModal, selectedProperty } =
-    useSharedContext();
-  const { standProperties, setStandProperties } = usePropertiesContext();
   const [numberOfpages, setNumberOfPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const { width } = useWindowDimensions();
+  const { openReportModal, setOpenReportModal, selectedProperty } =
+    useSharedContext();
   const { accessToken } = useAppSelector((state) => state.user.value);
-  const {
-    priceFilter,
-    currencyFilter,
-    propertySizeFilter,
-    propertyStructureTypeFilter,
-  } = usePropertyFiltersContext();
-
+  const { id } = useAppSelector((state) => state.managerAccount.value);
   const pageLimit = width > SCREEN_BREAK_POINT ? 30 : 12;
 
   const fetchProperties = () => {
-    getAllStandsHttpFunc({
+    getManagerResidentialRentalProperties({
       page: 1,
-      isUserLoggedIn: accessToken ? true : false,
       accessToken,
       pageLimit,
-      sortBy: sortStandPropertiesBy,
-      priceMax: priceFilter.stand.max,
-      priceMin: priceFilter.stand.min,
-      currency: currencyFilter.stand,
-      type: propertyStructureTypeFilter.stand,
-      sizeDimension: propertySizeFilter.stand.dimension,
-      sizeNumber: propertySizeFilter.stand.figure,
+      managerId: id,
     })
-      .then(({ data: { properties, totalPages, count } }) => {
-        setStandProperties(properties);
+    .then(({ data: { properties: data, totalPages, count } }) => {
+        setProperties(data);
         setNumberOfPages(totalPages);
         setTotalproperties(count);
         setPageNumber((value) => value + 1);
@@ -84,21 +63,14 @@ const StandsList: React.FC<Props> = ({
   };
 
   const refreshProperties = () => {
-    getAllStandsHttpFunc({
+    getManagerResidentialRentalProperties({
       page: 1,
-      isUserLoggedIn: accessToken ? true : false,
+      managerId: id,
       accessToken,
       pageLimit,
-      sortBy: sortStandPropertiesBy,
-      priceMax: priceFilter.stand.max,
-      priceMin: priceFilter.stand.min,
-      currency: currencyFilter.stand,
-      type: propertyStructureTypeFilter.stand,
-      sizeDimension: propertySizeFilter.stand.dimension,
-      sizeNumber: propertySizeFilter.stand.figure,
     })
-      .then(({ data: { properties, totalPages, count } }) => {
-        setStandProperties(properties);
+      .then(({ data: { properties: data, totalPages, count } }) => {
+        setProperties(data);
         setNumberOfPages(totalPages);
         setTotalproperties(count);
         setPageNumber((value) => value + 1);
@@ -116,21 +88,14 @@ const StandsList: React.FC<Props> = ({
   const loadMoreProperties = () => {
     setloadMoreHttpError("");
     if (numberOfpages >= pageNumber) {
-      getAllStandsHttpFunc({
+      getManagerResidentialRentalProperties({
         page: pageNumber,
-        isUserLoggedIn: accessToken ? true : false,
+        managerId: id,
         accessToken,
         pageLimit,
-        sortBy: sortStandPropertiesBy,
-        priceMax: priceFilter.land.max,
-        priceMin: priceFilter.land.min,
-        currency: currencyFilter.land,
-        type: propertyStructureTypeFilter.land,
-        sizeDimension: propertySizeFilter.land.dimension,
-        sizeNumber: propertySizeFilter.land.figure,
       })
-        .then(({ data: { properties, totalPages, count } }) => {
-          setStandProperties([...standProperties, ...properties]);
+        .then(({ data: { properties: data, totalPages, count } }) => {
+          setProperties([...properties, ...data]);
           setNumberOfPages(totalPages);
           setTotalproperties(count);
           setPageNumber((value) => value + 1);
@@ -147,37 +112,30 @@ const StandsList: React.FC<Props> = ({
   };
 
   const handleRefresh = () => {
-    setPageNumber(1);
     setIsRefreshing(true);
+    setPageNumber(1);
+    setProperties([]);
     refreshProperties();
   };
 
   useEffect(() => {
     fetchProperties();
-  }, [
-    accessToken,
-    sortStandPropertiesBy,
-    priceFilter.stand,
-    currencyFilter.stand,
-    propertySizeFilter.stand,
-    propertyStructureTypeFilter.stand,
-  ]);
+  }, [accessToken, id]);
 
   useEffect(() => {
     if (httpError) setTotalproperties(0);
   }, [httpError]);
 
-  const text =
-    "We currently do not have stands, please try again soon. Please checkout other property types in the meantime.";
+  const text = "You currently do not have rental residential properties.";
 
   return (
-    <View style={propertyTypeStyles.container}>
-      {isLoading && <LoadingSkeleton addAnimatedPaddingTop />}
+    <View style={myPropertyTypeStyles.container}>
+      {isLoading && <LoadingSkeleton />}
       {httpError && (
         <View
           style={{
             flex: 1,
-            paddingTop: width > SCREEN_BREAK_POINT ? 0 : animatedHeaderHeight,
+            paddingTop: 0,
           }}
         >
           <HttpError
@@ -189,11 +147,11 @@ const StandsList: React.FC<Props> = ({
           />
         </View>
       )}
-      {!httpError && !isLoading && standProperties.length < 1 && (
+      {!httpError && !isLoading && properties.length < 1 && (
         <View
           style={{
             flex: 1,
-            paddingTop: width > SCREEN_BREAK_POINT ? 0 : animatedHeaderHeight,
+            paddingTop: 0,
           }}
         >
           <EmptyPropertyList text={text} />
@@ -201,32 +159,34 @@ const StandsList: React.FC<Props> = ({
       )}
       {!httpError &&
         !isLoading &&
-        standProperties.length > 0 &&
+        properties.length > 0 &&
         width <= SCREEN_BREAK_POINT && (
           <PropertiesListMobileView
-            propertyType={PropertyTypesEnum.Stands}
+            propertyType={PropertyTypesEnum.ResidentialRentals}
             loadMorehttpError={loadMorehttpError}
             pageNumber={pageNumber}
+            data={properties}
             numberOfpages={numberOfpages}
             isRefreshing={isRefreshing}
-            scrollAnimation={scrollAnimation}
             loadMoreProperties={loadMoreProperties}
             handleRefresh={handleRefresh}
+            setTotalProperties={setTotalproperties}
           />
         )}
       {!httpError &&
         !isLoading &&
-        standProperties.length > 0 &&
+        properties.length > 0 &&
         width > SCREEN_BREAK_POINT && (
           <PropertiesListTabletView
-            propertyType={PropertyTypesEnum.Stands}
+            propertyType={PropertyTypesEnum.ResidentialRentals}
             loadMorehttpError={loadMorehttpError}
             pageNumber={pageNumber}
+            data={properties}
             numberOfpages={numberOfpages}
-            areMorePropertiesLoading={areMorePropertiesLoading}
             isRefreshing={isRefreshing}
             loadMoreProperties={loadMoreProperties}
             handleRefresh={handleRefresh}
+            areMorePropertiesLoading={areMorePropertiesLoading}
             setAreMorePropertiesLoading={setAreMorePropertiesLoading}
           />
         )}
@@ -244,5 +204,4 @@ const StandsList: React.FC<Props> = ({
   );
 };
 
-export default StandsList;
-
+export default MyRentalResidentialProperties;

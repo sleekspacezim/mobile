@@ -27,7 +27,10 @@ type Props = {
 };
 
 const profileHeading = "There's no profile to show";
-const postPropertyHeading = "There's no user to post";
+const postPropertyHeading = "There's no user to post.";
+const favoritesPropertyHeading = "There's no user to view favorites";
+const favoritesPropertyContent =
+  "Please login or create an account to view your favorite properties.";
 const postPropertyContent =
   "Please login or create an account to post a property.";
 const profileContent =
@@ -49,10 +52,18 @@ const SigninAndSignupBtn: React.FC<Props> = ({ screenType }) => {
         />
       </View>
       <ThemedText type="header">
-        {screenType === "profile" ? profileHeading : postPropertyHeading}
+        {screenType === "profile"
+          ? profileHeading
+          : screenType === "favorites"
+          ? favoritesPropertyHeading
+          : postPropertyHeading}
       </ThemedText>
       <RegularText>
-        {screenType === "profile" ? profileContent : postPropertyContent}
+        {screenType === "profile"
+          ? profileContent
+          : screenType === "favorites"
+          ? favoritesPropertyContent
+          : postPropertyContent}
       </RegularText>
       <View
         style={[

@@ -1,33 +1,112 @@
-import {
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
+import { View, ScrollView, RefreshControl, StyleSheet } from "react-native";
 import React from "react";
 
-import OutlinedButton from "@/src/Components/Buttons/Outlined/OutlinedButton";
-import FlatListOnEndReachedError from "@/src/Components/FlatListOnEndReachedError/FlatListOnEndReachedError";
-import PropertyCard from "@/src/Components/PropertyCard/PropertyCard";
-import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import { BUTTON_MAX_WIDTH, PropertyTypesEnum } from "@/src/Utils/Constants";
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
+import FlatListOnEndReachedError from "@/src/Components/FlatListOnEndReachedError/FlatListOnEndReachedError";
+import OutlinedButton from "@/src/Components/Buttons/Outlined/OutlinedButton";
 import { primary } from "@/src/Theme/Colors";
-import { PropertyTypesEnum, BUTTON_MAX_WIDTH } from "@/src/Utils/Constants";
-import { usePropertiesContext } from "@/src/Context/PropertiesContext";
+import PropertyCard from "@/src/Components/PropertyCard/PropertyCard";
+import { ICommercialPropertyForSaleWithManager } from "@/src/GlobalTypes/Property/Commercial/ForSaleTypes";
+import { ICommercialRentalPropertyWithManager } from "@/src/GlobalTypes/Property/Commercial/RentalTypes";
+import { ILandPropertyWithManager } from "@/src/GlobalTypes/Property/Land/LandTypes";
+import { IResidentialPropertyForSaleWithManager } from "@/src/GlobalTypes/Property/Residential/ForSaleTypes";
+import { IResidentialRentalPropertyWithManager } from "@/src/GlobalTypes/Property/Residential/RentalTypes";
+import { IStandPropertyWithManager } from "@/src/GlobalTypes/Property/Stand/StandTypes";
 
-type Props = {
-  propertyType: IPropertyType;
-  isRefreshing: boolean;
-  areMorePropertiesLoading: boolean;
-  numberOfpages: number;
-  pageNumber: number;
-  loadMorehttpError: string;
-  handleRefresh: IVoidFunc;
-  loadMoreProperties: IVoidFunc;
-  setAreMorePropertiesLoading: React.Dispatch<React.SetStateAction<boolean>>;
-};
+type Props =
+  | {
+      propertyType: PropertyTypesEnum.ResidentialRentals;
+      isRefreshing: boolean;
+      numberOfpages: number;
+      pageNumber: number;
+      loadMorehttpError: string;
+      handleRefresh: IVoidFunc;
+      loadMoreProperties: IVoidFunc;
+      data: IResidentialRentalPropertyWithManager[];
+      setAreMorePropertiesLoading: React.Dispatch<
+        React.SetStateAction<boolean>
+      >;
+      areMorePropertiesLoading: boolean;
+      setTotalProperties?: React.Dispatch<React.SetStateAction<number>>;
+    }
+  | {
+      propertyType: PropertyTypesEnum.ResidentialForSale;
+      isRefreshing: boolean;
+      numberOfpages: number;
+      pageNumber: number;
+      loadMorehttpError: string;
+      handleRefresh: IVoidFunc;
+      loadMoreProperties: IVoidFunc;
+      data: IResidentialPropertyForSaleWithManager[];
+      setAreMorePropertiesLoading: React.Dispatch<
+        React.SetStateAction<boolean>
+      >;
+      areMorePropertiesLoading: boolean;
+      setTotalProperties?: React.Dispatch<React.SetStateAction<number>>;
+    }
+  | {
+      propertyType: PropertyTypesEnum.Land;
+      isRefreshing: boolean;
+      numberOfpages: number;
+      pageNumber: number;
+      loadMorehttpError: string;
+      handleRefresh: IVoidFunc;
+      loadMoreProperties: IVoidFunc;
+      data: ILandPropertyWithManager[];
+      setAreMorePropertiesLoading: React.Dispatch<
+        React.SetStateAction<boolean>
+      >;
+      areMorePropertiesLoading: boolean;
+      setTotalProperties?: React.Dispatch<React.SetStateAction<number>>;
+    }
+  | {
+      propertyType: PropertyTypesEnum.Stands;
+      isRefreshing: boolean;
+      numberOfpages: number;
+      pageNumber: number;
+      loadMorehttpError: string;
+      handleRefresh: IVoidFunc;
+      loadMoreProperties: IVoidFunc;
+      data: IStandPropertyWithManager[];
+      setAreMorePropertiesLoading: React.Dispatch<
+        React.SetStateAction<boolean>
+      >;
+      areMorePropertiesLoading: boolean;
+      setTotalProperties?: React.Dispatch<React.SetStateAction<number>>;
+    }
+  | {
+      propertyType: PropertyTypesEnum.CommercialForSale;
+      isRefreshing: boolean;
+      numberOfpages: number;
+      pageNumber: number;
+      loadMorehttpError: string;
+      handleRefresh: IVoidFunc;
+      loadMoreProperties: IVoidFunc;
+      data: ICommercialPropertyForSaleWithManager[];
+      setAreMorePropertiesLoading: React.Dispatch<
+        React.SetStateAction<boolean>
+      >;
+      areMorePropertiesLoading: boolean;
+      setTotalProperties?: React.Dispatch<React.SetStateAction<number>>;
+    }
+  | {
+      propertyType: PropertyTypesEnum.CommercialRentals;
+      isRefreshing: boolean;
+      numberOfpages: number;
+      pageNumber: number;
+      loadMorehttpError: string;
+      handleRefresh: IVoidFunc;
+      loadMoreProperties: IVoidFunc;
+      data: ICommercialRentalPropertyWithManager[];
+      setAreMorePropertiesLoading: React.Dispatch<
+        React.SetStateAction<boolean>
+      >;
+      areMorePropertiesLoading: boolean;
+      setTotalProperties?: React.Dispatch<React.SetStateAction<number>>;
+    };
 
-const PropertiesListTableView: React.FC<Props> = ({
+const PropertiesListTabletView: React.FC<Props> = ({
   pageNumber,
   numberOfpages,
   areMorePropertiesLoading,
@@ -37,16 +116,9 @@ const PropertiesListTableView: React.FC<Props> = ({
   loadMorehttpError,
   handleRefresh,
   setAreMorePropertiesLoading,
+  setTotalProperties,
+  data,
 }) => {
-  const {
-    rentalResidentialProperties,
-    rentalCommercialProperties,
-    standProperties,
-    landProperties,
-    onSaleCommercialProperties,
-    onSaleResidentialProperties,
-  } = usePropertiesContext();
-
   return (
     <>
       {propertyType === PropertyTypesEnum.ResidentialRentals && (
@@ -60,8 +132,9 @@ const PropertiesListTableView: React.FC<Props> = ({
           }
         >
           <View style={styles.largeScreenWrapper}>
-            {rentalResidentialProperties.map((property) => (
+            {data.map((property) => (
               <PropertyCard
+                setTotalProperties={setTotalProperties}
                 type={PropertyTypesEnum.ResidentialRentals}
                 key={property.id}
                 property={property}
@@ -102,8 +175,9 @@ const PropertiesListTableView: React.FC<Props> = ({
           }
         >
           <View style={styles.largeScreenWrapper}>
-            {onSaleResidentialProperties.map((property) => (
+            {data.map((property) => (
               <PropertyCard
+                setTotalProperties={setTotalProperties}
                 type={PropertyTypesEnum.ResidentialForSale}
                 key={property.id}
                 property={property}
@@ -144,8 +218,9 @@ const PropertiesListTableView: React.FC<Props> = ({
           }
         >
           <View style={styles.largeScreenWrapper}>
-            {onSaleCommercialProperties.map((property) => (
+            {data.map((property) => (
               <PropertyCard
+                setTotalProperties={setTotalProperties}
                 type={PropertyTypesEnum.CommercialForSale}
                 key={property.id}
                 property={property}
@@ -186,8 +261,9 @@ const PropertiesListTableView: React.FC<Props> = ({
           }
         >
           <View style={styles.largeScreenWrapper}>
-            {rentalCommercialProperties.map((property) => (
+            {data.map((property) => (
               <PropertyCard
+                setTotalProperties={setTotalProperties}
                 type={PropertyTypesEnum.CommercialRentals}
                 key={property.id}
                 property={property}
@@ -228,8 +304,9 @@ const PropertiesListTableView: React.FC<Props> = ({
           }
         >
           <View style={styles.largeScreenWrapper}>
-            {standProperties.map((property) => (
+            {data.map((property) => (
               <PropertyCard
+                setTotalProperties={setTotalProperties}
                 type={PropertyTypesEnum.Stands}
                 key={property.id}
                 property={property}
@@ -270,8 +347,9 @@ const PropertiesListTableView: React.FC<Props> = ({
           }
         >
           <View style={styles.largeScreenWrapper}>
-            {landProperties.map((property) => (
+            {data.map((property) => (
               <PropertyCard
+                setTotalProperties={setTotalProperties}
                 type={PropertyTypesEnum.Land}
                 key={property.id}
                 property={property}
@@ -305,7 +383,7 @@ const PropertiesListTableView: React.FC<Props> = ({
   );
 };
 
-export default PropertiesListTableView;
+export default PropertiesListTabletView;
 
 const styles = StyleSheet.create({
   largeScreenWrapper: {

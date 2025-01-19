@@ -7,17 +7,15 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import RegularText from "@/src/Components/RegularText/RegularText";
 import Row from "@/src/Components/Row/Row";
 import { primary } from "@/src/Theme/Colors";
-import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
+import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 
 type Props = {
   totalProperties: number;
+  activePropertyType: IPropertyType
 };
 
-const TotalProperties: React.FC<Props> = ({ totalProperties }) => {
-  const activePropertyType = useAppSelector(
-    (state) => state.activePropertyType.value
-  );
+const TotalProperties: React.FC<Props> = ({ totalProperties, activePropertyType }) => {
   return (
     <View style={styles.container}>
       <Row style={styles.row}>

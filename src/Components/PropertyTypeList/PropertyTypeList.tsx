@@ -6,7 +6,12 @@ import PropertyTypeItem from "./PropertyTypeItem/PropertyType";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 import { INoPropsReactComponent } from "@/src/GlobalTypes/Types";
 
-const PropertyTypeList: INoPropsReactComponent = () => {
+type Props = {
+  activePropertyType: IPropertyType;
+  setActivePropertyType: (activePropertyType:IPropertyType) => void
+}
+
+const PropertyTypeList: React.FC<Props> = ({activePropertyType,setActivePropertyType}) => {
   const flatlistRef = useRef<FlatList | null>(null);
   const propertyTypeList: IPropertyType[] = [
     PropertyTypesEnum.ResidentialRentals,
@@ -32,6 +37,8 @@ const PropertyTypeList: INoPropsReactComponent = () => {
         renderItem={({ item }) => (
           <PropertyTypeItem
             propertyType={item}
+            activePropertyType={activePropertyType}
+            setActivePropertyType={setActivePropertyType}
             onPressFlatListScrollFunc={() =>
               scrollToIndex(propertyTypeList.indexOf(item))
             }

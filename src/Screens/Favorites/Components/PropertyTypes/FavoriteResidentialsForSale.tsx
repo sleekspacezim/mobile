@@ -1,74 +1,53 @@
-import {
-  Animated,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { View, useWindowDimensions } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { usePropertiesContext } from "@/src/Context/PropertiesContext";
-import { usePropertyFiltersContext } from "@/src/Context/PropertyFiltersContext";
-import { useSharedContext } from "@/src/Context/SharedContext";
-import { useSortPropertiesContext } from "@/src/Context/SortPropertiesContext";
-import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import { PropertyTypesEnum, SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
-import { getAllStandsHttpFunc } from "@/src/HttpServices/Queries/Properties/PropertiesHttpFuncs";
+import { useFavoritesPropertiesContext } from "@/src/Context/FavoritesPropertiesContext";
 import EmptyPropertyList from "@/src/Components/EmptyPropertyList/EmptyPropertyList";
 import HttpError from "@/src/Components/HttpError/HttpError";
 import ReportModal from "@/src/Components/Modals/Report/ReportModal";
-import { animatedHeaderHeight } from "../../Utils/Constants";
-import LoadingSkeleton from "../LoadingSkeleton/LoadingSkeleton";
-import PropertiesListMobileView from "./Components/PropertiesListMobileView";
-import PropertiesListTabletView from "./Components/PropertiesListTabletView";
-import { propertyTypeStyles } from "./Shared/Styles";
+import { useSharedContext } from "@/src/Context/SharedContext";
+import { getResidentialPropertyForSaleFavoritesHttpFunc } from "@/src/HttpServices/Queries/Properties/FavoritesHttpFuncs";
+import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import LoadingSkeleton from "@/src/Screens/Home/Components/LoadingSkeleton/LoadingSkeleton";
+import { SCREEN_BREAK_POINT, PropertyTypesEnum } from "@/src/Utils/Constants";
+import FavoritesListMobileView from "../../../../Components/PropertiesListMobileView/PropertiesListMobileView";
+import FavoritesListTabletView from "../../../../Components/PropertiesListTabletView/PropertiesListTabletView";
+import { favoritePropertyTypeStyles } from "../Shared/Styles";
 
 type Props = {
   setTotalproperties: React.Dispatch<React.SetStateAction<number>>;
-  scrollAnimation: Animated.Value;
 };
 
-const StandsList: React.FC<Props> = ({
+const FavoriteResidentialsForSale: React.FC<Props> = ({
   setTotalproperties,
-  scrollAnimation,
 }) => {
+  const {
+    onSaleResidentialFavoriteProperties,
+    setOnSaleResidentialFavoriteProperties,
+  } = useFavoritesPropertiesContext();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [areMorePropertiesLoading, setAreMorePropertiesLoading] =
     useState<boolean>(false);
   const [loadMorehttpError, setloadMoreHttpError] = useState<string>("");
   const [httpError, setHttpError] = useState<string>("");
-  const { sortStandPropertiesBy } = useSortPropertiesContext();
-  const { openReportModal, setOpenReportModal, selectedProperty } =
-    useSharedContext();
-  const { standProperties, setStandProperties } = usePropertiesContext();
   const [numberOfpages, setNumberOfPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const { width } = useWindowDimensions();
-  const { accessToken } = useAppSelector((state) => state.user.value);
-  const {
-    priceFilter,
-    currencyFilter,
-    propertySizeFilter,
-    propertyStructureTypeFilter,
-  } = usePropertyFiltersContext();
-
+  const { openReportModal, setOpenReportModal, selectedProperty } =
+    useSharedContext();
+  const { accessToken, id } = useAppSelector((state) => state.user.value);
   const pageLimit = width > SCREEN_BREAK_POINT ? 30 : 12;
 
   const fetchProperties = () => {
-    getAllStandsHttpFunc({
+    getResidentialPropertyForSaleFavoritesHttpFunc({
       page: 1,
-      isUserLoggedIn: accessToken ? true : false,
       accessToken,
       pageLimit,
-      sortBy: sortStandPropertiesBy,
-      priceMax: priceFilter.stand.max,
-      priceMin: priceFilter.stand.min,
-      currency: currencyFilter.stand,
-      type: propertyStructureTypeFilter.stand,
-      sizeDimension: propertySizeFilter.stand.dimension,
-      sizeNumber: propertySizeFilter.stand.figure,
+      userId: id,
     })
       .then(({ data: { properties, totalPages, count } }) => {
-        setStandProperties(properties);
+        setOnSaleResidentialFavoriteProperties(properties);
         setNumberOfPages(totalPages);
         setTotalproperties(count);
         setPageNumber((value) => value + 1);
@@ -84,21 +63,14 @@ const StandsList: React.FC<Props> = ({
   };
 
   const refreshProperties = () => {
-    getAllStandsHttpFunc({
+    getResidentialPropertyForSaleFavoritesHttpFunc({
       page: 1,
-      isUserLoggedIn: accessToken ? true : false,
+      userId: id,
       accessToken,
       pageLimit,
-      sortBy: sortStandPropertiesBy,
-      priceMax: priceFilter.stand.max,
-      priceMin: priceFilter.stand.min,
-      currency: currencyFilter.stand,
-      type: propertyStructureTypeFilter.stand,
-      sizeDimension: propertySizeFilter.stand.dimension,
-      sizeNumber: propertySizeFilter.stand.figure,
     })
       .then(({ data: { properties, totalPages, count } }) => {
-        setStandProperties(properties);
+        setOnSaleResidentialFavoriteProperties(properties);
         setNumberOfPages(totalPages);
         setTotalproperties(count);
         setPageNumber((value) => value + 1);
@@ -116,21 +88,17 @@ const StandsList: React.FC<Props> = ({
   const loadMoreProperties = () => {
     setloadMoreHttpError("");
     if (numberOfpages >= pageNumber) {
-      getAllStandsHttpFunc({
+      getResidentialPropertyForSaleFavoritesHttpFunc({
         page: pageNumber,
-        isUserLoggedIn: accessToken ? true : false,
+        userId: id,
         accessToken,
         pageLimit,
-        sortBy: sortStandPropertiesBy,
-        priceMax: priceFilter.land.max,
-        priceMin: priceFilter.land.min,
-        currency: currencyFilter.land,
-        type: propertyStructureTypeFilter.land,
-        sizeDimension: propertySizeFilter.land.dimension,
-        sizeNumber: propertySizeFilter.land.figure,
       })
         .then(({ data: { properties, totalPages, count } }) => {
-          setStandProperties([...standProperties, ...properties]);
+          setOnSaleResidentialFavoriteProperties([
+            ...onSaleResidentialFavoriteProperties,
+            ...properties,
+          ]);
           setNumberOfPages(totalPages);
           setTotalproperties(count);
           setPageNumber((value) => value + 1);
@@ -147,37 +115,31 @@ const StandsList: React.FC<Props> = ({
   };
 
   const handleRefresh = () => {
-    setPageNumber(1);
     setIsRefreshing(true);
+    setPageNumber(1);
+    setOnSaleResidentialFavoriteProperties([]);
     refreshProperties();
   };
 
   useEffect(() => {
     fetchProperties();
-  }, [
-    accessToken,
-    sortStandPropertiesBy,
-    priceFilter.stand,
-    currencyFilter.stand,
-    propertySizeFilter.stand,
-    propertyStructureTypeFilter.stand,
-  ]);
+  }, [accessToken, id]);
 
   useEffect(() => {
     if (httpError) setTotalproperties(0);
   }, [httpError]);
 
   const text =
-    "We currently do not have stands, please try again soon. Please checkout other property types in the meantime.";
+    "You currently do not have favorite residential properties on sale.";
 
   return (
-    <View style={propertyTypeStyles.container}>
-      {isLoading && <LoadingSkeleton addAnimatedPaddingTop />}
+    <View style={favoritePropertyTypeStyles.container}>
+      {isLoading && <LoadingSkeleton />}
       {httpError && (
         <View
           style={{
             flex: 1,
-            paddingTop: width > SCREEN_BREAK_POINT ? 0 : animatedHeaderHeight,
+            paddingTop: 0,
           }}
         >
           <HttpError
@@ -189,44 +151,48 @@ const StandsList: React.FC<Props> = ({
           />
         </View>
       )}
-      {!httpError && !isLoading && standProperties.length < 1 && (
-        <View
-          style={{
-            flex: 1,
-            paddingTop: width > SCREEN_BREAK_POINT ? 0 : animatedHeaderHeight,
-          }}
-        >
-          <EmptyPropertyList text={text} />
-        </View>
-      )}
       {!httpError &&
         !isLoading &&
-        standProperties.length > 0 &&
+        onSaleResidentialFavoriteProperties.length < 1 && (
+          <View
+            style={{
+              flex: 1,
+              paddingTop: 0,
+            }}
+          >
+            <EmptyPropertyList text={text} />
+          </View>
+        )}
+      {!httpError &&
+        !isLoading &&
+        onSaleResidentialFavoriteProperties.length > 0 &&
         width <= SCREEN_BREAK_POINT && (
-          <PropertiesListMobileView
-            propertyType={PropertyTypesEnum.Stands}
+          <FavoritesListMobileView
+            propertyType={PropertyTypesEnum.ResidentialForSale}
             loadMorehttpError={loadMorehttpError}
             pageNumber={pageNumber}
+            data={onSaleResidentialFavoriteProperties}
             numberOfpages={numberOfpages}
             isRefreshing={isRefreshing}
-            scrollAnimation={scrollAnimation}
             loadMoreProperties={loadMoreProperties}
             handleRefresh={handleRefresh}
+            setTotalProperties={setTotalproperties}
           />
         )}
       {!httpError &&
         !isLoading &&
-        standProperties.length > 0 &&
+        onSaleResidentialFavoriteProperties.length > 0 &&
         width > SCREEN_BREAK_POINT && (
-          <PropertiesListTabletView
-            propertyType={PropertyTypesEnum.Stands}
+          <FavoritesListTabletView
+            propertyType={PropertyTypesEnum.ResidentialForSale}
             loadMorehttpError={loadMorehttpError}
             pageNumber={pageNumber}
+            data={onSaleResidentialFavoriteProperties}
             numberOfpages={numberOfpages}
-            areMorePropertiesLoading={areMorePropertiesLoading}
             isRefreshing={isRefreshing}
             loadMoreProperties={loadMoreProperties}
             handleRefresh={handleRefresh}
+            areMorePropertiesLoading={areMorePropertiesLoading}
             setAreMorePropertiesLoading={setAreMorePropertiesLoading}
           />
         )}
@@ -244,5 +210,4 @@ const StandsList: React.FC<Props> = ({
   );
 };
 
-export default StandsList;
-
+export default FavoriteResidentialsForSale;

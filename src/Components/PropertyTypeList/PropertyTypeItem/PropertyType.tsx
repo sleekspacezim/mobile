@@ -11,22 +11,22 @@ import { setActivePropertyType } from "@/src/Redux/Slices/ActivePropertyTypeSlic
 
 type Props = {
   propertyType: IPropertyType;
+  activePropertyType: IPropertyType;
+  setActivePropertyType: (activePropertyType:IPropertyType) => void
   onPressFlatListScrollFunc: IVoidFunc;
 };
 
 const PropertyTypeItem: React.FC<Props> = ({
   propertyType,
+  activePropertyType,
+  setActivePropertyType,
   onPressFlatListScrollFunc,
 }) => {
-  const activePropertyType = useAppSelector(
-    (state) => state.activePropertyType.value
-  );
   const theme = useAppSelector((state) => state.theme.value);
-  const dispatch = useAppDispatch();
   return (
     <TouchableOpacity
       onPress={() => {
-        dispatch(setActivePropertyType(propertyType));
+        setActivePropertyType(propertyType)
         onPressFlatListScrollFunc();
       }}
       activeOpacity={activeOpacityOfTouchableOpacity}

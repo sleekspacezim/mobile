@@ -4,7 +4,6 @@ import React from "react";
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import ThreeDots from "@/src/Components/ThreeDots/ThreeDots";
-import { PropertyTypesEnum } from "@/src/Utils/Constants";
 import FavoriteContainer from "../FavoriteContainer/FavoriteContainer";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
@@ -16,6 +15,7 @@ type Props = {
   id: number;
   managerId: number;
   propertyType:IPropertyType
+  setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
 };
 
 const TypeDotsAndFavorite: React.FC<Props> = ({
@@ -24,7 +24,8 @@ const TypeDotsAndFavorite: React.FC<Props> = ({
   id,
   isFavorite,
   managerId,
-  propertyType
+  propertyType,
+  setTotalProperties
 }) => {
   const user = useAppSelector((state) => state.user.value);
   return (
@@ -36,6 +37,7 @@ const TypeDotsAndFavorite: React.FC<Props> = ({
             propertyId={id}
             isPropertyFavorite={isFavorite}
             propertyType={propertyType}
+            setTotalProperties={setTotalProperties}
           />
         )}
         <ThreeDots
