@@ -18,7 +18,7 @@ import useNavigateToProperty from "../../Hooks/useNavigateToProperty";
 import { cardInfoStyles } from "./Shared/styles";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { green, primary, red } from "@/src/Theme/Colors";
-import IconContainer from "./IconContainer/IconContainer";
+import IconContainer from "../../../IconContainer/IconContainer";
 import { iconSize } from "./Shared/Contants";
 import RegularText from "@/src/Components/RegularText/RegularText";
 import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";

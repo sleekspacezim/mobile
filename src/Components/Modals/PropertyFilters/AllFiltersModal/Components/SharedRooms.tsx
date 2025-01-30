@@ -1,10 +1,10 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
+import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { primary, lighterPrimary, gray } from "@/src/Theme/Colors";
-import { Ionicons, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import Divider from "./Divider";
 import { sharedRoomsFilterStyles } from "@/src/Screens/Home/Components/AnimatedListHeader/Filters/Shared/Styles";
 import {

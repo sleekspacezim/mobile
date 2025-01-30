@@ -1,4 +1,5 @@
 import { IManagerAccount } from "../../Manager/ManagerTypes";
+import { IStatus, ICurrency } from "../Common";
 import { IPropertyInsights } from "../Insights/InsightsTypes";
 import {
   IPropertyLocation,

@@ -6,6 +6,9 @@ import Screen from "@/src/Components/ScreenWrapper/Screen";
 import { INoPropsReactComponent } from "@/src/GlobalTypes/Types";
 import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
+import { SafeAreaView } from "react-native-safe-area-context";
+import ResidentialRentalProperty from "./PropertyTypes/ResidentialRentalProperty";
+import StackScreen from "@/src/Components/StackScreenWrapper/StackScreen";
 
 const Property: INoPropsReactComponent = () => {
   const { propertyType, id } = useLocalSearchParams<{
@@ -14,16 +17,24 @@ const Property: INoPropsReactComponent = () => {
   }>();
   return (
     <Screen>
-      <Text>{propertyType}</Text>
-      <Text>{id}</Text>
-      <CustomButton
-        title="update"
-        onPressFunc={() => router.push("/property/update/" + id)}
-      />
+      <StackScreen>
+        <View style={styles.container}>
+        <ResidentialRentalProperty propertyId={Number(id)} />
+        <CustomButton
+          title="update"
+          onPressFunc={() => router.push("/property/update/" + id)}
+        />
+        </View>
+      </StackScreen>
     </Screen>
   );
 };
 
 export default Property;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 10,
+    flex: 1,
+  },
+});

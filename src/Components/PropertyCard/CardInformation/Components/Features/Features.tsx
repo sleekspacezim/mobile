@@ -13,7 +13,7 @@ import RegularText from "@/src/Components/RegularText/RegularText";
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { green, primary, red } from "@/src/Theme/Colors";
-import IconContainer from "../IconContainer/IconContainer";
+import IconContainer from "../../../../IconContainer/IconContainer";
 import { iconSize } from "../Shared/Contants";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
 

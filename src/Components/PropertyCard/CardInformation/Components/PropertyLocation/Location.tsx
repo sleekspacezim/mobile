@@ -5,7 +5,7 @@ import { EvilIcons } from "@expo/vector-icons";
 import RegularText from "@/src/Components/RegularText/RegularText";
 import Row from "@/src/Components/Row/Row";
 import { primary } from "@/src/Theme/Colors";
-import IconContainer from "../IconContainer/IconContainer";
+import IconContainer from "../../../../IconContainer/IconContainer";
 import { shortenString } from "@/src/Utils/Funcs";
 import { SCREEN_BREAK_POINT } from "@/src/Utils/Constants";
 import { iconSize } from "../Shared/Contants";

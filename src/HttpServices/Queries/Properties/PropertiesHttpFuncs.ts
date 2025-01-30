@@ -34,7 +34,7 @@ const controller = new AbortController();
 export const getCommercialPropertyForSaleHttpFunc = (requestData: {
   propertyId: number;
 }) => {
-  return axios.get<{ response: ICommercialPropertyForSale }>(
+  return axios.get<{ response: ICommercialPropertyForSaleWithManager }>(
     `${commercialPropertiesForSaleRoutes.getUpdateAndDeleteCommercialPropertyForSale}/${requestData.propertyId}`
   );
 };
@@ -72,7 +72,7 @@ export const getCommercialRentalPropertyHttpFunc = (requestData: {
   propertyId: number;
 }) => {
   return axios.get<{
-    response: ICommercialRentalProperty;
+    response: ICommercialRentalPropertyWithManager;
   }>(
     `${commercialRentalPropertiesRoutes.getUpdateAndDeleteCommercialRentalProperty}/${requestData.propertyId}`
   );
@@ -111,7 +111,7 @@ export const getAllCommercialRentalPropertiesHttpFunc = (requestData: {
 export const getResidentialRentalPropertyHttpFunc = (requestData: {
   propertyId: number;
 }) => {
-  return axios.get<{ response: IResidentialRentalProperty }>(
+  return axios.get<{ response: IResidentialRentalPropertyWithManager }>(
     `${residentialRentalPropertiesRoutes.getUpdateAndDeleteResidentialRentalProperty}/${requestData.propertyId}`
   );
 };
@@ -152,7 +152,7 @@ export const getResidentialPropertyForSaleHttpFunc = (requestData: {
   propertyId: number;
 }) => {
   return axios.get<{
-    response: IResidentialPropertyForSale;
+    response: IResidentialPropertyForSaleWithManager;
   }>(
     `${residentialPropertiesForSaleRoutes.getUpdateAndDeleteResidentialPropertyForSale}/${requestData.propertyId}`
   );
@@ -192,7 +192,7 @@ export const getAllResidentialPropertiesForSaleHttpFunc = (requestData: {
 export const getStandPropertyHttpFunc = (requestData: {
   propertyId: number;
 }) => {
-  return axios.get<{ response: IStandProperty }>(
+  return axios.get<{ response: IStandPropertyWithManager }>(
     `${standRoutes.getAllGetOnePostDeleteAndUpdateStand}/${requestData.propertyId}`
   );
 };
@@ -228,7 +228,7 @@ export const getAllStandsHttpFunc = (requestData: {
 export const getLandPropertyHttpFunc = (requestData: {
   propertyId: number;
 }) => {
-  return axios.get<{ response: ILandProperty }>(
+  return axios.get<{ response: ILandPropertyWithManager }>(
     `${landRoutes.getAllGetOnePostDeleteAndUpdateLand}/${requestData.propertyId}`
   );
 };

@@ -10,7 +10,6 @@ import PropertyLocationInput from "@/src/Components/PropertyLocationInput/Proper
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import { PropertyTypesEnum } from "@/src/Utils/Constants";
 import { IGeneralInfoFormError, ILandGeneralInfo } from "../Types/FormTypes";
 import { ICurrency } from "@/src/GlobalTypes/Property/Common";
 
