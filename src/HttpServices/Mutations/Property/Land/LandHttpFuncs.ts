@@ -36,7 +36,7 @@ export const deleteLandHttpFunc = (requestData: {
   propertyId: number;
   accessToken: string;
 }) => {
-  return axios.delete(
+  return axios.delete<{ response: string }>(
     `${landRoutes.getAllGetOnePostDeleteAndUpdateLand}/${requestData.propertyId}`,
     {
       headers: { Authorization: `Bearer ${requestData.accessToken}` },

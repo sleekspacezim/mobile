@@ -6,7 +6,6 @@ import {
 } from "react-native";
 import React from "react";
 
-import { INoPropsReactComponent } from "@/src/GlobalTypes/Types";
 import SkeletonLoader from "@/src/Components/SkeletonLoader/SkeletonLoader";
 import { animatedHeaderHeight } from "../../Utils/Constants";
 

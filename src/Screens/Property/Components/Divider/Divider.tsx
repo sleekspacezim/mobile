@@ -11,6 +11,7 @@ const Divider = () => {
       style={{
         borderWidth: 1,
         borderColor: theme === "dark" ? dark.darkGray : lightGray,
+        marginBottom:10
       }}
     />
   );

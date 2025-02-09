@@ -284,3 +284,12 @@ export const removeBlankSpacesFromWordsInAnArray: (
   }
   return resultArray;
 };
+
+export const getPropertyLocationSurburb: (
+  location: string,
+  city: string
+) => string = (location: string, city: string) => {
+  let array = removeBlankSpacesFromWordsInAnArray(location.split(","));
+  let cityIndex = array.indexOf(city);
+  return array.splice(0, cityIndex).join(",");
+};

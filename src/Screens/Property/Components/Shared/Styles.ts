@@ -5,7 +5,8 @@ export const propertyTypeStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     width: "100%",
-    paddingBottom: 10,
+    paddingBottom: 77,
+    position:"relative"
   },
 });
 

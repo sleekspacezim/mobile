@@ -34,6 +34,7 @@ import useUpdatePropertyFavorite from "@/src/Components/PropertyCard/Hooks/useUp
 import Row from "@/src/Components/Row/Row";
 import { useSharedContext } from "@/src/Context/SharedContext";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
+import useUpdateProperty from "@/src/Screens/Property/Hooks/useUpdateProperty";
 
 type Props = {
   closeBottomSheetWithoutScrollingToTheBottom: () => void;
@@ -59,6 +60,15 @@ const PropertyCardOptions: React.FC<Props> = ({
     updateRentalResidentialProperties,
     updateStandProperties,
   } = useUpdatePropertyFavorite(selectedProperty.id);
+
+  const {
+    updateLandProperty,
+    updateOnSaleCommercialProperty,
+    updateOnSaleResidentialProperty,
+    updateRentalCommercialProperty,
+    updateRentalResidentialProperty,
+    updateStandProperty,
+  } = useUpdateProperty();
 
   const onShare = async () => {
     closeBottomSheetWithoutScrollingToTheBottom();
@@ -103,17 +113,25 @@ const PropertyCardOptions: React.FC<Props> = ({
   };
 
   const updatePropertyFavorite = () => {
-    if (selectedProperty.type === PropertyTypesEnum.CommercialForSale)
+    if (selectedProperty.type === PropertyTypesEnum.CommercialForSale) {
       updateOnSaleCommercialProperties();
-    else if (selectedProperty.type === PropertyTypesEnum.CommercialRentals)
+      updateOnSaleCommercialProperty();
+    } else if (selectedProperty.type === PropertyTypesEnum.CommercialRentals) {
       updateRentalCommercialProperties();
-    else if (selectedProperty.type === PropertyTypesEnum.ResidentialRentals)
+      updateRentalCommercialProperty();
+    } else if (selectedProperty.type === PropertyTypesEnum.ResidentialRentals) {
       updateRentalResidentialProperties();
-    else if (selectedProperty.type === PropertyTypesEnum.ResidentialForSale)
+      updateRentalResidentialProperty();
+    } else if (selectedProperty.type === PropertyTypesEnum.ResidentialForSale) {
       updateOnSaleResidentialProperties();
-    else if (selectedProperty.type === PropertyTypesEnum.Land)
+      updateOnSaleResidentialProperty();
+    } else if (selectedProperty.type === PropertyTypesEnum.Land) {
       updateLandProperties();
-    else return updateStandProperties();
+      updateLandProperty();
+    } else {
+      updateStandProperties();
+      updateStandProperty();
+    }
   };
 
   const addFavoritePropertyMutation = useMutation({

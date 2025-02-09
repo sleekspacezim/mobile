@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   counterContainer: {
     position: "absolute",
     top: 10,
-    right: 10,
+    right: 20,
     backgroundColor: "rgba(0,0,0,0.7)",
     width: 40,
     borderRadius: 5,

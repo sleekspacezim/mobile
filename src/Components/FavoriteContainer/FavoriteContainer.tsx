@@ -21,16 +21,18 @@ import {
   removeLandFavoritePropertyHttpFunc,
   removeStandFavoritePropertyHttpFunc,
 } from "@/src/HttpServices/Mutations/Property/Favorites/FavoritesHttpFuncs";
-import useUpdatePropertyFavorite from "../../../Hooks/useUpdatePropertyFavorite";
+import useUpdatePropertyFavorite from "../PropertyCard/Hooks/useUpdatePropertyFavorite";
 import MessageModal from "@/src/Components/Modals/MessageModal";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
+import { IVoidFunc } from "@/src/GlobalTypes/Types";
+import useUpdateProperty from "@/src/Screens/Property/Hooks/useUpdateProperty";
 
 type Props = {
   propertyId: number;
   isPropertyFavorite: boolean;
   propertyType: IPropertyType;
   setTotalProperties?: React.Dispatch<React.SetStateAction<number>>;
-};
+}
 
 type IPropertyLoading = {
   propertyId: number;
@@ -59,6 +61,11 @@ const FavoriteContainer: React.FC<Props> = ({
     updateRentalResidentialProperties,
     updateStandProperties,
   } = useUpdatePropertyFavorite(loader.propertyId);
+
+  const {
+    updateLandProperty,
+    updateOnSaleCommercialProperty,updateOnSaleResidentialProperty,updateRentalCommercialProperty,updateRentalResidentialProperty,updateStandProperty
+  } = useUpdateProperty()
 
   const addFavoritePropertyMutationFn = () => {
     if (propertyType === PropertyTypesEnum.CommercialForSale)
@@ -93,26 +100,32 @@ const FavoriteContainer: React.FC<Props> = ({
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateOnSaleCommercialProperties();
+      updateOnSaleCommercialProperty()
     } else if (propertyType === PropertyTypesEnum.CommercialRentals) {
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateRentalCommercialProperties();
+      updateRentalCommercialProperty()
     } else if (propertyType === PropertyTypesEnum.ResidentialRentals) {
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateRentalResidentialProperties();
+      updateRentalResidentialProperty()
     } else if (propertyType === PropertyTypesEnum.ResidentialForSale) {
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateOnSaleResidentialProperties();
+      updateOnSaleResidentialProperty()
     } else if (propertyType === PropertyTypesEnum.Land) {
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateLandProperties();
+      updateLandProperty()
     } else {
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateStandProperties();
+      updateStandProperty()
     }
   };
 
@@ -173,6 +186,7 @@ const FavoriteContainer: React.FC<Props> = ({
           userId: id,
         });
   };
+  //console.log("isfavorite",propertyId)
   return (
     <>
       {accessToken ? (

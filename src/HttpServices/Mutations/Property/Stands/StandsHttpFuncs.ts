@@ -36,7 +36,7 @@ export const deleteStandHttpFunc = (requestData: {
   propertyId: number;
   accessToken: string;
 }) => {
-  return axios.delete(
+  return axios.delete<{ response: string }>(
     `${standRoutes.getAllGetOnePostDeleteAndUpdateStand}/${requestData.propertyId}`,
     {
       headers: { Authorization: `Bearer ${requestData.accessToken}` },

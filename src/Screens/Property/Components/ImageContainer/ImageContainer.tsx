@@ -36,13 +36,18 @@ const ImageContainer: React.FC<Props> = ({ propertyType, media }) => {
       return residentialRentalImage;
     else return standImage;
   };
-  const borderColor = theme === "dark" ? dark.darkGray : lightGray
-  const height = width > SCREEN_BREAK_POINT ? 400 : 350
+  const borderColor = theme === "dark" ? dark.darkGray : lightGray;
+  const height = width > SCREEN_BREAK_POINT ? 400 : 350;
   return (
-    <View style={[styles.image,{
-      borderColor: borderColor,
-      height: height,
-    }]}>
+    <View
+      style={[
+        styles.image,
+        {
+          borderColor: borderColor,
+          height: height,
+        },
+      ]}
+    >
       {media.length > 0 ? (
         <FlatList
           data={media}
@@ -62,7 +67,7 @@ const ImageContainer: React.FC<Props> = ({ propertyType, media }) => {
       ) : (
         <Image
           source={placeholderImage()}
-          style={{height:height}}
+          style={{ height: height }}
           contentFit="contain"
         />
       )}
@@ -74,7 +79,7 @@ export default ImageContainer;
 
 const styles = StyleSheet.create({
   image: {
-    borderRadius:10,
+    borderRadius: 10,
     borderWidth: 1,
-  }
+  },
 });

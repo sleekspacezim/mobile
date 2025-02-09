@@ -4,7 +4,7 @@ import React from "react";
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import ThreeDots from "@/src/Components/ThreeDots/ThreeDots";
-import FavoriteContainer from "../FavoriteContainer/FavoriteContainer";
+import FavoriteContainer from "../../../../FavoriteContainer/FavoriteContainer";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 

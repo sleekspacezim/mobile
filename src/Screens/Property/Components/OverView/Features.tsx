@@ -23,10 +23,12 @@ import PostedTime from "./Components/PostedTime";
 import Pool from "./Components/Pool";
 import PublicUtilities from "./Components/PublicUtilities";
 import Negotiability from "./Components/Negotiability";
-import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import { dark, lightGray } from "@/src/Theme/Colors";
 import Status from "./Components/Status";
 import Divider from "../Divider/Divider";
+import Row from "@/src/Components/Row/Row";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { gray, primary } from "@/src/Theme/Colors";
+import Heading from "../Heading/Heading";
 
 type Props =
   | {
@@ -54,11 +56,19 @@ type Props =
       property: ICommercialRentalPropertyWithManager;
     };
 
-const Overview: React.FC<Props> = ({ property, propertyType }) => {
-  const theme = useAppSelector((state) => state.theme.value);
+const Features: React.FC<Props> = ({ property, propertyType }) => {
   return (
     <View style={styles.container}>
-      <ThemedText type="header">Overview</ThemedText>
+      <Heading
+        title="Features"
+        icon={
+          <MaterialCommunityIcons
+            name="eye-circle-outline"
+            size={26}
+            color={primary}
+          />
+        }
+      />
       <View style={styles.subContainer}>
         {propertyType === PropertyTypesEnum.CommercialRentals ||
         propertyType === PropertyTypesEnum.ResidentialRentals ? (
@@ -151,19 +161,20 @@ const Overview: React.FC<Props> = ({ property, propertyType }) => {
             <YearBuilt year={property.yearBuilt} />
           )}
         <Type type={property.type} />
+        <Status status={property.status} />
         <PostedTime timePosted={property.postedTime} />
-        <Status status={property.status}/>
       </View>
-      <Divider/>
+      <Divider />
     </View>
   );
 };
 
-export default Overview;
+export default Features;
 
 const styles = StyleSheet.create({
   container: {
     gap: 10,
+    paddingTop:10
   },
   subContainer: {
     flexWrap: "wrap",
