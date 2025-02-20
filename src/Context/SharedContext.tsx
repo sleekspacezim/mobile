@@ -12,7 +12,8 @@ export type ISelectedPropertyDetails = {
   managerId: number;
   type: IPropertyType | "";
   isFavorite: boolean;
-  userId:number;
+  userId: number;
+  propertyUniqueId: number;
 };
 
 const SharedContext = createContext<{
@@ -25,9 +26,10 @@ const SharedContext = createContext<{
   selectedProperty: {
     id: 0,
     managerId: 0,
-    userId:0,
+    userId: 0,
     type: "",
-    isFavorite:false
+    isFavorite: false,
+    propertyUniqueId: 0,
   },
   setSelectedProperty: () => {},
   setOpenReportModal: () => {},
@@ -43,9 +45,10 @@ export const SharedContextProvider = ({
     useState<ISelectedPropertyDetails>({
       id: 0,
       managerId: 0,
-      userId:0,
+      userId: 0,
       type: "",
-      isFavorite:false
+      isFavorite: false,
+      propertyUniqueId: 0,
     });
   return (
     <SharedContext.Provider

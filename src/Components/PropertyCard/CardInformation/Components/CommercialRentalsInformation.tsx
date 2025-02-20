@@ -10,10 +10,10 @@ import ManagerImage from './ManagerImage/ManagerImage';
 import NameRentOrPrice from './NameRentOrPrice/NameRentOrPrice';
 import TypeDotsAndFavorite from './TypeDotsAndFavorite/TypeDotsAndFavorite';
 import CustomButton from '@/src/Components/Buttons/Custom/CustomButton';
-import { red } from '@/src/Theme/Colors';
 import Features from './Features/Features';
 import PostTimeAndStatus from './PostTimeAndStatus/PostTimeAndStatus';
 import Location from './PropertyLocation/Location';
+import { processSizeDimensions } from './Shared/Funcs';
 
 type Props = {
   property: ICommercialRentalPropertyWithManager;
@@ -26,6 +26,7 @@ const CommercialRentalsInformation:React.FC<Props> = ({
   setTotalProperties,
   property: {
     id,
+    uniqueId,
     postedTime,
     numberOfRoomsToLet,
     type,
@@ -51,16 +52,6 @@ const CommercialRentalsInformation:React.FC<Props> = ({
       id
     );
     const {details,btnContainer,infoContainer} = cardInfoStyles
-    
-    const processSizeDimensions = () => {
-      if (sizeDimensions === "Acres") {
-        if (sizeNumber === 1) return "Acre";
-        else return sizeDimensions;
-      }
-      if (sizeDimensions === "Square meters") return "m²";
-      if (sizeDimensions === "Hectares") return "Ha";
-      else return sizeDimensions;
-    };
   
     const processRoomsText = () => {
       if (isFullSpace) return "Full Space";
@@ -68,11 +59,6 @@ const CommercialRentalsInformation:React.FC<Props> = ({
         if (numberOfRoomsToLet === 1) return "Room to rent";
         else return "Rooms to rent";
       }
-    };
-  
-    const processTotalRoomsText = () => {
-      if (numberOfRooms === 1) return "Total room";
-      else return "Total rooms";
     };
   
   return (
@@ -88,6 +74,7 @@ const CommercialRentalsInformation:React.FC<Props> = ({
               propertyType={PropertyTypesEnum.CommercialRentals}
               managerId={managerId}
               type={type}
+              propertyUniqueId={uniqueId}
               setTotalProperties={setTotalProperties}
             />
             <NameRentOrPrice
@@ -103,11 +90,11 @@ const CommercialRentalsInformation:React.FC<Props> = ({
         <Features
           featureOne={numberOfRoomsToLet}
           featureOneText={processRoomsText()}
-          featureTwo={numberOfRooms}
-          featureTwoText={processTotalRoomsText()}
+          featureTwo={type}
+          featureTwoText={"Type"}
           propertyType={PropertyTypesEnum.CommercialRentals}
           sizeNumber={sizeNumber}
-          dimension={processSizeDimensions()}
+          dimension={processSizeDimensions(sizeDimensions,sizeNumber)}
           isFullHouseOrSpace={isFullSpace}
         />
         <Location displayName={displayName} />

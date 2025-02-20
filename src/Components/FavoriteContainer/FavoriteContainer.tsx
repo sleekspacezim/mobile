@@ -24,15 +24,16 @@ import {
 import useUpdatePropertyFavorite from "../PropertyCard/Hooks/useUpdatePropertyFavorite";
 import MessageModal from "@/src/Components/Modals/MessageModal";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
-import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import useUpdateProperty from "@/src/Screens/Property/Hooks/useUpdateProperty";
+import { updateAndIncreamentPropertyInsightsByPropertyIdHttpFunc } from "@/src/HttpServices/Mutations/Property/Insights/InsightsHttpFunc";
 
 type Props = {
   propertyId: number;
   isPropertyFavorite: boolean;
   propertyType: IPropertyType;
+  propertyUniqueId: number;
   setTotalProperties?: React.Dispatch<React.SetStateAction<number>>;
-}
+};
 
 type IPropertyLoading = {
   propertyId: number;
@@ -43,6 +44,7 @@ const FavoriteContainer: React.FC<Props> = ({
   propertyId,
   isPropertyFavorite,
   propertyType,
+  propertyUniqueId,
   setTotalProperties,
 }) => {
   const [loader, setLoader] = useState<IPropertyLoading>({
@@ -64,8 +66,12 @@ const FavoriteContainer: React.FC<Props> = ({
 
   const {
     updateLandProperty,
-    updateOnSaleCommercialProperty,updateOnSaleResidentialProperty,updateRentalCommercialProperty,updateRentalResidentialProperty,updateStandProperty
-  } = useUpdateProperty()
+    updateOnSaleCommercialProperty,
+    updateOnSaleResidentialProperty,
+    updateRentalCommercialProperty,
+    updateRentalResidentialProperty,
+    updateStandProperty,
+  } = useUpdateProperty();
 
   const addFavoritePropertyMutationFn = () => {
     if (propertyType === PropertyTypesEnum.CommercialForSale)
@@ -100,32 +106,32 @@ const FavoriteContainer: React.FC<Props> = ({
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateOnSaleCommercialProperties();
-      updateOnSaleCommercialProperty()
+      updateOnSaleCommercialProperty();
     } else if (propertyType === PropertyTypesEnum.CommercialRentals) {
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateRentalCommercialProperties();
-      updateRentalCommercialProperty()
+      updateRentalCommercialProperty();
     } else if (propertyType === PropertyTypesEnum.ResidentialRentals) {
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateRentalResidentialProperties();
-      updateRentalResidentialProperty()
+      updateRentalResidentialProperty();
     } else if (propertyType === PropertyTypesEnum.ResidentialForSale) {
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateOnSaleResidentialProperties();
-      updateOnSaleResidentialProperty()
+      updateOnSaleResidentialProperty();
     } else if (propertyType === PropertyTypesEnum.Land) {
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateLandProperties();
-      updateLandProperty()
+      updateLandProperty();
     } else {
       if (setTotalProperties !== undefined)
         setTotalProperties((prev) => prev - 1);
       updateStandProperties();
-      updateStandProperty()
+      updateStandProperty();
     }
   };
 
@@ -169,24 +175,44 @@ const FavoriteContainer: React.FC<Props> = ({
     },
   });
 
+  const updatePropertyInsightsOnAddFavorite = useMutation({
+      mutationFn: updateAndIncreamentPropertyInsightsByPropertyIdHttpFunc,
+      onSettled: () => {
+        addFavoritePropertyMutation.mutate({
+          favouritePropertyId: propertyId,
+          accessToken,
+          userId: id,
+        });
+      },
+    });
+  
+    const updatePropertyInsightsOnRemoveFavorite = useMutation({
+      mutationFn: updateAndIncreamentPropertyInsightsByPropertyIdHttpFunc,
+      onSettled: () => {
+        removeFavoritePropertyMutation.mutate({
+          favouritePropertyId: propertyId,
+          accessToken,
+          userId: id,
+        });
+      },
+    });
+
   const toggleFavorite = () => {
     setLoader({
       isLoading: true,
       propertyId: propertyId,
     });
     isPropertyFavorite
-      ? removeFavoritePropertyMutation.mutate({
-          favouritePropertyId: propertyId,
-          accessToken,
-          userId: id,
-        })
-      : addFavoritePropertyMutation.mutate({
-          favouritePropertyId: propertyId,
-          accessToken,
-          userId: id,
+      ? updatePropertyInsightsOnRemoveFavorite.mutate({
+        propertyId: propertyUniqueId,
+        data: { insightProperty: "removedFromFavourites" },
+      })
+      : updatePropertyInsightsOnAddFavorite.mutate({
+        propertyId: propertyUniqueId,
+        data: { insightProperty: "addedToFavourites" },
         });
   };
-  //console.log("isfavorite",propertyId)
+
   return (
     <>
       {accessToken ? (

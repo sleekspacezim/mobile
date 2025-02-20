@@ -111,7 +111,7 @@ export const generalPropertyInfoIntialState: ICommercialForSaleGeneralInfo = {
   sizeNumber: "",
   numberOfRooms: "",
   type: "Shop",
-  sizeDimensions: "Square meters",
+  sizeDimensions: "m²",
   yearBuilt: "",
   storeys: "1",
   currency: "US$",

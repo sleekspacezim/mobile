@@ -43,6 +43,7 @@ import {
   ISortStandOptions,
 } from "@/src/Context/SortPropertiesContext";
 import { ICurrency, IDimensions } from "@/src/GlobalTypes/Property/Common";
+import { IPropertyInsights } from "@/src/GlobalTypes/Property/Insights/InsightsTypes";
 
 const controller = new AbortController();
 
@@ -99,7 +100,7 @@ export const getCommercialRentalPropertyHttpFunc = (requestData: {
     response: ICommercialRentalPropertyWithManager;
   }>(
     requestData.isUserLoggedIn
-      ? `${commercialRentalPropertiesRoutes.getUpdateAndDeleteCommercialRentalProperty}/logged-in${requestData.propertyId}`
+      ? `${commercialRentalPropertiesRoutes.getUpdateAndDeleteCommercialRentalProperty}/logged-in/${requestData.propertyId}`
       : `${commercialRentalPropertiesRoutes.getUpdateAndDeleteCommercialRentalProperty}/${requestData.propertyId}`,
     {
       headers: { Authorization: `Bearer ${requestData.accessToken}` },
@@ -322,7 +323,7 @@ export const getPropertyInsightsByPropertyIdHttpFunc = (requestData: {
   propertyId: number;
   accessToken: string;
 }) => {
-  return axios.get(
+  return axios.get<{response:IPropertyInsights}>(
     `${propertyInsightsRoutes.getPropertyInsightsByPropertyId}/${requestData.propertyId}`,
     {
       headers: { Authorization: `Bearer ${requestData.accessToken}` },
@@ -335,7 +336,7 @@ export const getPropertyInsightsByIdHttpFunc = (requestData: {
   accessToken: string;
 }) => {
   return axios.get(
-    `${propertyInsightsRoutes.getPropertyInsightsByPropertyId}/${requestData.insightId}`,
+    `${propertyInsightsRoutes.getAndUpdatePropertyInsights}/${requestData.insightId}`,
     {
       headers: { Authorization: `Bearer ${requestData.accessToken}` },
     }

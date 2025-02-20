@@ -15,6 +15,7 @@ import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";
 import { red } from "@/src/Theme/Colors";
 import Features from "./Features/Features";
 import PostTimeAndStatus from "./PostTimeAndStatus/PostTimeAndStatus";
+import { processSizeDimensions } from "./Shared/Funcs";
 
 type Props = {
   property: IResidentialPropertyForSaleWithManager;
@@ -31,6 +32,7 @@ const ResidentialForSaleInformation: React.FC<Props> = ({
     type,
     currency,
     price,
+    uniqueId,
     sizeNumber,
     bedrooms,
     sizeDimensions,
@@ -56,15 +58,6 @@ const ResidentialForSaleInformation: React.FC<Props> = ({
     if (bedrooms === 1) return "Bedroom";
     else return "Bedrooms";
   };
-  const processSizeDimensions = () => {
-    if (sizeDimensions === "Acres") {
-      if (sizeNumber === 1) return "Acre";
-      else return sizeDimensions;
-    }
-    if (sizeDimensions === "Square meters") return "m²";
-    if (sizeDimensions === "Hectares") return "Ha";
-    else return sizeDimensions;
-  };
 
   const processTotalRoomsText = () => {
     if (numberOfRooms === 1) return "Total room";
@@ -84,6 +77,7 @@ const ResidentialForSaleInformation: React.FC<Props> = ({
               propertyType={PropertyTypesEnum.ResidentialForSale}
               managerId={managerId}
               type={type}
+              propertyUniqueId={uniqueId}
               setTotalProperties={setTotalProperties}
             />
             <NameRentOrPrice
@@ -103,7 +97,7 @@ const ResidentialForSaleInformation: React.FC<Props> = ({
           featureTwoText={processTotalRoomsText()}
           propertyType={PropertyTypesEnum.ResidentialForSale}
           sizeNumber={sizeNumber}
-          dimension={processSizeDimensions()}
+          dimension={processSizeDimensions(sizeDimensions,sizeNumber)}
         />
         <Location displayName={displayName} />
         <View style={details}>

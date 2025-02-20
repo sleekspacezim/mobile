@@ -15,6 +15,7 @@ import NameRentOrPrice from "./NameRentOrPrice/NameRentOrPrice";
 import Features from "./Features/Features";
 import PostTimeAndStatus from "./PostTimeAndStatus/PostTimeAndStatus";
 import { cardInfoStyles } from "./Shared/styles";
+import { processSizeDimensions } from "./Shared/Funcs";
 
 type Props = {
   property: IResidentialRentalPropertyWithManager;
@@ -38,6 +39,7 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
     isFullHouse,
     isFavorite,
     managerId,
+    uniqueId,
     status,
     manager: {
       profilePicture: { uri },
@@ -52,16 +54,6 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
     id
   );
   const {details,btnContainer,infoContainer} = cardInfoStyles
-  
-  const processSizeDimensions = () => {
-    if (sizeDimensions === "Acres") {
-      if (sizeNumber === 1) return "Acre";
-      else return sizeDimensions;
-    }
-    if (sizeDimensions === "Square meters") return "m²";
-    if (sizeDimensions === "Hectares") return "Ha";
-    else return sizeDimensions;
-  };
 
   const processRoomsText = () => {
     if (isFullHouse) return "Full House";
@@ -85,6 +77,7 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
             <TypeDotsAndFavorite
               isFavorite={isFavorite}
               id={id}
+              propertyUniqueId={uniqueId}
               userId={userId}
               propertyType={PropertyTypesEnum.ResidentialRentals}
               managerId={managerId}
@@ -108,7 +101,7 @@ const ResidentialRentalsInformation: React.FC<Props> = ({
           featureTwoText={processTotalRoomsText()}
           propertyType={PropertyTypesEnum.ResidentialRentals}
           sizeNumber={sizeNumber}
-          dimension={processSizeDimensions()}
+          dimension={processSizeDimensions(sizeDimensions,sizeNumber)}
           isFullHouseOrSpace={isFullHouse}
         />
         <Location displayName={displayName} />

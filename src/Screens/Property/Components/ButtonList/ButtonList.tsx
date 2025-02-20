@@ -1,23 +1,25 @@
 import { useWindowDimensions, View } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import React from "react";
 
 import { IVoidFunc } from "@/src/GlobalTypes/Types";
 import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";
 import OutlinedButton from "@/src/Components/Buttons/Outlined/OutlinedButton";
-import { red, white } from "@/src/Theme/Colors";
+import { primary, red, white } from "@/src/Theme/Colors";
 import { SCREEN_BREAK_POINT, BUTTON_MAX_WIDTH } from "@/src/Utils/Constants";
 
 type Props = {
-  navigate: IVoidFunc;
+  updateProperty: IVoidFunc;
+  navigateToPropertyInsights: IVoidFunc;
   isDeleting: boolean;
   setOpenDeleteConfirmationModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ButtonList: React.FC<Props> = ({
-  navigate,
+  updateProperty,
   isDeleting,
   setOpenDeleteConfirmationModal,
+  navigateToPropertyInsights,
 }) => {
   const { width } = useWindowDimensions();
   return (
@@ -30,12 +32,14 @@ const ButtonList: React.FC<Props> = ({
     >
       <OutlinedButton
         title="view insights"
-        onPressFunc={() => {}}
+        icon={<Ionicons name="eye-outline" size={24} color={primary} />}
+        iconPosition="left"
+        onPressFunc={navigateToPropertyInsights}
         isDisabled={isDeleting}
       />
       <CustomButton
         title="update"
-        onPressFunc={navigate}
+        onPressFunc={updateProperty}
         isDisabled={isDeleting}
       />
       <CustomButton

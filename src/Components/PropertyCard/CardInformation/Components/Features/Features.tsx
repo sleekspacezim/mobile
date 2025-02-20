@@ -100,18 +100,34 @@ const Features: React.FC<Props> = ({
           </Row>
         </View>
       )}
-      {propertyType !== PropertyTypesEnum.Land && (
+      {propertyType !== PropertyTypesEnum.Land &&
+        propertyType !== PropertyTypesEnum.CommercialRentals && (
+          <View style={{ alignItems: "center", flexDirection: "column" }}>
+            <IconContainer>
+              <MaterialIcons
+                name="meeting-room"
+                size={iconSize}
+                color={primary}
+              />
+            </IconContainer>
+            <Row style={{ gap: 5 }}>
+              <RegularText>{featureTwo}</RegularText>
+              <ThemedText type="regular">{featureTwoText}</ThemedText>
+            </Row>
+          </View>
+        )}
+      {propertyType === PropertyTypesEnum.CommercialRentals && (
         <View style={{ alignItems: "center", flexDirection: "column" }}>
           <IconContainer>
-            <MaterialIcons
-              name="meeting-room"
+            <MaterialCommunityIcons
+              name="office-building"
               size={iconSize}
               color={primary}
             />
           </IconContainer>
           <Row style={{ gap: 5 }}>
-            <RegularText>{featureTwo}</RegularText>
             <ThemedText type="regular">{featureTwoText}</ThemedText>
+            <RegularText>{featureTwo}</RegularText>
           </Row>
         </View>
       )}

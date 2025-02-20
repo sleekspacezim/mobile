@@ -1,8 +1,5 @@
 import { StyleSheet } from "react-native";
 
-import { lighterPrimary, primary } from "@/src/Theme/Colors";
-import { family, small } from "@/src/Theme/Font";
-
 export const propertyScreenStyles = StyleSheet.create({
   container: {
     gap: 10,
@@ -14,5 +11,6 @@ export const propertyScreenStyles = StyleSheet.create({
     gap: 2,
     paddingRight: 10,
     width: "100%",
+    marginTop:5
   }
 });

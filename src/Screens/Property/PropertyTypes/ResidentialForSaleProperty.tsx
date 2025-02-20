@@ -1,37 +1,37 @@
-import { RefreshControl, ScrollView, View } from "react-native";
+import { View, ScrollView, RefreshControl } from "react-native";
 import React, { useEffect, useState } from "react";
-import { router } from "expo-router";
 import { useMutation } from "@tanstack/react-query";
+import { router } from "expo-router";
 
-import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import { getResidentialRentalPropertyHttpFunc } from "@/src/HttpServices/Queries/Properties/PropertiesHttpFuncs";
-import { propertyTypeStyles } from "../Components/Shared/Styles";
-import HttpError from "@/src/Components/HttpError/HttpError";
+import { usePropertyContext } from "@/src/Context/PropertyContext";
+import { getResidentialPropertyForSaleHttpFunc } from "@/src/HttpServices/Queries/Properties/PropertiesHttpFuncs";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
-import ImageContainer from "../Components/ImageContainer/ImageContainer";
-import ExteriorInteriorFeatures from "../Components/ExteriorInteriorFeatures/ExteriorInteriorFeatures";
-import Location from "../Components/Location/Location";
-import Manager from "../Components/Manager/Manager";
-import Features from "../Components/OverView/Features";
-import { primary, pureWhite } from "@/src/Theme/Colors";
-import Loader from "../Components/Loader/Loader";
-import { deleteResidentialRentalPropertyHttpFunc } from "@/src/HttpServices/Mutations/Property/Residential/ForRental";
+import FavoriteContainer from "@/src/Components/FavoriteContainer/FavoriteContainer";
+import HttpError from "@/src/Components/HttpError/HttpError";
 import MessageModal from "@/src/Components/Modals/MessageModal";
 import Row from "@/src/Components/Row/Row";
-import FavoriteContainer from "@/src/Components/FavoriteContainer/FavoriteContainer";
 import ThreeDots from "@/src/Components/ThreeDots/ThreeDots";
-import { usePropertyContext } from "@/src/Context/PropertyContext";
-import { propertyScreenStyles } from "./Shared/Styles";
-import ContactManager from "../Components/Contacts/ContactManager";
-import ButtonList from "../Components/ButtonList/ButtonList";
 import { updateAndIncreamentPropertyInsightsByPropertyIdHttpFunc } from "@/src/HttpServices/Mutations/Property/Insights/InsightsHttpFunc";
+import { useAppSelector } from "@/src/Redux/Hooks/Config";
+import { pureWhite, primary } from "@/src/Theme/Colors";
+import ButtonList from "../Components/ButtonList/ButtonList";
+import ContactManager from "../Components/Contacts/ContactManager";
+import ExteriorInteriorFeatures from "../Components/ExteriorInteriorFeatures/ExteriorInteriorFeatures";
+import ImageContainer from "../Components/ImageContainer/ImageContainer";
+import Loader from "../Components/Loader/Loader";
+import Manager from "../Components/Manager/Manager";
+import Features from "../Components/OverView/Features";
+import { propertyTypeStyles } from "../Components/Shared/Styles";
 import useUpdateProperties from "../Hooks/useUpdateProperties";
+import { propertyScreenStyles } from "./Shared/Styles";
+import Location from "../Components/Location/Location";
+import { deleteResidentialPropertyForSaleHttpFunc } from "@/src/HttpServices/Mutations/Property/Residential/ForSale";
 
 type Props = {
   propertyId: number;
 };
 
-const ResidentialRentalProperty: React.FC<Props> = ({ propertyId }) => {
+const ResidentialForSaleProperty: React.FC<Props> = ({ propertyId }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [openDeleteConfirmationModal, setOpenDeleteConfirmationModal] =
@@ -43,21 +43,21 @@ const ResidentialRentalProperty: React.FC<Props> = ({ propertyId }) => {
   const theme = useAppSelector((state) => state.theme.value);
   const { accessToken, id } = useAppSelector((state) => state.user.value);
   const { removeDeletedProperty } = useUpdateProperties(
-    PropertyTypesEnum.ResidentialRentals,
+    PropertyTypesEnum.ResidentialForSale,
     propertyId
   );
-  const { rentalResidentialProperty, setRentalResidentialProperty } =
+  const { onSaleResidentialProperty, setOnSaleResidentialProperty } =
     usePropertyContext();
 
   const fetchProperty = () => {
     setHttpError("");
-    getResidentialRentalPropertyHttpFunc({
+    getResidentialPropertyForSaleHttpFunc({
       propertyId,
       isUserLoggedIn: accessToken ? true : false,
       accessToken,
     })
       .then(({ data: { response } }) => {
-        setRentalResidentialProperty(response);
+        setOnSaleResidentialProperty(response);
         if (response.manager.userId !== id) {
           updateAndIncreamentPropertyInsightsByPropertyIdHttpFunc({
             propertyId: response.uniqueId,
@@ -89,13 +89,13 @@ const ResidentialRentalProperty: React.FC<Props> = ({ propertyId }) => {
   const refreshProperty = () => {
     setIsRefreshing(true);
     setHttpError("");
-    getResidentialRentalPropertyHttpFunc({
+    getResidentialPropertyForSaleHttpFunc({
       propertyId,
       isUserLoggedIn: accessToken ? true : false,
       accessToken,
     })
       .then(({ data: { response } }) => {
-        setRentalResidentialProperty(response);
+        setOnSaleResidentialProperty(response);
       })
       .catch((error: any) => {
         if (error.response?.data?.error) {
@@ -112,12 +112,12 @@ const ResidentialRentalProperty: React.FC<Props> = ({ propertyId }) => {
 
   const handleRefresh = () => {
     setIsLoading(true);
-    setRentalResidentialProperty(undefined);
+    setOnSaleResidentialProperty(undefined);
     refreshProperty();
   };
 
   const deleteMutation = useMutation({
-    mutationFn: deleteResidentialRentalPropertyHttpFunc,
+    mutationFn: deleteResidentialPropertyForSaleHttpFunc,
     onSuccess: (_data) => {
       removeDeletedProperty();
       setOpenSuccessModal(true);
@@ -146,15 +146,15 @@ const ResidentialRentalProperty: React.FC<Props> = ({ propertyId }) => {
     router.push({
       pathname: "/property/update/" + propertyId,
       params: {
-        propertyType: PropertyTypesEnum.ResidentialRentals,
+        propertyType: PropertyTypesEnum.ResidentialForSale,
       },
     });
 
   const navigateToPropertyInsights = () =>
     router.push({
-      pathname: "/property/insights/" + rentalResidentialProperty?.uniqueId,
+      pathname: "/property/insights/" + onSaleResidentialProperty?.uniqueId,
       params: {
-        propertyType: PropertyTypesEnum.ResidentialRentals,
+        propertyType: PropertyTypesEnum.ResidentialForSale,
       },
     });
 
@@ -177,7 +177,7 @@ const ResidentialRentalProperty: React.FC<Props> = ({ propertyId }) => {
           />
         </View>
       )}
-      {!isLoading && rentalResidentialProperty && (
+      {!isLoading && onSaleResidentialProperty && (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={propertyTypeStyles.container}
@@ -192,50 +192,50 @@ const ResidentialRentalProperty: React.FC<Props> = ({ propertyId }) => {
           }
         >
           <ImageContainer
-            propertyType={PropertyTypesEnum.ResidentialRentals}
-            media={rentalResidentialProperty.media}
+            propertyType={PropertyTypesEnum.ResidentialForSale}
+            media={onSaleResidentialProperty.media}
           />
           <Row style={propertyScreenStyles.optionsContainer}>
-            {rentalResidentialProperty.manager.userId != id && (
+            {onSaleResidentialProperty.manager.userId != id && (
               <FavoriteContainer
-                propertyId={rentalResidentialProperty.id}
-                isPropertyFavorite={rentalResidentialProperty.isFavorite}
-                propertyType={PropertyTypesEnum.ResidentialRentals}
-                propertyUniqueId={rentalResidentialProperty.uniqueId}
+                propertyId={onSaleResidentialProperty.id}
+                isPropertyFavorite={onSaleResidentialProperty.isFavorite}
+                propertyType={PropertyTypesEnum.ResidentialForSale}
+                propertyUniqueId={onSaleResidentialProperty.uniqueId}
               />
             )}
             <ThreeDots
               propertyId={propertyId}
-              isFavorite={rentalResidentialProperty.isFavorite}
-              propertyType={PropertyTypesEnum.ResidentialRentals}
-              managerId={rentalResidentialProperty.managerId}
-              userId={rentalResidentialProperty.manager.userId}
-              propertyUniqueId={rentalResidentialProperty.uniqueId}
+              isFavorite={onSaleResidentialProperty.isFavorite}
+              propertyType={PropertyTypesEnum.ResidentialForSale}
+              managerId={onSaleResidentialProperty.managerId}
+              userId={onSaleResidentialProperty.manager.userId}
+              propertyUniqueId={onSaleResidentialProperty.uniqueId}
               type="property"
             />
           </Row>
           <Features
-            propertyType={PropertyTypesEnum.ResidentialRentals}
-            property={rentalResidentialProperty}
+            propertyType={PropertyTypesEnum.ResidentialForSale}
+            property={onSaleResidentialProperty}
           />
-          <Location location={rentalResidentialProperty.propertyLocation} />
-          {rentalResidentialProperty.otherInteriorFeatures.length > 0 && (
+          <Location location={onSaleResidentialProperty.propertyLocation} />
+          {onSaleResidentialProperty.otherInteriorFeatures.length > 0 && (
             <ExteriorInteriorFeatures
-              features={rentalResidentialProperty.otherInteriorFeatures}
+              features={onSaleResidentialProperty.otherInteriorFeatures}
               type="Interior"
             />
           )}
-          {rentalResidentialProperty.otherExteriorFeatures.length > 0 && (
+          {onSaleResidentialProperty.otherExteriorFeatures.length > 0 && (
             <ExteriorInteriorFeatures
-              features={rentalResidentialProperty.otherExteriorFeatures}
+              features={onSaleResidentialProperty.otherExteriorFeatures}
               type="Exterior"
             />
           )}
           <Manager
-            manager={rentalResidentialProperty.manager}
-            propertyUniqueId={rentalResidentialProperty.uniqueId}
+            manager={onSaleResidentialProperty.manager}
+            propertyUniqueId={onSaleResidentialProperty.uniqueId}
           />
-          {id === rentalResidentialProperty.manager.userId && (
+          {id === onSaleResidentialProperty.manager.userId && (
             <ButtonList
               isDeleting={isDeleting}
               setOpenDeleteConfirmationModal={setOpenDeleteConfirmationModal}
@@ -245,10 +245,10 @@ const ResidentialRentalProperty: React.FC<Props> = ({ propertyId }) => {
           )}
         </ScrollView>
       )}
-      {rentalResidentialProperty && (
+      {onSaleResidentialProperty && (
         <ContactManager
-          manager={rentalResidentialProperty.manager}
-          propertyUniqueId={rentalResidentialProperty.uniqueId}
+          manager={onSaleResidentialProperty.manager}
+          propertyUniqueId={onSaleResidentialProperty.uniqueId}
         />
       )}
       <MessageModal
@@ -280,4 +280,4 @@ const ResidentialRentalProperty: React.FC<Props> = ({ propertyId }) => {
   );
 };
 
-export default ResidentialRentalProperty;
+export default ResidentialForSaleProperty;

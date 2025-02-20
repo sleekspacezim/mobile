@@ -17,12 +17,13 @@ const Size: React.FC<Props> = ({ size, sizeDimensions }) => {
   return (
     <Row style={rowContainerStyles.rowContainer}>
       <IconContainer>
-      <AntDesign name="appstore-o" size={iconSize} color={primary} />
+        <AntDesign name="appstore-o" size={iconSize} color={primary} />
       </IconContainer>
       <Row style={{ gap: 5 }}>
         <ThemedText type="subHeader">Size:</ThemedText>
         <RegularText style={{ marginTop: 2 }}>
-          {size} {sizeDimensions === "Square meters" ? "m²" : sizeDimensions}
+          {size === 0 ? "--" : size}{" "}
+          {sizeDimensions === "Square meters" ? "m²" : sizeDimensions}
         </RegularText>
       </Row>
     </Row>

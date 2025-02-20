@@ -1,0 +1,1 @@
+export { default } from "../../../../../src/Screens/Property/Screens/Insights/Insights";

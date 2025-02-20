@@ -28,6 +28,10 @@ const PropertyLayout = () => {
         options={{ headerTitle: "Property", headerTitleAlign: "center" }}
       />
       <Stack.Screen
+        name="property/insights/[id]"
+        options={{ headerTitle: "Insights", headerTitleAlign: "center" }}
+      />
+      <Stack.Screen
         name="property/update/[id]"
         options={{ headerShown: false }}
       />

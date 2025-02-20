@@ -27,10 +27,7 @@ import {
 } from "@/src/Utils/Constants";
 import MapModal from "@/src/Components/Modals/Map/MapModal";
 import Heading from "../Heading/Heading";
-import {
-  lighterPrimary,
-  primary
-} from "@/src/Theme/Colors";
+import { lighterPrimary, primary } from "@/src/Theme/Colors";
 import IconContainer from "@/src/Components/IconContainer/IconContainer";
 import { iconSize, rowContainerStyles } from "../Shared/Styles";
 import { family, small } from "@/src/Theme/Font";
@@ -42,9 +39,19 @@ type Props = {
   location: IPropertyLocation;
 };
 
-const Location: React.FC<Props> = ({ location:{
-  lat,lon,displayName,city,country,countryCode,county,surburb,province
-} }) => {
+const Location: React.FC<Props> = ({
+  location: {
+    lat,
+    lon,
+    displayName,
+    city,
+    country,
+    countryCode,
+    county,
+    surburb,
+    province,
+  },
+}) => {
   const [openMap, setOpenMap] = useState<boolean>(false);
   const { width } = useWindowDimensions();
   const theme = useAppSelector((state) => state.theme.value);
@@ -63,11 +70,18 @@ const Location: React.FC<Props> = ({ location:{
               color={primary}
             />
           </IconContainer>
-          <RegularText style={{maxWidth:width>SCREEN_BREAK_POINT?"100%":"90%"}}>
+          <RegularText
+            style={{ maxWidth: width > SCREEN_BREAK_POINT ? "100%" : "90%" }}
+          >
             {displayName ? displayName : "---"}
           </RegularText>
         </Row>
-        <Row style={{gap:5,alignItems:width>SCREEN_BREAK_POINT?"center":"flex-start"}}>
+        <Row
+          style={{
+            gap: 5,
+            alignItems: width > SCREEN_BREAK_POINT ? "center" : "flex-start",
+          }}
+        >
           <IconContainer>
             <MaterialCommunityIcons
               name="home-group"
@@ -77,8 +91,12 @@ const Location: React.FC<Props> = ({ location:{
           </IconContainer>
           <Row style={{ gap: 5 }}>
             <ThemedText type="regular">Surburb:</ThemedText>
-            <RegularText style={{maxWidth:width>SCREEN_BREAK_POINT?"100%":"75%"}}>
-              {surburb ? surburb : getPropertyLocationSurburb(displayName,city)}
+            <RegularText
+              style={{ maxWidth: width > SCREEN_BREAK_POINT ? "100%" : "75%" }}
+            >
+              {surburb
+                ? surburb
+                : getPropertyLocationSurburb(displayName, city)}
             </RegularText>
           </Row>
         </Row>
@@ -101,9 +119,7 @@ const Location: React.FC<Props> = ({ location:{
           </IconContainer>
           <Row style={{ gap: 5 }}>
             <ThemedText type="regular">Constituency:</ThemedText>
-            <RegularText>
-              {county ? county : "---"}
-            </RegularText>
+            <RegularText>{county ? county : "---"}</RegularText>
           </Row>
         </Row>
         <Row style={rowContainerStyles.rowContainer}>
@@ -112,9 +128,7 @@ const Location: React.FC<Props> = ({ location:{
           </IconContainer>
           <Row style={{ gap: 5 }}>
             <ThemedText type="regular">Province:</ThemedText>
-            <RegularText>
-              {province ? province : "---"}
-            </RegularText>
+            <RegularText>{province ? province : "---"}</RegularText>
           </Row>
         </Row>
         <Row style={rowContainerStyles.rowContainer}>
@@ -127,9 +141,7 @@ const Location: React.FC<Props> = ({ location:{
           </IconContainer>
           <Row style={{ gap: 5 }}>
             <ThemedText type="regular">Country:</ThemedText>
-            <RegularText>
-              {country ? country : "---"}
-            </RegularText>
+            <RegularText>{country ? country : "---"}</RegularText>
           </Row>
         </Row>
         <Row style={rowContainerStyles.rowContainer}>
@@ -142,9 +154,7 @@ const Location: React.FC<Props> = ({ location:{
           </IconContainer>
           <Row style={{ gap: 5 }}>
             <ThemedText type="regular">Country code:</ThemedText>
-            <RegularText>
-              {countryCode ? countryCode : "---"}
-            </RegularText>
+            <RegularText>{countryCode ? countryCode : "---"}</RegularText>
           </Row>
         </Row>
         <Row style={rowContainerStyles.rowContainer}>
@@ -226,7 +236,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    alignSelf: "center",marginTop:10
+    alignSelf: "center",
+    marginTop: 10,
   },
   btn: {
     alignItems: "center",

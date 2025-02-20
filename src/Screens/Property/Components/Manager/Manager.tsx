@@ -13,9 +13,14 @@ import Divider from "../Divider/Divider";
 
 type Props = {
   manager: IManagerAccount;
+  propertyUniqueId: number;
 };
 
-const Manager: React.FC<Props> = ({ manager, manager: { profilePicture } }) => {
+const Manager: React.FC<Props> = ({
+  manager,
+  manager: { profilePicture },
+  propertyUniqueId,
+}) => {
   const { width } = useWindowDimensions();
   return (
     <View style={styles.container}>
@@ -24,12 +29,15 @@ const Manager: React.FC<Props> = ({ manager, manager: { profilePicture } }) => {
         icon={<Fontisto name="person" size={26} color={primary} />}
       />
       {width > SCREEN_BREAK_POINT ? (
-        <Row style={{ gap: 35 }}>
+        <Row style={{ gap: 35,alignItems:"flex-start" }}>
           <ProfilePicture
             hideCameraOptions
             uri={profilePicture ? profilePicture.uri : ""}
           />
-          <ManagerDetails manager={manager} />
+          <ManagerDetails
+            manager={manager}
+            propertyUniqueId={propertyUniqueId}
+          />
         </Row>
       ) : (
         <View style={{ gap: 5 }}>
@@ -37,7 +45,10 @@ const Manager: React.FC<Props> = ({ manager, manager: { profilePicture } }) => {
             hideCameraOptions
             uri={profilePicture ? profilePicture.uri : ""}
           />
-          <ManagerDetails manager={manager} />
+          <ManagerDetails
+            manager={manager}
+            propertyUniqueId={propertyUniqueId}
+          />
         </View>
       )}
       <Divider />

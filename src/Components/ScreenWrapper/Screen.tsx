@@ -31,6 +31,6 @@ export default Screen;
 
 const styles = StyleSheet.create({
   screen: {
-    flex: 1,
+    flex: 1
   },
 });

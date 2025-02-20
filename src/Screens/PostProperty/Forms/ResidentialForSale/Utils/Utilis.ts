@@ -154,7 +154,7 @@ export const generalPropertyInfoIntialState: IResidentialForSaleGeneralInfo = {
   sizeNumber: "",
   numberOfRooms: "1",
   type: "Single family home",
-  sizeDimensions: "Square meters",
+  sizeDimensions: "m²",
   yearBuilt: "",
   storeys: "1",
   currency: "US$",

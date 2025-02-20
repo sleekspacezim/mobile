@@ -35,6 +35,7 @@ import Row from "@/src/Components/Row/Row";
 import { useSharedContext } from "@/src/Context/SharedContext";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
 import useUpdateProperty from "@/src/Screens/Property/Hooks/useUpdateProperty";
+import { updateAndIncreamentPropertyInsightsByPropertyIdHttpFunc } from "@/src/HttpServices/Mutations/Property/Insights/InsightsHttpFunc";
 
 type Props = {
   closeBottomSheetWithoutScrollingToTheBottom: () => void;
@@ -43,7 +44,8 @@ type Props = {
 const PropertyCardOptions: React.FC<Props> = ({
   closeBottomSheetWithoutScrollingToTheBottom,
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isFavoriteLoading, setIsFavoriteloading] = useState<boolean>(false);
+  const [isSharedLoading, setIsSharedloading] = useState<boolean>(false);
   const [httpError, setHttpError] = useState<string>("");
   const { setOpenReportModal, selectedProperty } = useSharedContext();
   const theme = useAppSelector((state) => state.theme.value);
@@ -70,18 +72,52 @@ const PropertyCardOptions: React.FC<Props> = ({
     updateStandProperty,
   } = useUpdateProperty();
 
+  const updateOnSharePropertyInsightsMutation = useMutation({
+    mutationFn: updateAndIncreamentPropertyInsightsByPropertyIdHttpFunc,
+    onSettled: async () => {
+      setIsSharedloading(false);
+      closeBottomSheetWithoutScrollingToTheBottom();
+      setTimeout(async () => {
+        try {
+          await Share.share({
+            url: pageUrl,
+            message: pageUrl,
+          });
+        } catch (error: any) {
+          Alert.alert(error.message);
+        }
+      }, 350);
+    },
+  });
+
+  const updatePropertyInsightsOnAddFavorite = useMutation({
+    mutationFn: updateAndIncreamentPropertyInsightsByPropertyIdHttpFunc,
+    onSettled: () => {
+      addFavoritePropertyMutation.mutate({
+        favouritePropertyId: selectedProperty.id,
+        accessToken,
+        userId: id,
+      });
+    },
+  });
+
+  const updatePropertyInsightsOnRemoveFavorite = useMutation({
+    mutationFn: updateAndIncreamentPropertyInsightsByPropertyIdHttpFunc,
+    onSettled: () => {
+      removeFavoritePropertyMutation.mutate({
+        favouritePropertyId: selectedProperty.id,
+        accessToken,
+        userId: id,
+      });
+    },
+  });
+
   const onShare = async () => {
-    closeBottomSheetWithoutScrollingToTheBottom();
-    setTimeout(async () => {
-      try {
-        await Share.share({
-          url: pageUrl,
-          message: pageUrl,
-        });
-      } catch (error: any) {
-        Alert.alert(error.message);
-      }
-    }, 200);
+    setIsSharedloading(true);
+    updateOnSharePropertyInsightsMutation.mutate({
+      propertyId: selectedProperty.propertyUniqueId,
+      data: { insightProperty: "shared" },
+    });
   };
 
   const addFavoritePropertyMutationFn = () => {
@@ -148,7 +184,7 @@ const PropertyCardOptions: React.FC<Props> = ({
       } else setHttpError("Something went wrong");
     },
     onSettled: () => {
-      setIsLoading(false);
+      setIsFavoriteloading(false);
     },
   });
 
@@ -166,14 +202,26 @@ const PropertyCardOptions: React.FC<Props> = ({
       } else setHttpError("Something went wrong");
     },
     onSettled: () => {
-      setIsLoading(false);
+      setIsFavoriteloading(false);
     },
   });
 
   const contentWithFavorites = [
     {
-      name: "Share",
-      icon: (
+      name: isSharedLoading ? "" : "Share",
+      icon: isSharedLoading ? (
+        <Row style={{ gap: 20 }}>
+          <MaterialCommunityIcons
+            name="share-outline"
+            size={iconSize}
+            color={iconColor}
+          />
+          <ActivityIndicator
+            size={"small"}
+            color={theme === "dark" ? dark.text : light.text}
+          />
+        </Row>
+      ) : (
         <MaterialCommunityIcons
           name="share-outline"
           size={iconSize}
@@ -183,12 +231,12 @@ const PropertyCardOptions: React.FC<Props> = ({
       onPressFunc: onShare,
     },
     {
-      name: isLoading
+      name: isFavoriteLoading
         ? ""
         : selectedProperty.isFavorite
         ? "remove from favorites"
         : "Add to favorites",
-      icon: isLoading ? (
+      icon: isFavoriteLoading ? (
         <Row style={{ gap: 20 }}>
           <MaterialCommunityIcons
             name="heart-plus-outline"
@@ -214,17 +262,15 @@ const PropertyCardOptions: React.FC<Props> = ({
         />
       ),
       onPressFunc: () => {
-        setIsLoading(true);
+        setIsFavoriteloading(true);
         selectedProperty.isFavorite
-          ? removeFavoritePropertyMutation.mutate({
-              favouritePropertyId: selectedProperty.id,
-              accessToken,
-              userId: id,
+          ? updatePropertyInsightsOnRemoveFavorite.mutate({
+              propertyId: selectedProperty.propertyUniqueId,
+              data: { insightProperty: "removedFromFavourites" },
             })
-          : addFavoritePropertyMutation.mutate({
-              favouritePropertyId: selectedProperty.id,
-              accessToken,
-              userId: id,
+          : updatePropertyInsightsOnAddFavorite.mutate({
+              propertyId: selectedProperty.propertyUniqueId,
+              data: { insightProperty: "addedToFavourites" },
             });
       },
     },
@@ -242,8 +288,20 @@ const PropertyCardOptions: React.FC<Props> = ({
 
   const contentListWithoutFavorites = [
     {
-      name: "Share",
-      icon: (
+      name: isSharedLoading ? "" : "Share",
+      icon: isSharedLoading ? (
+        <Row style={{ gap: 20 }}>
+          <MaterialCommunityIcons
+            name="share-outline"
+            size={iconSize}
+            color={iconColor}
+          />
+          <ActivityIndicator
+            size={"small"}
+            color={theme === "dark" ? dark.text : light.text}
+          />
+        </Row>
+      ) : (
         <MaterialCommunityIcons
           name="share-outline"
           size={iconSize}
@@ -275,7 +333,7 @@ const PropertyCardOptions: React.FC<Props> = ({
       {getContentList().map(({ name, icon, onPressFunc }) => (
         <TouchableHighlight
           key={name}
-          disabled={isLoading}
+          disabled={isFavoriteLoading}
           style={styles.touchable}
           underlayColor={underLayColor}
           onPress={() => {
