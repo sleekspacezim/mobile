@@ -1,1 +1,1 @@
-export { default } from "../../../../../src/Screens/UpdateProperty/UpdateProperty";
+export { default } from "../../../../../src/Screens/Property/Screens/UpdateProperty/UpdateProperty";

@@ -13,7 +13,7 @@ import RegularText from "@/src/Components/RegularText/RegularText";
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { green, primary, red } from "@/src/Theme/Colors";
-import IconContainer from "../IconContainer/IconContainer";
+import IconContainer from "../../../../IconContainer/IconContainer";
 import { iconSize } from "../Shared/Contants";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
 
@@ -100,18 +100,34 @@ const Features: React.FC<Props> = ({
           </Row>
         </View>
       )}
-      {propertyType !== PropertyTypesEnum.Land && (
+      {propertyType !== PropertyTypesEnum.Land &&
+        propertyType !== PropertyTypesEnum.CommercialRentals && (
+          <View style={{ alignItems: "center", flexDirection: "column" }}>
+            <IconContainer>
+              <MaterialIcons
+                name="meeting-room"
+                size={iconSize}
+                color={primary}
+              />
+            </IconContainer>
+            <Row style={{ gap: 5 }}>
+              <RegularText>{featureTwo}</RegularText>
+              <ThemedText type="regular">{featureTwoText}</ThemedText>
+            </Row>
+          </View>
+        )}
+      {propertyType === PropertyTypesEnum.CommercialRentals && (
         <View style={{ alignItems: "center", flexDirection: "column" }}>
           <IconContainer>
-            <MaterialIcons
-              name="meeting-room"
+            <MaterialCommunityIcons
+              name="office-building"
               size={iconSize}
               color={primary}
             />
           </IconContainer>
           <Row style={{ gap: 5 }}>
-            <RegularText>{featureTwo}</RegularText>
             <ThemedText type="regular">{featureTwoText}</ThemedText>
+            <RegularText>{featureTwo}</RegularText>
           </Row>
         </View>
       )}

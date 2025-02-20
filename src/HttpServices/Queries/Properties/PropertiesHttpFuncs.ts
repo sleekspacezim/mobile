@@ -14,11 +14,26 @@ import {
   IResidentialRentalProperty,
   IResidentialRentalPropertyWithManager,
 } from "@/src/GlobalTypes/Property/Residential/RentalTypes";
-import { ICommercialPropertyForSale, ICommercialPropertyForSaleWithManager } from "@/src/GlobalTypes/Property/Commercial/ForSaleTypes";
-import { ICommercialRentalProperty, ICommercialRentalPropertyWithManager } from "@/src/GlobalTypes/Property/Commercial/RentalTypes";
-import { IResidentialPropertyForSale, IResidentialPropertyForSaleWithManager } from "@/src/GlobalTypes/Property/Residential/ForSaleTypes";
-import { IStandProperty, IStandPropertyWithManager } from "@/src/GlobalTypes/Property/Stand/StandTypes";
-import { ILandProperty, ILandPropertyWithManager } from "@/src/GlobalTypes/Property/Land/LandTypes";
+import {
+  ICommercialPropertyForSale,
+  ICommercialPropertyForSaleWithManager,
+} from "@/src/GlobalTypes/Property/Commercial/ForSaleTypes";
+import {
+  ICommercialRentalProperty,
+  ICommercialRentalPropertyWithManager,
+} from "@/src/GlobalTypes/Property/Commercial/RentalTypes";
+import {
+  IResidentialPropertyForSale,
+  IResidentialPropertyForSaleWithManager,
+} from "@/src/GlobalTypes/Property/Residential/ForSaleTypes";
+import {
+  IStandProperty,
+  IStandPropertyWithManager,
+} from "@/src/GlobalTypes/Property/Stand/StandTypes";
+import {
+  ILandProperty,
+  ILandPropertyWithManager,
+} from "@/src/GlobalTypes/Property/Land/LandTypes";
 import {
   ISortCommercialForSalePropertiesOptions,
   ISortCommercialRentalPropertiesOptions,
@@ -28,14 +43,22 @@ import {
   ISortStandOptions,
 } from "@/src/Context/SortPropertiesContext";
 import { ICurrency, IDimensions } from "@/src/GlobalTypes/Property/Common";
+import { IPropertyInsights } from "@/src/GlobalTypes/Property/Insights/InsightsTypes";
 
 const controller = new AbortController();
 
 export const getCommercialPropertyForSaleHttpFunc = (requestData: {
   propertyId: number;
+  isUserLoggedIn: boolean;
+  accessToken: string;
 }) => {
-  return axios.get<{ response: ICommercialPropertyForSale }>(
-    `${commercialPropertiesForSaleRoutes.getUpdateAndDeleteCommercialPropertyForSale}/${requestData.propertyId}`
+  return axios.get<{ response: ICommercialPropertyForSaleWithManager }>(
+    requestData.isUserLoggedIn
+      ? `${commercialPropertiesForSaleRoutes.getUpdateAndDeleteCommercialPropertyForSale}/logged-in/${requestData.propertyId}`
+      : `${commercialPropertiesForSaleRoutes.getUpdateAndDeleteCommercialPropertyForSale}/${requestData.propertyId}`,
+    {
+      headers: { Authorization: `Bearer ${requestData.accessToken}` },
+    }
   );
 };
 
@@ -70,11 +93,18 @@ export const getAllCommercialPropertiesForSaleHttpFunc = (requestData: {
 
 export const getCommercialRentalPropertyHttpFunc = (requestData: {
   propertyId: number;
+  isUserLoggedIn: boolean;
+  accessToken: string;
 }) => {
   return axios.get<{
-    response: ICommercialRentalProperty;
+    response: ICommercialRentalPropertyWithManager;
   }>(
-    `${commercialRentalPropertiesRoutes.getUpdateAndDeleteCommercialRentalProperty}/${requestData.propertyId}`
+    requestData.isUserLoggedIn
+      ? `${commercialRentalPropertiesRoutes.getUpdateAndDeleteCommercialRentalProperty}/logged-in/${requestData.propertyId}`
+      : `${commercialRentalPropertiesRoutes.getUpdateAndDeleteCommercialRentalProperty}/${requestData.propertyId}`,
+    {
+      headers: { Authorization: `Bearer ${requestData.accessToken}` },
+    }
   );
 };
 
@@ -110,9 +140,16 @@ export const getAllCommercialRentalPropertiesHttpFunc = (requestData: {
 
 export const getResidentialRentalPropertyHttpFunc = (requestData: {
   propertyId: number;
+  isUserLoggedIn: boolean;
+  accessToken: string;
 }) => {
-  return axios.get<{ response: IResidentialRentalProperty }>(
-    `${residentialRentalPropertiesRoutes.getUpdateAndDeleteResidentialRentalProperty}/${requestData.propertyId}`
+  return axios.get<{ response: IResidentialRentalPropertyWithManager }>(
+    requestData.isUserLoggedIn
+      ? `${residentialRentalPropertiesRoutes.getUpdateAndDeleteResidentialRentalProperty}/logged-in/${requestData.propertyId}`
+      : `${residentialRentalPropertiesRoutes.getUpdateAndDeleteResidentialRentalProperty}/${requestData.propertyId}`,
+    {
+      headers: { Authorization: `Bearer ${requestData.accessToken}` },
+    }
   );
 };
 
@@ -150,11 +187,18 @@ export const getAllResidentialRentalPropertiesHttpFunc = (requestData: {
 
 export const getResidentialPropertyForSaleHttpFunc = (requestData: {
   propertyId: number;
+  isUserLoggedIn: boolean;
+  accessToken: string;
 }) => {
   return axios.get<{
-    response: IResidentialPropertyForSale;
+    response: IResidentialPropertyForSaleWithManager;
   }>(
-    `${residentialPropertiesForSaleRoutes.getUpdateAndDeleteResidentialPropertyForSale}/${requestData.propertyId}`
+    requestData.isUserLoggedIn
+      ? `${residentialPropertiesForSaleRoutes.getUpdateAndDeleteResidentialPropertyForSale}/logged-in/${requestData.propertyId}`
+      : `${residentialPropertiesForSaleRoutes.getUpdateAndDeleteResidentialPropertyForSale}/${requestData.propertyId}`,
+    {
+      headers: { Authorization: `Bearer ${requestData.accessToken}` },
+    }
   );
 };
 
@@ -191,9 +235,16 @@ export const getAllResidentialPropertiesForSaleHttpFunc = (requestData: {
 
 export const getStandPropertyHttpFunc = (requestData: {
   propertyId: number;
+  isUserLoggedIn: boolean;
+  accessToken: string;
 }) => {
-  return axios.get<{ response: IStandProperty }>(
-    `${standRoutes.getAllGetOnePostDeleteAndUpdateStand}/${requestData.propertyId}`
+  return axios.get<{ response: IStandPropertyWithManager }>(
+    requestData.isUserLoggedIn
+      ? `${standRoutes.getAllGetOnePostDeleteAndUpdateStand}/logged-in/${requestData.propertyId}`
+      : `${standRoutes.getAllGetOnePostDeleteAndUpdateStand}/${requestData.propertyId}`,
+    {
+      headers: { Authorization: `Bearer ${requestData.accessToken}` },
+    }
   );
 };
 
@@ -227,9 +278,16 @@ export const getAllStandsHttpFunc = (requestData: {
 
 export const getLandPropertyHttpFunc = (requestData: {
   propertyId: number;
+  isUserLoggedIn: boolean;
+  accessToken: string;
 }) => {
-  return axios.get<{ response: ILandProperty }>(
-    `${landRoutes.getAllGetOnePostDeleteAndUpdateLand}/${requestData.propertyId}`
+  return axios.get<{ response: ILandPropertyWithManager }>(
+    requestData.isUserLoggedIn
+      ? `${landRoutes.getAllGetOnePostDeleteAndUpdateLand}/logged-in/${requestData.propertyId}`
+      : `${landRoutes.getAllGetOnePostDeleteAndUpdateLand}/${requestData.propertyId}`,
+    {
+      headers: { Authorization: `Bearer ${requestData.accessToken}` },
+    }
   );
 };
 
@@ -265,7 +323,7 @@ export const getPropertyInsightsByPropertyIdHttpFunc = (requestData: {
   propertyId: number;
   accessToken: string;
 }) => {
-  return axios.get(
+  return axios.get<{response:IPropertyInsights}>(
     `${propertyInsightsRoutes.getPropertyInsightsByPropertyId}/${requestData.propertyId}`,
     {
       headers: { Authorization: `Bearer ${requestData.accessToken}` },
@@ -278,7 +336,7 @@ export const getPropertyInsightsByIdHttpFunc = (requestData: {
   accessToken: string;
 }) => {
   return axios.get(
-    `${propertyInsightsRoutes.getPropertyInsightsByPropertyId}/${requestData.insightId}`,
+    `${propertyInsightsRoutes.getAndUpdatePropertyInsights}/${requestData.insightId}`,
     {
       headers: { Authorization: `Bearer ${requestData.accessToken}` },
     }

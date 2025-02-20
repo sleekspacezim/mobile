@@ -32,7 +32,7 @@ const RentFilterModal: React.FC<Props> = ({
   propertyType,
   closeModal,
 }) => {
-  const { setRentFilter, rentFilter } = usePropertyFiltersContext();
+  const { rentFilter } = usePropertyFiltersContext();
   const [rent, setRent] = useState<IRentFilter>(rentFilter);
   const theme = useAppSelector((state) => state.theme.value);
   const { width } = useWindowDimensions();

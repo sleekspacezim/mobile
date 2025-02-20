@@ -15,6 +15,7 @@ import { red } from "@/src/Theme/Colors";
 import Features from "./Features/Features";
 import PostTimeAndStatus from "./PostTimeAndStatus/PostTimeAndStatus";
 import Location from "./PropertyLocation/Location";
+import { processSizeDimensions } from "./Shared/Funcs";
 
 type Props = {
   property: ILandPropertyWithManager;
@@ -30,6 +31,7 @@ const LandInformation: React.FC<Props> = ({
     postedTime,
     price,
     type,
+    uniqueId,
     currency,
     sizeNumber,
     sizeDimensions,
@@ -51,16 +53,6 @@ const LandInformation: React.FC<Props> = ({
     id
   );
   const { details, btnContainer, infoContainer } = cardInfoStyles;
-
-  const processSizeDimensions = () => {
-    if (sizeDimensions === "Acres") {
-      if (sizeNumber === 1) return "Acre";
-      else return sizeDimensions;
-    }
-    if (sizeDimensions === "Square meters") return "m²";
-    if (sizeDimensions === "Hectares") return "Ha";
-    else return sizeDimensions;
-  };
 
   const processHasWater = () => {
     if (hasWater) return "hasWater";
@@ -86,6 +78,7 @@ const LandInformation: React.FC<Props> = ({
               isFavorite={isFavorite}
               id={id}
               userId={userId}
+              propertyUniqueId={uniqueId}
               propertyType={PropertyTypesEnum.Land}
               managerId={managerId}
               type={type}
@@ -108,7 +101,7 @@ const LandInformation: React.FC<Props> = ({
           featureTwoText={"water"}
           propertyType={PropertyTypesEnum.Land}
           sizeNumber={sizeNumber}
-          dimension={processSizeDimensions()}
+          dimension={processSizeDimensions(sizeDimensions,sizeNumber)}
         />
         <Location displayName={displayName} />
         <View style={details}>

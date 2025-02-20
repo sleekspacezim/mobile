@@ -90,7 +90,7 @@ export const generalPropertyInfoIntialState: ILandGeneralInfo = {
   price: "",
   sizeNumber: "",
   type: "Residential",
-  sizeDimensions: "Square meters",
+  sizeDimensions: "m²",
   currency: "US$",
   isNegotiable: false,
   otherType: "",

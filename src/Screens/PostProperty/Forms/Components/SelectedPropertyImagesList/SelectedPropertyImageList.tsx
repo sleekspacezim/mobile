@@ -30,7 +30,6 @@ import { IResidentialRentalOtherInfo } from "@/src/Screens/PostProperty/Forms/Re
 import { ICommercialForSaleOtherInfo } from "@/src/Screens/PostProperty/Forms/CommercialForSale/Types/FormTypes";
 import { ICommercialRentalOtherInfo } from "@/src/Screens/PostProperty/Forms/CommercialRental/Types/FormTypes";
 import Row from "../../../../../Components/Row/Row";
-import { IVoidFunc } from "@/src/GlobalTypes/Types";
 
 type ICustomImageType = {
   uri: string;

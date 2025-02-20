@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     position: "absolute",
     zIndex: 10,
-    bottom: 30,
+    bottom: 20,
     height: 40,
     borderRadius: 20,
     elevation: 10,

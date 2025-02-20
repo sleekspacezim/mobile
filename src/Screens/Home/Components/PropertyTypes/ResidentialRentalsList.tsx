@@ -119,7 +119,10 @@ const ResidentialRentalsList: React.FC<Props> = ({
           } else setHttpError("Something went wrong");
         } else setHttpError("Something went wrong");
       })
-      .finally(() => setIsRefreshing(false));
+      .finally(() => {
+        setIsRefreshing(false)
+        setIsLoading(false)
+      });
   };
 
   const loadMoreProperties = () => {
@@ -164,11 +167,15 @@ const ResidentialRentalsList: React.FC<Props> = ({
 
   const handleRefresh = () => {
     setPageNumber(1);
+    setTotalproperties(0)
     setIsRefreshing(true);
+    setIsLoading(true)
+    setRentalResidentialProperties([])
     refreshProperties();
   };
 
   useEffect(() => {
+    setTotalproperties(0)
     fetchProperties();
   }, [
     accessToken,

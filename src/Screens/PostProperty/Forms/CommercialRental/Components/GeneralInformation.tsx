@@ -13,7 +13,6 @@ import PropertyLocationInput from "@/src/Components/PropertyLocationInput/Proper
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
-import { PropertyTypesEnum } from "@/src/Utils/Constants";
 import CheckBoxField from "@/src/Components/CheckBox/CheckBoxField";
 import { ICurrency } from "@/src/GlobalTypes/Property/Common";
 
@@ -50,6 +49,8 @@ const GeneralInformation: React.FC<Props> = ({
     if (propertyDetails.type === "Other") {
       setShowOtherPropertyTypeInput(true);
     } else if (propertyDetails.type === "Building") {
+      setShowNumberOfRoomsToLetInput(true);
+    } else if (propertyDetails.type === "Flat") {
       setShowNumberOfRoomsToLetInput(true);
     } else {
       setShowOtherPropertyTypeInput(false);
@@ -195,28 +196,31 @@ const GeneralInformation: React.FC<Props> = ({
             )}
           </View>
         )}
-        {(propertyDetails.type === "Building" || propertyDetails.type === "Other") && <View>
-          <InputField
-            textValue={propertyDetails?.numberOfRooms}
-            placeHolder=""
-            width={160}
-            handleOnChangeText={(e) =>
-              setPropertyDetails({
-                ...propertyDetails,
-                numberOfRooms: e,
-              })
-            }
-            height={57}
-            contentType="none"
-            type="number"
-            label="Number of rooms"
-            backgroundColor="transparent"
-            borderColor={formError === "numberOfRooms" ? red : gray}
-          />
-          {formError === "numberOfRooms" && (
-            <Text style={styles.errorText}>invalid size</Text>
-          )}
-        </View>}
+        {(propertyDetails.type === "Building" ||
+          propertyDetails.type === "Other") && (
+          <View>
+            <InputField
+              textValue={propertyDetails?.numberOfRooms}
+              placeHolder=""
+              width={160}
+              handleOnChangeText={(e) =>
+                setPropertyDetails({
+                  ...propertyDetails,
+                  numberOfRooms: e,
+                })
+              }
+              height={57}
+              contentType="none"
+              type="number"
+              label="Number of rooms"
+              backgroundColor="transparent"
+              borderColor={formError === "numberOfRooms" ? red : gray}
+            />
+            {formError === "numberOfRooms" && (
+              <Text style={styles.errorText}>invalid size</Text>
+            )}
+          </View>
+        )}
 
         <CheckBoxField
           label="Is FullSpace"

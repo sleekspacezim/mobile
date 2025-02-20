@@ -18,12 +18,13 @@ import useNavigateToProperty from "../../Hooks/useNavigateToProperty";
 import { cardInfoStyles } from "./Shared/styles";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import { green, primary, red } from "@/src/Theme/Colors";
-import IconContainer from "./IconContainer/IconContainer";
+import IconContainer from "../../../IconContainer/IconContainer";
 import { iconSize } from "./Shared/Contants";
 import RegularText from "@/src/Components/RegularText/RegularText";
 import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";
 import PostTimeAndStatus from "./PostTimeAndStatus/PostTimeAndStatus";
 import Location from "./PropertyLocation/Location";
+import { processSizeDimensions } from "./Shared/Funcs";
 
 type Props = {
   property: ICommercialPropertyForSaleWithManager;
@@ -47,6 +48,7 @@ const CommercialForSaleInformation: React.FC<Props> = ({
     numberOfRooms,
     isFavorite,
     managerId,
+    uniqueId,
     status,
     manager: {
       profilePicture: { uri },
@@ -57,20 +59,10 @@ const CommercialForSaleInformation: React.FC<Props> = ({
   },
 }) => {
   const { navigateToProperty } = useNavigateToProperty(
-    PropertyTypesEnum.ResidentialForSale,
+    PropertyTypesEnum.CommercialForSale,
     id
   );
   const { details, btnContainer, infoContainer } = cardInfoStyles;
-
-  const processSizeDimensions = () => {
-    if (sizeDimensions === "Acres") {
-      if (sizeNumber === 1) return "Acre";
-      else return sizeDimensions;
-    }
-    if (sizeDimensions === "Square meters") return "m²";
-    if (sizeDimensions === "Hectares") return "Ha";
-    else return sizeDimensions;
-  };
 
   const processYearBuiltOrTotalRooms = () => {
     if (type === "Flat" || type === "Building") {
@@ -95,6 +87,7 @@ const CommercialForSaleInformation: React.FC<Props> = ({
               propertyType={PropertyTypesEnum.CommercialForSale}
               managerId={managerId}
               type={type}
+              propertyUniqueId={uniqueId}
               setTotalProperties={setTotalProperties}
             />
             <NameRentOrPrice
@@ -161,7 +154,7 @@ const CommercialForSaleInformation: React.FC<Props> = ({
               <ThemedText type="regular">Size</ThemedText>
               <RegularText>{`${
                 sizeNumber === 0 ? "--" : sizeNumber
-              } ${processSizeDimensions()}`}</RegularText>
+              } ${processSizeDimensions(sizeDimensions,sizeNumber)}`}</RegularText>
             </Row>
           </View>
         </Row>

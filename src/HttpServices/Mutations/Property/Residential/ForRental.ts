@@ -36,7 +36,7 @@ export const deleteResidentialRentalPropertyHttpFunc = (requestData: {
   propertyId: number;
   accessToken: string;
 }) => {
-  return axios.delete(
+  return axios.delete<{ response: string }>(
     `${residentialRentalPropertiesRoutes.getUpdateAndDeleteResidentialRentalProperty}/${requestData.propertyId}`,
     {
       headers: { Authorization: `Bearer ${requestData.accessToken}` },

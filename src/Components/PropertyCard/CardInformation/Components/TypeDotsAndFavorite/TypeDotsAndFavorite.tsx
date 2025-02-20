@@ -4,7 +4,7 @@ import React from "react";
 import Row from "@/src/Components/Row/Row";
 import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import ThreeDots from "@/src/Components/ThreeDots/ThreeDots";
-import FavoriteContainer from "../FavoriteContainer/FavoriteContainer";
+import FavoriteContainer from "../../../../FavoriteContainer/FavoriteContainer";
 import { useAppSelector } from "@/src/Redux/Hooks/Config";
 import { IPropertyType } from "@/src/GlobalTypes/Property/Common";
 
@@ -15,6 +15,7 @@ type Props = {
   id: number;
   managerId: number;
   propertyType:IPropertyType
+  propertyUniqueId: number;
   setTotalProperties?:React.Dispatch<React.SetStateAction<number>>
 };
 
@@ -25,6 +26,7 @@ const TypeDotsAndFavorite: React.FC<Props> = ({
   isFavorite,
   managerId,
   propertyType,
+  propertyUniqueId,
   setTotalProperties
 }) => {
   const user = useAppSelector((state) => state.user.value);
@@ -37,6 +39,7 @@ const TypeDotsAndFavorite: React.FC<Props> = ({
             propertyId={id}
             isPropertyFavorite={isFavorite}
             propertyType={propertyType}
+            propertyUniqueId={propertyUniqueId}
             setTotalProperties={setTotalProperties}
           />
         )}
@@ -47,6 +50,7 @@ const TypeDotsAndFavorite: React.FC<Props> = ({
           type="property"
           isFavorite={isFavorite}
           userId={userId}
+          propertyUniqueId={propertyUniqueId}
         />
       </Row>
     </Row>

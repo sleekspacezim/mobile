@@ -64,7 +64,7 @@ export const processInteriorPropertyDetails = (
     setInteriorInfoFormError("bedrooms");
   } else if (
     +interiorPropertyDetails.bathrooms < 1 ||
-    +interiorPropertyDetails.bathrooms >=
+    +interiorPropertyDetails.bathrooms >
       +generalPropertyDetails.totalNumberOfRooms
   ) {
     setInteriorInfoFormError("bathrooms");
@@ -169,7 +169,7 @@ export const generalPropertyInfoIntialState: IResidentialRentalGeneralInfo = {
   numberOfRoomsToLet: "1",
   totalNumberOfRooms: "1",
   type: "Single family home",
-  sizeDimensions: "Square meters",
+  sizeDimensions: "m²",
   yearBuilt: "",
   storeys: "1",
   currency: "US$",

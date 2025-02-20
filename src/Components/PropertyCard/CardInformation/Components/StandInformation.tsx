@@ -15,6 +15,7 @@ import Location from "./PropertyLocation/Location";
 import CustomButton from "@/src/Components/Buttons/Custom/CustomButton";
 import { red } from "@/src/Theme/Colors";
 import PostTimeAndStatus from "./PostTimeAndStatus/PostTimeAndStatus";
+import { processSizeDimensions } from "./Shared/Funcs";
 
 type Props = {
   property: IStandPropertyWithManager;
@@ -36,6 +37,7 @@ const StandInformation: React.FC<Props> = ({
     isFavorite,
     managerId,
     isServiced,
+    uniqueId,
     level,
     status,
     manager: {
@@ -51,16 +53,6 @@ const StandInformation: React.FC<Props> = ({
     id
   );
   const { details, btnContainer, infoContainer } = cardInfoStyles;
-
-  const processSizeDimensions = () => {
-    if (sizeDimensions === "Acres") {
-      if (sizeNumber === 1) return "Acre";
-      else return sizeDimensions;
-    }
-    if (sizeDimensions === "Square meters") return "m²";
-    if (sizeDimensions === "Hectares") return "Ha";
-    else return sizeDimensions;
-  };
 
   const processServiced = () => {
     if (isServiced) return "isServiced";
@@ -87,6 +79,7 @@ const StandInformation: React.FC<Props> = ({
               propertyType={PropertyTypesEnum.Stands}
               managerId={managerId}
               type={type}
+              propertyUniqueId={uniqueId}
               setTotalProperties={setTotalProperties}
             />
             <NameRentOrPrice
@@ -106,7 +99,7 @@ const StandInformation: React.FC<Props> = ({
           featureTwoText={"level"}
           propertyType={PropertyTypesEnum.Stands}
           sizeNumber={sizeNumber}
-          dimension={processSizeDimensions()}
+          dimension={processSizeDimensions(sizeDimensions,sizeNumber)}
         />
         <Location displayName={displayName} />
         <View style={details}>
