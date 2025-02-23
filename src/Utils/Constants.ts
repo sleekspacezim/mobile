@@ -9,7 +9,7 @@ export const expoSecureValueKeyNames = {
 };
 
 //export const backEndUrl = "https://backend-1fpy.onrender.com";
-export const backEndUrl = "http://192.168.56.195:8080";
+export const backEndUrl = "http://192.168.95.195:8080";
 
 export const managerAccountUpdateMsg =
   "Remember, if you update your information, all your properties will also be updated, so make sure it is accurate.";

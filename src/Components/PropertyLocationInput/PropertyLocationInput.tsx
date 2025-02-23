@@ -13,10 +13,12 @@ import MapModal from "../Modals/Map/MapModal";
 
 type Props = {
   borderColor: string;
+  propertyLocationValue?: string;
 };
 
 const PropertyLocationInput: React.FC<Props> = ({
-  borderColor
+  borderColor,
+  propertyLocationValue,
 }) => {
   const [openLocationModal, setOpenLocationModal] = useState<boolean>(false);
   const [openMapModal, setOpenMapModal] = useState<boolean>(false);
@@ -27,9 +29,12 @@ const PropertyLocationInput: React.FC<Props> = ({
   };
 
   const getPropertyInputValue = () => {
-    if (location.lat && location.lon) {
-      return shortenString(processDisplayName(location.display_name), 37);
-    } else return "Enter Property Location";
+    if (propertyLocationValue) return shortenString(propertyLocationValue, 37);
+    else {
+      if (location.lat && location.lon) {
+        return shortenString(processDisplayName(location.display_name), 37);
+      } else return "Enter Property Location";
+    }
   };
 
   return (

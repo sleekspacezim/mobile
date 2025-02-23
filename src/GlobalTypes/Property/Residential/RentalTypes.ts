@@ -122,6 +122,7 @@ export type IResidentialRentalPropertyWithManager = {
   media: IPropertyImageOrVideo[];
   manager: IManagerAccount;
 };
+
 export type IResidentialRentalPropertyUpdate = {
   id: number;
   managerId: number;
@@ -150,8 +151,11 @@ export type IResidentialRentalPropertyUpdate = {
   typeOfExteriorSecurity: string;
   type: string;
   sizeDimensions: string;
+  marketingStatement: string;
   otherInteriorFeatures: string[];
   otherExteriorFeatures: string[];
   tenantRequirements: string[];
-  marketingStatement: string;
+  newMedia: IPropertyImageOrVideoCreationOrUpdate[];
+  mediaToDelete: IPropertyImageOrVideo[];
+  mediaToUpdate: IPropertyImageOrVideo[];
 };

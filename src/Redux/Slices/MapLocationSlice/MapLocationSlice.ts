@@ -9,7 +9,10 @@ export const mapLocationSlice = createSlice({
     value: mapLocation,
   },
   reducers: {
-    addMapLocation: (state, action) => {
+    addMapLocation: (state, action: {
+      payload: ISearchLocation;
+      type: string;
+  }) => {
       state.value = action.payload;
     },
   },

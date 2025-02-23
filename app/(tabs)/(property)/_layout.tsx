@@ -33,7 +33,7 @@ const PropertyLayout = () => {
       />
       <Stack.Screen
         name="property/update/[id]"
-        options={{ headerShown: false }}
+        options={{ headerTitle: "Update Property", headerTitleAlign:"center" }}
       />
     </Stack>
   );

@@ -1,5 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import React from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { ICommercialPropertyForSaleWithManager } from "@/src/GlobalTypes/Property/Commercial/ForSaleTypes";
 import { ICommercialRentalPropertyWithManager } from "@/src/GlobalTypes/Property/Commercial/RentalTypes";
@@ -8,7 +9,6 @@ import { IResidentialPropertyForSaleWithManager } from "@/src/GlobalTypes/Proper
 import { IResidentialRentalPropertyWithManager } from "@/src/GlobalTypes/Property/Residential/RentalTypes";
 import { IStandPropertyWithManager } from "@/src/GlobalTypes/Property/Stand/StandTypes";
 import { PropertyTypesEnum } from "@/src/Utils/Constants";
-import ThemedText from "@/src/Components/ThemedText/ThemedText";
 import Bedrooms from "./Components/Bedrooms";
 import Bathrooms from "./Components/Bathrooms";
 import PriceOrRent from "./Components/PriceOrRent";
@@ -20,15 +20,13 @@ import YearBuilt from "./Components/YearBuilt";
 import Size from "./Components/Size";
 import Type from "./Components/Type";
 import PostedTime from "./Components/PostedTime";
-import Pool from "./Components/Pool";
 import PublicUtilities from "./Components/PublicUtilities";
 import Negotiability from "./Components/Negotiability";
 import Status from "./Components/Status";
 import Divider from "../Divider/Divider";
-import Row from "@/src/Components/Row/Row";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { gray, primary } from "@/src/Theme/Colors";
+import { primary } from "@/src/Theme/Colors";
 import Heading from "../Heading/Heading";
+import OtherFeatures from "./Components/OtherFeatures";
 
 type Props =
   | {
@@ -120,6 +118,34 @@ const Features: React.FC<Props> = ({ property, propertyType }) => {
           ))}
         {(propertyType === PropertyTypesEnum.ResidentialForSale ||
           propertyType === PropertyTypesEnum.ResidentialRentals) && (
+          <OtherFeatures header="Has Ceiling" property={property.hasCeiling} />
+        )}
+        {(propertyType === PropertyTypesEnum.ResidentialForSale ||
+          propertyType === PropertyTypesEnum.ResidentialRentals) && (
+          <OtherFeatures header="Tiled" property={property.isTiled} />
+        )}
+        {(propertyType === PropertyTypesEnum.ResidentialForSale ||
+          propertyType === PropertyTypesEnum.ResidentialRentals) && (
+          <OtherFeatures header="Painted" property={property.isPainted} />
+        )}
+        {(propertyType === PropertyTypesEnum.ResidentialForSale ||
+          propertyType === PropertyTypesEnum.ResidentialRentals) && (
+          <OtherFeatures header="Paved" property={property.isPaved} />
+        )}
+        {(propertyType === PropertyTypesEnum.ResidentialForSale ||
+          propertyType === PropertyTypesEnum.ResidentialRentals) && (
+          <OtherFeatures header="Plustered" property={property.isPlustered} />
+        )}
+        {(propertyType === PropertyTypesEnum.ResidentialForSale ||
+          propertyType === PropertyTypesEnum.ResidentialRentals) && (
+          <OtherFeatures header="Pool" property={property.hasSwimmingPool} />
+        )}
+        {(propertyType === PropertyTypesEnum.ResidentialForSale ||
+          propertyType === PropertyTypesEnum.ResidentialRentals) && (
+          <OtherFeatures header="Has Borehole" property={property.hasBoreHole} />
+        )}
+        {(propertyType === PropertyTypesEnum.ResidentialForSale ||
+          propertyType === PropertyTypesEnum.ResidentialRentals) && (
           <Garages garageNumber={property.numberOfGarages} />
         )}
         {propertyType !== PropertyTypesEnum.Stands &&
@@ -143,10 +169,6 @@ const Features: React.FC<Props> = ({ property, propertyType }) => {
             hasWater={property.isServiced}
             type="stand"
           />
-        )}
-        {(propertyType === PropertyTypesEnum.ResidentialForSale ||
-          propertyType === PropertyTypesEnum.ResidentialRentals) && (
-          <Pool hasPool={property.hasSwimmingPool} />
         )}
         <Size
           size={property.sizeNumber}

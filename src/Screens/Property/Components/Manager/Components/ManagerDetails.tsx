@@ -35,12 +35,13 @@ type Props = {
 };
 
 const ManagerDetails: React.FC<Props> = ({
-  manager: { name, contacts, email },
+  manager: { name, contacts, email, userId },
   propertyUniqueId,
 }) => {
   const [openContacts, setOpenContacts] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const theme = useAppSelector((state) => state.theme.value);
+  const { id } = useAppSelector((state) => state.user.value);
   const { width } = useWindowDimensions();
 
   const updatePropertyInsightsMutation = useMutation({
@@ -50,10 +51,14 @@ const ManagerDetails: React.FC<Props> = ({
 
   const handleOpenContacts = () => {
     setOpenContacts(true);
-    updatePropertyInsightsMutation.mutate({
-      propertyId: propertyUniqueId,
-      data: { insightProperty: "contactInfoViews" },
-    });
+    if (id !== userId) {
+      updatePropertyInsightsMutation.mutate({
+        propertyId: propertyUniqueId,
+        data: { insightProperty: "contactInfoViews" },
+      });
+    } else {
+      setIsLoading(false);
+    }
   };
 
   return (
